@@ -15,7 +15,6 @@
         /* ABOUT PAGE STYLES */
         .about-container {
             padding: 180px 10% 2rem;
-            /* Account for navbar + ad slot */
             position: relative;
             z-index: 60;
             max-width: 1400px;
@@ -51,7 +50,7 @@
 
         .about-header {
             font-family: var(--font-heading);
-            font-size: 5rem;
+            font-size: 48px;
             font-weight: 700;
             margin-bottom: 4rem;
             line-height: 1;
@@ -60,14 +59,14 @@
 
         .about-profile-grid {
             display: grid;
-            grid-template-columns: 320px 1fr 280px;
-            gap: 4rem;
+            grid-template-columns: 40% 40% 20%;
+            gap: 3rem;
             margin-bottom: 6rem;
         }
 
         .profile-photo-box {
-            width: 100%;
-            aspect-ratio: 4/5;
+            width: 200px;
+            height: 280px;
             background: #111;
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 12px;
@@ -80,8 +79,8 @@
 
         .heart-icon {
             position: absolute;
-            top: 1.5rem;
-            right: 1.5rem;
+            top: 1rem;
+            left: 1rem;
             color: rgba(255, 255, 255, 0.3);
             transition: color 0.3s;
             z-index: 2;
@@ -100,8 +99,16 @@
             flex-direction: column;
         }
 
+        .bio-title {
+            color: var(--btn-color);
+            font-weight: 600;
+            font-size: 1rem;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+
         .bio-text {
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             line-height: 1.8;
             color: rgba(255, 255, 255, 0.8);
             font-weight: 300;
@@ -121,48 +128,27 @@
             text-transform: uppercase;
         }
 
-        .more-links h4 {
-            font-size: 0.85rem;
-            letter-spacing: 0.2em;
-            color: rgba(255, 255, 255, 0.4);
-            margin-bottom: 1.5rem;
-            text-transform: uppercase;
-            font-weight: 500;
+        .more-links {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+            letter-spacing: 0.05em;
         }
 
-        .more-links-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-        }
-
-        .more-links-list a {
+        .more-links a {
             color: #fff;
             text-decoration: none;
-            font-size: 1.1rem;
-            font-weight: 300;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.2rem 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             transition: color 0.3s;
         }
 
-        .more-links-list a:hover {
+        .more-links a:hover {
             color: var(--btn-color);
-        }
-
-        .more-links-list a::after {
-            content: '→';
-            opacity: 0.3;
-            font-family: sans-serif;
         }
 
         .sidebar-actions {
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
+            align-items: flex-end;
         }
 
         .btn-outline-yellow {
@@ -179,34 +165,32 @@
             border-radius: 50px;
             transition: all 0.3s;
             text-transform: uppercase;
+            width: 100%;
         }
 
         .btn-outline-yellow:hover {
             background: var(--btn-color);
             color: #000;
+            box-shadow: 0 5px 15px rgba(255, 230, 0, 0.2);
         }
 
         /* MIDDLE SECTION */
         .about-middle {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 5rem;
             margin-bottom: 6rem;
             padding-top: 5rem;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .details-box h3,
-        .skills-box h3 {
+        .details-box h3 {
             font-family: var(--font-heading);
             font-size: 2.5rem;
-            margin-bottom: 2.5rem;
+            margin-bottom: 2rem;
             font-weight: 600;
         }
 
         .social-links {
             display: flex;
-            gap: 1rem;
+            gap: 1.5rem;
             margin-bottom: 3.5rem;
             flex-wrap: wrap;
         }
@@ -214,26 +198,22 @@
         .social-links a {
             color: rgba(255, 255, 255, 0.7);
             text-decoration: none;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: 400;
             letter-spacing: 0.1em;
             transition: all 0.3s;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 0.8rem 1.8rem;
-            border-radius: 30px;
             text-transform: uppercase;
         }
 
         .social-links a:hover {
-            color: #000;
-            background: #fff;
-            border-color: #fff;
+            color: #fff;
         }
 
         .stats-row {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 1.5rem;
+            margin-bottom: 4rem;
         }
 
         .stat-item {
@@ -247,9 +227,9 @@
 
         .stat-value {
             font-family: var(--font-heading);
-            font-size: 3rem;
+            font-size: 2.5rem;
             font-weight: 700;
-            color: var(--btn-color);
+            color: var(--text-white);
             margin-bottom: 0.5rem;
             line-height: 1;
         }
@@ -264,23 +244,20 @@
         .skills-tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 1rem;
+            gap: 1.5rem;
         }
 
         .skill-tag {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 1rem 1.8rem;
-            border-radius: 8px;
-            font-size: 0.95rem;
+            font-size: 1rem;
             font-weight: 300;
             letter-spacing: 0.05em;
-            transition: all 0.3s ease;
+            color: rgba(255, 255, 255, 0.7);
         }
 
-        .skill-tag:hover {
-            border-color: var(--accent-color);
-            background: rgba(139, 0, 0, 0.1);
+        .edit-page-btn {
+            text-align: center;
+            margin-top: 4rem;
+            margin-bottom: 2rem;
         }
 
         /* Responsive for About */
@@ -291,17 +268,17 @@
             }
 
             .profile-photo-box {
-                max-width: 400px;
                 margin: 0 auto;
-            }
-
-            .about-middle {
-                grid-template-columns: 1fr;
-                gap: 4rem;
             }
 
             .stats-row {
                 grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .stats-row {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -318,10 +295,6 @@
         <div class="nav-right">
             <a href="index.html">HOME</a>
             <a href="about.html">ABOUT</a>
-            <a href="plugins.html">PLUGIN</a>
-            <a href="sfx.html">SFX</a>
-            <a href="presets.html">PRESET</a>
-            <a href="apps.html">APPS</a>
             <a href="search.html" style="color: var(--btn-color);">SEARCH</a>
             <div class="user-dropdown" id="user-dropdown-container">
                 <button id="nav-auth-btn" class="user-dropdown-btn">ACCOUNT</button>
@@ -333,11 +306,6 @@
             </div>
         </div>
     </nav>
-
-    <!-- Header Ad Slot -->
-    <div class="ad-slot header-ad"
-        style="margin-top: 100px; text-align: center; height: 90px; width: 728px; background: #222; margin-left: auto; margin-right: auto; display: flex; align-items: center; justify-content: center; border: 1px dashed #555; color: #555;">
-        AD BANNER 728x90</div>
 
     <!-- LEFT SIDE FIXED TEXT -->
     <div class="fixed-left-text">AVS MAHIM</div>
@@ -364,34 +332,33 @@
 
         <div class="about-profile-grid">
             <!-- Left Photo -->
-            <div class="profile-photo-box">
-                <div class="heart-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path
-                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-                        </path>
+            <div>
+                <div class="profile-photo-box">
+                    <div class="heart-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                            </path>
+                        </svg>
+                    </div>
+                    <svg class="profile-placeholder-icon" width="60" height="60" viewBox="0 0 24 24" fill="none"
+                        stroke="#fff" stroke-width="1.5">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
                     </svg>
                 </div>
-                <svg class="profile-placeholder-icon" width="60" height="60" viewBox="0 0 24 24" fill="none"
-                    stroke="#fff" stroke-width="1.5">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="12" cy="7" r="4"></circle>
-                </svg>
             </div>
 
             <!-- Middle Bio -->
             <div class="profile-bio-sec">
+                <div class="bio-title">Video Editor &middot; Video Creation &middot; Automation Service</div>
                 <p class="bio-text">AVS MAHIM is a Bangladeshi content creator specializing in Premiere Pro & After
                     Effects plugins, SFX, presets and editing resources for video editors.</p>
                 <a href="#" class="read-more">Read more ↓</a>
 
                 <div class="more-links">
-                    <h4>More at AVS</h4>
-                    <div class="more-links-list">
-                        <a href="about.html">Contact</a>
-                        <a href="about.html">Services links</a>
-                    </div>
+                    More at AVS &middot; <a href="about.html">Contact</a> &middot; <a href="about.html">Services</a>
                 </div>
             </div>
 
@@ -408,22 +375,23 @@
             <div class="details-box">
                 <h3>Personal Details</h3>
                 <div class="social-links">
-                    <a href="#">YouTube</a>
-                    <a href="#">Facebook</a>
+                    Official Sites
+                    <a href="#" style="margin-left: 1rem;">YouTube</a> &middot;
+                    <a href="#">Facebook</a> &middot;
                     <a href="#">Instagram</a>
                 </div>
                 <div class="stats-row">
                     <div class="stat-item">
                         <div class="stat-value">25K+</div>
-                        <div class="stat-label">Total Downloads</div>
+                        <div class="stat-label">Downloads</div>
                     </div>
                     <div class="stat-item">
                         <div class="stat-value">120+</div>
-                        <div class="stat-label">Total Plugins</div>
+                        <div class="stat-label">Plugins</div>
                     </div>
                     <div class="stat-item">
                         <div class="stat-value">500+</div>
-                        <div class="stat-label">Total SFX</div>
+                        <div class="stat-label">SFX</div>
                     </div>
                     <div class="stat-item">
                         <div class="stat-value">10K+</div>
@@ -433,53 +401,26 @@
             </div>
 
             <div class="skills-box">
-                <h3>Skills</h3>
                 <div class="skills-tags">
-                    <div class="skill-tag">Premiere Pro</div>
-                    <div class="skill-tag">After Effects</div>
+                    Skills:
+                    <div class="skill-tag" style="margin-left: 1rem;">Premiere Pro</div> |
+                    <div class="skill-tag">After Effects</div> |
                     <div class="skill-tag">Video Editing</div>
-                    <div class="skill-tag">Motion Graphics</div>
-                    <div class="skill-tag">Sound Design</div>
                 </div>
             </div>
         </div>
+
+        <!-- RESOURCES SECTION -->
+        <section class="resources-section" id="resources" style="padding: 0;">
+            <div class="resources-grid" id="resources-grid">
+                <!-- Generated via JS -->
+            </div>
+
+            <div class="edit-page-btn">
+                <a href="#" class="btn-yellow">EDIT THIS PAGE</a>
+            </div>
+        </section>
     </div>
-
-    <!-- SCROLL PNG ANIMATION -->
-    <section class="scroll-sequence" id="home">
-        <div class="sticky-container">
-            <div class="loading-screen" id="loading-screen">Loading... <span id="loading-progress">0%</span></div>
-            <canvas id="sequence-canvas"></canvas>
-            <div class="scroll-text" id="scroll-text">
-                <h1>PREMIERE PRO & AFTER EFFECTS</h1>
-                <p>SCROLL TO EXPLORE</p>
-                <div class="scroll-line"></div>
-            </div>
-            <div class="progress-bar-container">
-                <div class="progress-bar" id="progress-bar"></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- RESOURCES SECTION -->
-    <section class="resources-section" id="resources">
-        <h2>PREMIUM RESOURCES</h2>
-
-        <!-- Using anchor tags so navbar can link to them if needed -->
-        <div id="plugin" style="position: absolute; top: -100px;"></div>
-        <div id="sfx" style="position: absolute; top: -100px;"></div>
-        <div id="preset" style="position: absolute; top: -100px;"></div>
-
-        <div class="filter-tabs">
-            <button class="filter-btn active" data-filter="all">ALL</button>
-            <button class="filter-btn" data-filter="plugins">PLUGINS</button>
-            <button class="filter-btn" data-filter="sfx">SFX</button>
-            <button class="filter-btn" data-filter="presets">PRESETS</button>
-        </div>
-        <div class="resources-grid" id="resources-grid">
-            <!-- Generated via JS -->
-        </div>
-    </section>
 
     <!-- FOOTER SECTION -->
     <footer class="footer">
