@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MY DASHBOARD | AVS MAHIM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@100;200;300;400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css?v=2">
+</head>
+
+<body>
+
+    <!-- Overlay for watermark hiding -->
+    <div class="vignette-overlay"></div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-left">AVS MAHIM</div>
+        <div class="nav-right">
+            <a href="index.html">HOME</a>
+            <a href="plugins.html">PLUGIN</a>
+            <a href="sfx.html">SFX</a>
+            <a href="presets.html">PRESET</a>
+            <a href="apps.html">APPS</a>
+            <a href="search.html" style="color: var(--btn-color);">SEARCH</a>
+            <div class="user-dropdown" id="user-dropdown-container">
+                <button id="nav-auth-btn" class="user-dropdown-btn">ACCOUNT</button>
+                <div class="dropdown-menu" id="user-dropdown-menu">
+                    <a href="dashboard.html">Dashboard</a>
+                    <a href="profile.html">Profile</a>
+                    <a href="#" id="nav-logout-btn">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- LEFT SIDE FIXED TEXT -->
+    <div class="fixed-left-text">AVS MAHIM</div>
+
+    <div class="dashboard-container">
+        <div class="page-header">
+            <h1 id="dash-welcome">Hi User!</h1>
+            <p>Manage your downloads and premium purchases.</p>
+        </div>
+
+        <div class="dash-cards-grid">
+            <!-- Card 1: Stats -->
+            <div class="dash-card">
+                <h3>Account Stats</h3>
+                <p><strong>Member Since:</strong> <span id="stat-date">Loading...</span></p>
+                <p><strong>Profile Completion:</strong> <span id="stat-progress">0%</span></p>
+                <div class="progress-track" style="margin-top:20px; width:100%;">
+                    <div class="progress-fill" id="stat-fill"></div>
+                </div>
+                <br>
+                <a href="profile.html" style="color:var(--btn-color); text-decoration:none; font-size:0.9rem;">EDIT
+                    PROFILE &rarr;</a>
+            </div>
+
+            <!-- Card 2: Downloads -->
+            <div class="dash-card">
+                <h3>My Downloads</h3>
+                <p style="font-size: 0.8rem; margin-bottom: 1rem;">Recent free resources you have accessed.</p>
+                <div id="downloads-list" style="margin-top: 1rem;">
+                    <p style="opacity:0.5;">Loading...</p>
+                </div>
+            </div>
+
+            <!-- Card 3: Purchases -->
+            <div class="dash-card">
+                <h3>My Purchases</h3>
+                <p style="font-size: 0.8rem; margin-bottom: 1rem;">Your premium tools and bundles.</p>
+                <div id="purchases-list" style="margin-top: 1rem;">
+                    <p style="opacity:0.5;">Loading...</p>
+                </div>
+            </div>
+
+            <!-- Card 4: Settings -->
+            <div class="dash-card">
+                <h3>Account Settings</h3>
+                <div class="dash-list-item">
+                    <h4>Change Password</h4>
+                    <button class="btn-yellow" style="padding:0.5rem 1rem; font-size:0.7rem;" id="dash-reset-pwd">SEND
+                        LINK</button>
+                </div>
+                <div class="dash-list-item">
+                    <h4>Delete Account</h4>
+                    <button class="btn-yellow"
+                        style="padding:0.5rem 1rem; font-size:0.7rem; background:rgba(255,0,0,0.2); border-color:#f00; color:#f00;"
+                        id="dash-delete-acc">DELETE</button>
+                </div>
+                <span id="settings-msg" style="display:block; margin-top:1rem; font-size:0.8rem;"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER SECTION -->
+    <footer class="footer">
+        <div class="footer-content">
+            <h2>Want free resources too?</h2>
+            <p>Browse our free plugins, SFX and presets<br>and download instantly.</p>
+            <a href="index.html#resources" class="btn-yellow">GET FREE RESOURCES NOW â€” IT'S FREE!</a>
+            <hr>
+            <div class="copyright">Â© 2026 AVS MAHIM. MADE IN BD.</div>
+        </div>
+    </footer>
+
+    <!-- AUTH MODAL -->
+    <div class="auth-modal-overlay" id="auth-modal">
+        <!-- Same standard minimal modal (managed by auth.js) -->
+        <div class="auth-modal-content">
+            <button class="auth-close-btn" id="auth-close">&times;</button>
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="tab-signin" data-tab="signin">SIGN IN</button>
+                <button class="auth-tab" id="tab-signup" data-tab="signup">SIGN UP</button>
+                <button class="auth-tab" id="tab-account" data-tab="account" style="display: none;">PROFILE</button>
+            </div>
+
+            <!-- SIGN IN FORM -->
+            <form id="signin-form" class="auth-form active">
+                <input type="email" id="signin-email" placeholder="EMAIL ADDRESS" required>
+                <input type="password" id="signin-password" placeholder="PASSWORD" required>
+                <button type="submit" class="btn-yellow auth-submit" id="signin-btn">LOGIN</button>
+                <div class="auth-msg" id="signin-msg"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-client.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+
+</html>

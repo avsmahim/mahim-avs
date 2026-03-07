@@ -1,0 +1,277 @@
+/* =========================================
+   GSAP + LENIS INITIALIZATION
+   ========================================= */
+try {
+  gsap.registerPlugin(ScrollTrigger);
+} catch (e) { console.warn('GSAP init failed:', e); }
+
+
+
+
+/* =========================================
+   DOM ELEMENTS
+   ========================================= */
+const canvas = document.getElementById('sequence-canvas');
+const ctx = canvas ? canvas.getContext('2d') : null;
+const loadingScreen = document.getElementById('loading-screen');
+const loadingProgress = document.getElementById('loading-progress');
+const scrollText = document.getElementById('scroll-text');
+const progressBar = document.getElementById('progress-bar');
+const sequenceSection = document.querySelector('.scroll-sequence');
+const navbar = document.getElementById('navbar');
+const grid = document.getElementById('resources-grid');
+const filterBtns = document.querySelectorAll('.filter-btn');
+
+/* =========================================
+   SCROLL SEQUENCE ANIMATION
+   ========================================= */
+const totalFrames = 79;
+const images = [];
+let imagesLoaded = 0;
+
+if (canvas) {
+  canvas.width = 1920;
+  canvas.height = 1080;
+}
+
+function loadImages() {
+  for (let i = 1; i <= totalFrames; i++) {
+    const img = new Image();
+    const indexStr = i.toString().padStart(5, '0');
+    img.src = `${indexStr}.png`;
+    images.push(img);
+
+    img.onload = () => {
+      imagesLoaded++;
+      const percent = Math.floor((imagesLoaded / totalFrames) * 100);
+      if (loadingProgress) loadingProgress.innerText = `${percent}%`;
+
+      if (imagesLoaded === totalFrames) {
+        if (loadingScreen) {
+          loadingScreen.style.opacity = '0';
+          setTimeout(() => { loadingScreen.style.display = 'none'; }, 250);
+        }
+        if (ctx && images[0]) ctx.drawImage(images[0], 0, 0, canvas.width, canvas.height);
+      }
+    };
+    img.onerror = () => {
+      imagesLoaded++;
+      if (imagesLoaded === totalFrames && loadingScreen) {
+        loadingScreen.style.opacity = '0';
+        setTimeout(() => { loadingScreen.style.display = 'none'; }, 250);
+      }
+    };
+  }
+
+  // Forced Fallback
+  setTimeout(() => {
+    if (loadingScreen && loadingScreen.style.display !== 'none') {
+      console.log('Forced Loader Clear');
+      loadingScreen.style.opacity = '0';
+      setTimeout(() => { loadingScreen.style.display = 'none'; }, 250);
+    }
+  }, 5000);
+}
+
+if (sequenceSection) {
+  loadImages();
+  window.addEventListener('scroll', () => {
+    const sectionTop = sequenceSection.offsetTop;
+    const sectionHeight = sequenceSection.offsetHeight;
+    const scrollY = window.scrollY;
+    let scrollProgress = (scrollY - sectionTop) / (sectionHeight - window.innerHeight);
+    scrollProgress = Math.max(0, Math.min(1, scrollProgress));
+
+    if (progressBar) progressBar.style.width = `${scrollProgress * 100}%`;
+    if (scrollText) scrollText.style.opacity = scrollProgress > 0.05 ? '0' : '1';
+
+    if (images.length === totalFrames) {
+      let frameIndex = Math.floor(scrollProgress * (totalFrames - 1));
+      if (ctx && images[frameIndex] && images[frameIndex].complete) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(images[frameIndex], 0, 0, canvas.width, canvas.height);
+      }
+    }
+  });
+}
+
+/* =========================================
+   RESOURCE DATA & FILTER LOGIC
+   ========================================= */
+let resourcesData = [];
+let purchasesData = [];
+
+async function fetchResources(searchQuery = '') {
+  let query = supabaseClient.from('items').select('*');
+  if (searchQuery) {
+    query = query.ilike('title', `%${searchQuery}%`);
+  }
+  const { data, error } = await query;
+  if (error) { console.error('Error fetching items:', error); return []; }
+  return data || [];
+}
+
+async function fetchPurchases(userId) {
+  if (!userId) return [];
+  const { data, error } = await supabaseClient.from('purchases').select('item_id').eq('user_id', userId);
+  if (error) { console.error('Error fetching purchases:', error); return []; }
+  return data.map(p => p.item_id) || [];
+}
+
+async function renderResources(filter = 'all', searchQuery = '') {
+  if (!grid) return;
+
+  const fixedAdHTML = grid.querySelector('.inline-ad') ? grid.querySelector('.inline-ad').outerHTML : '';
+  grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 4rem; opacity: 0.5;">LOADING ITEMS...</div>';
+
+  resourcesData = await fetchResources(searchQuery);
+
+  // Determine user and purchases
+  let userId = null;
+  let purchasedItemIds = [];
+  const { data: { session } } = await supabase.auth.getSession();
+  if (session && session.user) {
+    userId = session.user.id;
+    purchasedItemIds = await fetchPurchases(userId);
+  }
+
+  grid.innerHTML = fixedAdHTML;
+
+  const filtered = filter === 'all' ? resourcesData : resourcesData.filter(item => item.category === filter);
+
+  if (filtered.length === 0) {
+    grid.innerHTML += '<div style="grid-column: 1/-1; text-align: center; padding: 4rem; opacity: 0.5;">NO ITEMS FOUND.</div>';
+    return;
+  }
+
+  filtered.forEach((item, index) => {
+    const isPremium = item.type === 'premium';
+    const hasPurchased = purchasedItemIds.includes(item.id);
+
+    const badgeHtml = isPremium
+      ? `<span class="card-badge premium-badge">PREMIUM</span>`
+      : `<span class="card-badge">${item.category}</span>`;
+
+    let btnHtml = '';
+    if (isPremium && !hasPurchased) {
+      btnHtml = `<a href="order.html?product=${item.id}" class="card-btn btn-premium">BUY NOW - $${item.price}</a>`;
+    } else {
+      const btnText = isPremium ? 'DOWNLOAD' : 'FREE DOWNLOAD';
+      btnHtml = `<a href="${item.file_url || '#'}" target="_blank" class="card-btn">${btnText}</a>`;
+    }
+
+    const sizeText = item.size ? `SIZE: ${item.size}` : '';
+    const versionText = item.version ? ` | VER: ${item.version}` : '';
+    const downloadsText = ` | DLs: ${item.download_count || 0}`;
+
+    const card = document.createElement('div');
+    card.className = 'resource-card';
+    card.style.opacity = '0';
+    card.innerHTML = `
+          <div class="card-img-wrapper">
+            ${badgeHtml}
+            <img src="${item.thumbnail_url || ''}" alt="${item.title}" class="card-img" loading="lazy" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'400\\' height=\\'225\\'><rect width=\\'100%\\' height=\\'100%\\' fill=\\'%23111\\'/><text x=\\'50%\\' y=\\'50%\\' fill=\\'%23555\\' font-family=\\'sans-serif\\' font-size=\\'20\\' text-anchor=\\'middle\\' dominant-baseline=\\'middle\\'>No Image</text></svg>'">
+          </div>
+          <div class="card-content">
+            <h3 class="card-title">${item.title}</h3>
+            <div class="card-meta">${sizeText}${versionText}${downloadsText}</div>
+            ${btnHtml}
+          </div>
+        `;
+    grid.appendChild(card);
+    gsap.to(card, { opacity: 1, y: 0, duration: 0.6, delay: index * 0.1, ease: "power2.out", startAt: { y: 30 } });
+  });
+}
+
+if (grid) {
+  const defaultCategory = grid.getAttribute('data-category') || 'all';
+  const isSearch = grid.getAttribute('data-search') === 'true';
+
+  if (!isSearch) {
+    renderResources(defaultCategory);
+  }
+
+  const searchBtn = document.getElementById('search-btn');
+  const searchInput = document.getElementById('search-input');
+
+  if (searchBtn && searchInput) {
+    searchBtn.addEventListener('click', () => {
+      renderResources('all', searchInput.value.trim());
+    });
+    searchInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') renderResources('all', searchInput.value.trim());
+    });
+  }
+}
+
+filterBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    filterBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderResources(btn.getAttribute('data-filter'));
+  });
+});
+
+/* =========================================
+   NAVBAR SCROLL EFFECT & LINKS
+   ========================================= */
+if (navbar) {
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) navbar.classList.add('scrolled');
+    else navbar.classList.remove('scrolled');
+  });
+
+  // Handle smooth scrolling & filtering for navbar links
+  const navLinks = navbar.querySelectorAll('a[href^="#"]');
+  navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      // Download Handling
+      async function handleDownload(item) {
+        // Free item
+        if (item.type === 'free') {
+          await supabaseClient.rpc('increment_download', { row_id: item.id }).catch(e => console.log(e));
+          window.open(item.file_url || '#', '_blank');
+          return;
+        }
+
+        // Premium item
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (!session) {
+          // Need to logic
+          document.getElementById('auth-modal').style.display = 'flex';
+          document.getElementById('signin-msg').innerText = "Please login to purchase premium items.";
+          return;
+        }
+
+        // Redirect to order page with item details securely
+        // In a real app we'd trigger a Stripe checkout here. 
+        // For now, redirect to our fake order page.
+        window.location.href = `order.html?id=${item.id}&title=${encodeURIComponent(item.title)}&price=${item.price}`;
+      }
+      const targetId = link.getAttribute('href').substring(1);
+      if (targetId === 'home') {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (['plugin', 'sfx', 'preset'].includes(targetId)) {
+        e.preventDefault();
+        // Scroll to the resources section
+        const targetEl = document.getElementById('resources');
+        if (targetEl) {
+          window.scrollTo({ top: targetEl.offsetTop - 100, behavior: 'smooth' });
+
+          // Trigger the corresponding filter button
+          const filterMap = {
+            'plugin': 'plugins',
+            'sfx': 'sfx',
+            'preset': 'presets'
+          };
+          const filterBtn = document.querySelector(`.filter-btn[data-filter="${filterMap[targetId]}"]`);
+          if (filterBtn) {
+            // Wait briefly for scroll to start before filtering, looks smoother
+            setTimeout(() => filterBtn.click(), 200);
+          }
+        }
+      }
+    });
+  });
+}
