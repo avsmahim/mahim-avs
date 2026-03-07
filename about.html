@@ -8,277 +8,554 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@100;200;300;400;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@100;200;300;400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="css/style.css?v=2">
     <style>
-        /* ABOUT PAGE STYLES */
-        .about-container {
-            padding: 180px 10% 2rem;
-            position: relative;
-            z-index: 60;
-            max-width: 1400px;
-            margin: 0 auto;
+        /* IMDB STYLE ABOUT PAGE */
+        :root {
+            --imdb-dark: #1a1a1a;
+            --imdb-gray: #f5f5f5;
+            --imdb-yellow: #f5c518;
+            --imdb-text-dark: #333333;
+            --imdb-link-blue: #5799ef;
         }
 
-        .about-top-tabs {
-            display: flex;
-            justify-content: flex-end;
-            gap: 2rem;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 1rem;
-            font-size: 0.85rem;
-            font-weight: 300;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-        }
-
-        .about-top-tabs a {
-            color: rgba(255, 255, 255, 0.6);
-            text-decoration: none;
-            transition: color 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .about-top-tabs a:hover,
-        .about-top-tabs a.active {
+        body {
+            background-color: var(--imdb-dark);
             color: #fff;
         }
 
-        .about-header {
-            font-family: var(--font-heading);
-            font-size: 48px;
+        /* ------- NEW IMDB NAVBAR ------- */
+        .imdb-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 56px;
+            background-color: #121212;
+            display: flex;
+            align-items: center;
+            padding: 0 2rem;
+            z-index: 10001;
+            font-family: var(--font-body);
+        }
+
+        .nav-logo-box {
+            background-color: var(--imdb-yellow);
+            color: #000;
+            font-weight: 800;
+            font-size: 1.2rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+            margin-right: 1.5rem;
+        }
+
+        .nav-menu-btn {
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-right: 1.5rem;
+        }
+
+        .nav-search-container {
+            flex: 1;
+            display: flex;
+            height: 32px;
+            max-width: 800px;
+        }
+
+        .search-dropdown {
+            background-color: #fff;
+            color: #333;
+            border: none;
+            border-radius: 4px 0 0 4px;
+            padding: 0 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            border-right: 1px solid #ccc;
+            cursor: pointer;
+        }
+
+        .search-input-box {
+            flex: 1;
+            border: none;
+            padding: 0 10px;
+            font-size: 0.95rem;
+        }
+
+        .search-btn-icon {
+            background-color: #fff;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            padding: 0 10px;
+            cursor: pointer;
+            color: #555;
+        }
+
+        .nav-right-imdb {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-left: 2rem;
+        }
+
+        .nav-right-imdb a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-pro-logo {
+            color: #5799ef;
             font-weight: 700;
-            margin-bottom: 4rem;
+            font-size: 1.1rem;
+            letter-spacing: -0.5px;
+        }
+
+        /* ------- MAIN LAYOUT ------- */
+        .page-wrapper {
+            padding-top: 56px;
+            /* navbar height */
+        }
+
+        .dark-header-section {
+            background-color: var(--imdb-dark);
+            padding: 2rem 10% 3rem;
+        }
+
+        .second-row-nav {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .second-row-nav a {
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .second-row-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .person-header {
+            font-family: var(--font-body);
+            font-size: 56px;
+            font-weight: 400;
+            margin-bottom: 2rem;
             line-height: 1;
-            letter-spacing: 0.05em;
         }
 
-        .about-profile-grid {
+        .main-grid {
             display: grid;
-            grid-template-columns: 40% 40% 20%;
-            gap: 3rem;
-            margin-bottom: 6rem;
+            grid-template-columns: 130px 1fr 280px;
+            gap: 2rem;
         }
 
-        .profile-photo-box {
-            width: 200px;
-            height: 280px;
-            background: #111;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
+        /* Left col: Image */
+        .photo-container {
+            width: 130px;
+            height: 180px;
+            background: #333;
+            position: relative;
+        }
+
+        .photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .imdb-heart {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: rgba(0, 0, 0, 0.5);
+            width: 32px;
+            height: 38px;
             display: flex;
             justify-content: center;
             align-items: center;
-            position: relative;
-            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 85%, 0 100%);
+            cursor: pointer;
         }
 
-        .heart-icon {
-            position: absolute;
-            top: 1rem;
-            left: 1rem;
-            color: rgba(255, 255, 255, 0.3);
-            transition: color 0.3s;
-            z-index: 2;
+        .imdb-heart svg {
+            width: 24px;
+            height: 24px;
+            stroke: #fff;
+            stroke-width: 2;
+            fill: none;
         }
 
-        .heart-icon:hover {
-            color: var(--accent-color);
+        .imdb-heart:hover svg {
+            stroke: var(--imdb-yellow);
         }
 
-        .profile-placeholder-icon {
-            opacity: 0.2;
-        }
-
-        .profile-bio-sec {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .bio-title {
-            color: var(--btn-color);
-            font-weight: 600;
+        /* Center col: Bio */
+        .bio-content {
             font-size: 1rem;
-            letter-spacing: 0.1em;
-            margin-bottom: 1rem;
+            line-height: 1.5;
+            color: #fff;
         }
 
         .bio-text {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: rgba(255, 255, 255, 0.8);
-            font-weight: 300;
-            margin-bottom: 1.5rem;
+            margin-bottom: 0.5rem;
+            display: inline;
         }
 
-        .read-more {
-            color: var(--btn-color);
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            letter-spacing: 0.1em;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 3rem;
-            text-transform: uppercase;
-        }
-
-        .more-links {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.5);
-            letter-spacing: 0.05em;
-        }
-
-        .more-links a {
+        .expand-arrow {
             color: #fff;
             text-decoration: none;
-            transition: color 0.3s;
+            font-weight: bold;
+            margin-left: 5px;
         }
 
-        .more-links a:hover {
-            color: var(--btn-color);
+        .expand-arrow:hover {
+            color: var(--imdb-link-blue);
         }
 
-        .sidebar-actions {
+        .bio-links {
+            margin-top: 1rem;
+            font-size: 0.9rem;
             display: flex;
             flex-direction: column;
-            gap: 1.5rem;
-            align-items: flex-end;
+            gap: 0.5rem;
         }
 
-        .btn-outline-yellow {
-            display: inline-block;
-            background: transparent;
-            border: 1px solid var(--btn-color);
-            color: var(--btn-color);
-            padding: 1.2rem 2rem;
-            text-align: center;
+        .bio-links a {
+            color: var(--imdb-link-blue);
             text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            letter-spacing: 0.1em;
-            border-radius: 50px;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            width: 100%;
+            font-weight: 500;
         }
 
-        .btn-outline-yellow:hover {
-            background: var(--btn-color);
-            color: #000;
-            box-shadow: 0 5px 15px rgba(255, 230, 0, 0.2);
+        .bio-links a:hover {
+            text-decoration: underline;
         }
 
-        /* MIDDLE SECTION */
-        .about-middle {
-            margin-bottom: 6rem;
-            padding-top: 5rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .details-box h3 {
-            font-family: var(--font-heading);
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            font-weight: 600;
-        }
-
-        .social-links {
+        .bio-links-row {
             display: flex;
-            gap: 1.5rem;
-            margin-bottom: 3.5rem;
-            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: center;
         }
 
-        .social-links a {
-            color: rgba(255, 255, 255, 0.7);
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 400;
-            letter-spacing: 0.1em;
-            transition: all 0.3s;
-            text-transform: uppercase;
-        }
-
-        .social-links a:hover {
-            color: #fff;
-        }
-
-        .stats-row {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1.5rem;
-            margin-bottom: 4rem;
-        }
-
-        .stat-item {
-            background: rgba(255, 255, 255, 0.02);
-            padding: 2rem 1.5rem;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            text-align: center;
-            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
-        }
-
-        .stat-value {
-            font-family: var(--font-heading);
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--text-white);
-            margin-bottom: 0.5rem;
+        .bullet-separator {
+            color: #888;
+            font-size: 1.2rem;
             line-height: 1;
         }
 
-        .stat-label {
-            font-size: 0.75rem;
-            color: rgba(255, 255, 255, 0.5);
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-        }
-
-        .skills-tags {
+        /* Right col: Actions */
+        .action-buttons {
             display: flex;
-            flex-wrap: wrap;
-            gap: 1.5rem;
+            flex-direction: column;
+            gap: 0.5rem;
         }
 
-        .skill-tag {
-            font-size: 1rem;
-            font-weight: 300;
-            letter-spacing: 0.05em;
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .edit-page-btn {
+        .btn-imdb-yellow {
+            background-color: var(--imdb-yellow);
+            color: #000;
+            border: none;
+            padding: 0.6rem 1rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
             text-align: center;
-            margin-top: 4rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-imdb-yellow:hover {
+            background-color: #e2b616;
+        }
+
+        .btn-fav {
+            display: flex;
+        }
+
+        .btn-fav-left {
+            flex: 1;
+            background-color: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            border: none;
+            padding: 0.6rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: 4px 0 0 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .btn-fav-left:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .btn-fav-right {
+            background-color: rgba(255, 255, 255, 0.08);
+            border: none;
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 0 0.8rem;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-fav-right:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        /* ------- LIGHT GRAY BOTTOM SECTION ------- */
+        .light-content-section {
+            background-color: var(--imdb-gray);
+            color: var(--imdb-text-dark);
+            padding: 3rem 10% 5rem;
+        }
+
+        .light-grid {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 24px;
+            background-color: var(--imdb-yellow);
+            border-radius: 4px;
+        }
+
+        .icon-btn {
+            color: #555;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+        }
+
+        .icon-btn:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        /* Details List */
+        .details-list {
+            display: flex;
+            flex-direction: column;
+            border-top: 1px solid #ddd;
+        }
+
+        .detail-row {
+            display: flex;
+            padding: 1rem 0;
+            border-bottom: 1px solid #ddd;
+            align-items: center;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            min-width: 150px;
+        }
+
+        .detail-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .detail-content a,
+        .detail-content span {
+            color: var(--imdb-link-blue);
+            text-decoration: none;
+            margin-right: 0.5rem;
+        }
+
+        .detail-content a:hover {
+            text-decoration: underline;
+        }
+
+        .detail-content .plain-text {
+            color: var(--imdb-text-dark);
+        }
+
+        .detail-arrow {
+            color: #888;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* Contribute Box */
+        .contribute-box {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 1.5rem;
+            margin-top: 3rem;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            background-color: #fff;
+        }
+
+        .contribute-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            align-items: center;
+        }
+
+        .contribute-desc {
+            color: #555;
+            margin-bottom: 1rem;
+        }
+
+        .contribute-link {
+            color: var(--imdb-link-blue);
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+        }
+
+        .contribute-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Right Sidebar - More to explore */
+        .sidebar-widget {
             margin-bottom: 2rem;
         }
 
-        /* Responsive for About */
-        @media (max-width: 1024px) {
-            .about-profile-grid {
+        .sidebar-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .sidebar-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        /* Reuse some of the main styles for featured items but adapt for light bg */
+        .light-card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: box-shadow 0.2s;
+        }
+
+        .light-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .light-card-img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            background: #eee;
+        }
+
+        .light-card-content {
+            padding: 1rem;
+        }
+
+        .light-card-title {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            color: var(--imdb-text-dark);
+        }
+
+        .light-card-meta {
+            font-size: 0.85rem;
+            color: #555;
+            margin-bottom: 1rem;
+        }
+
+        /* Remove existing navbar and resources styles visibility */
+        #navbar {
+            display: none !important;
+        }
+
+        .vignette-overlay {
+            display: none !important;
+        }
+
+        .fixed-left-text {
+            display: none !important;
+        }
+
+        @media (max-width: 900px) {
+            .main-grid {
+                grid-template-columns: 130px 1fr;
+            }
+
+            .action-buttons {
+                grid-column: 1 / -1;
+                flex-direction: row;
+            }
+
+            .light-grid {
                 grid-template-columns: 1fr;
-                gap: 3rem;
-            }
-
-            .profile-photo-box {
-                margin: 0 auto;
-            }
-
-            .stats-row {
-                grid-template-columns: repeat(2, 1fr);
             }
         }
 
         @media (max-width: 600px) {
-            .stats-row {
+            .main-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .photo-container {
+                margin: 0 auto;
             }
         }
     </style>
@@ -286,138 +563,228 @@
 
 <body>
 
-    <!-- Overlay for watermark hiding -->
-    <div class="vignette-overlay"></div>
+    <!-- IMDB STYLE NAVBAR -->
+    <nav class="imdb-navbar">
+        <a href="index.html" class="nav-logo-box">AVS</a>
 
-    <!-- NAVBAR -->
-    <nav class="navbar" id="navbar">
-        <div class="nav-left">AVS MAHIM</div>
-        <div class="nav-right">
-            <a href="index.html">HOME</a>
-            <a href="about.html">ABOUT</a>
-            <a href="search.html" style="color: var(--btn-color);">SEARCH</a>
-            <div class="user-dropdown" id="user-dropdown-container">
-                <button id="nav-auth-btn" class="user-dropdown-btn">ACCOUNT</button>
-                <div class="dropdown-menu" id="user-dropdown-menu">
-                    <a href="dashboard.html">Dashboard</a>
-                    <a href="profile.html">Profile</a>
-                    <a href="#" id="nav-logout-btn">Logout</a>
-                </div>
-            </div>
+        <a href="#" class="nav-menu-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"></path>
+            </svg>
+            Menu
+        </a>
+
+        <div class="nav-search-container">
+            <button class="search-dropdown">All ▾</button>
+            <input type="text" class="search-input-box" placeholder="Search AVS MAHIM">
+            <button class="search-btn-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z">
+                    </path>
+                </svg>
+            </button>
+        </div>
+
+        <div class="nav-right-imdb">
+            <a href="#" class="nav-pro-logo">AVSPro</a>
+            <a href="#">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2zm0 15l-5-2.18L7 18V5h10v13z"></path>
+                </svg>
+                Watchlist
+            </a>
+            <a href="#" onclick="document.getElementById('auth-modal').classList.add('open')">Sign In</a>
+            <a href="#">EN ▾</a>
         </div>
     </nav>
 
-    <!-- LEFT SIDE FIXED TEXT -->
-    <div class="fixed-left-text">AVS MAHIM</div>
+    <div class="page-wrapper">
+        <!-- TOP DARK SECTION -->
+        <section class="dark-header-section">
+            <!-- Second Row Nav -->
+            <div class="second-row-nav">
+                <a href="#">Biography</a>
+                <a href="#">AVSPro</a>
+                <a href="#">All topics</a>
+                <a href="#">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="18" cy="5" r="3"></circle>
+                        <circle cx="6" cy="12" r="3"></circle>
+                        <circle cx="18" cy="19" r="3"></circle>
+                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                    </svg>
+                </a>
+            </div>
 
-    <!-- ABOUT PAGE CONTENT -->
-    <div class="about-container">
+            <h1 class="person-header">AVS MAHIM</h1>
 
-        <!-- TOP TABS -->
-        <div class="about-top-tabs">
-            <a href="#" class="active">Biography</a>
-            <a href="#">All Topics</a>
-            <a href="#">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="18" cy="5" r="3"></circle>
-                    <circle cx="6" cy="12" r="3"></circle>
-                    <circle cx="18" cy="19" r="3"></circle>
-                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-                </svg>
-            </a>
-        </div>
-
-        <h1 class="about-header">AVS MAHIM</h1>
-
-        <div class="about-profile-grid">
-            <!-- Left Photo -->
-            <div>
-                <div class="profile-photo-box">
-                    <div class="heart-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <div class="main-grid">
+                <!-- Photo -->
+                <div class="photo-container">
+                    <div class="imdb-heart">
+                        <svg viewBox="0 0 24 24">
                             <path
-                                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z">
                             </path>
                         </svg>
                     </div>
-                    <svg class="profile-placeholder-icon" width="60" height="60" viewBox="0 0 24 24" fill="none"
-                        stroke="#fff" stroke-width="1.5">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
+                    <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='130' height='180'><rect width='100%' height='100%' fill='%23222'/><path d='M65 60 a20 20 0 1 0 0-40 a20 20 0 1 0 0 40 M30 130 q35-50 70 0' stroke='%23444' stroke-width='4' fill='none'/></svg>"
+                        alt="AVS MAHIM">
                 </div>
-            </div>
 
-            <!-- Middle Bio -->
-            <div class="profile-bio-sec">
-                <div class="bio-title">Video Editor &middot; Video Creation &middot; Automation Service</div>
-                <p class="bio-text">AVS MAHIM is a Bangladeshi content creator specializing in Premiere Pro & After
-                    Effects plugins, SFX, presets and editing resources for video editors.</p>
-                <a href="#" class="read-more">Read more ↓</a>
+                <!-- Bio -->
+                <div class="bio-content">
+                    <p class="bio-text">AVS MAHIM is a Bangladeshi content creator specializing in Premiere Pro & After
+                        Effects plugins, SFX, presets and editing resources for video editors.</p>
+                    <a href="#" class="expand-arrow">&gt;</a>
 
-                <div class="more-links">
-                    More at AVS &middot; <a href="about.html">Contact</a> &middot; <a href="about.html">Services</a>
-                </div>
-            </div>
-
-            <!-- Right Sidebar Actions -->
-            <div class="sidebar-actions">
-                <a href="#" class="btn-outline-yellow">+ Add to favorites</a>
-                <a href="plugins.html" class="btn-yellow"
-                    style="margin-bottom:0; width:100%; padding: 1.2rem 2rem;">Browse All Items</a>
-            </div>
-        </div>
-
-        <!-- MIDDLE SECTION -->
-        <div class="about-middle">
-            <div class="details-box">
-                <h3>Personal Details</h3>
-                <div class="social-links">
-                    Official Sites
-                    <a href="#" style="margin-left: 1rem;">YouTube</a> &middot;
-                    <a href="#">Facebook</a> &middot;
-                    <a href="#">Instagram</a>
-                </div>
-                <div class="stats-row">
-                    <div class="stat-item">
-                        <div class="stat-value">25K+</div>
-                        <div class="stat-label">Downloads</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">120+</div>
-                        <div class="stat-label">Plugins</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">500+</div>
-                        <div class="stat-label">SFX</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">10K+</div>
-                        <div class="stat-label">Members</div>
+                    <div class="bio-links">
+                        <div class="bio-links-row">
+                            <span style="color:#fff; font-weight:600;">More at</span> <a href="#">AVSPro</a> <a
+                                href="#">Contact info</a> <span class="bullet-separator">&middot;</span> <a
+                                href="#">Services</a>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="skills-box">
-                <div class="skills-tags">
-                    Skills:
-                    <div class="skill-tag" style="margin-left: 1rem;">Premiere Pro</div> |
-                    <div class="skill-tag">After Effects</div> |
-                    <div class="skill-tag">Video Editing</div>
+                <!-- Buttons -->
+                <div class="action-buttons">
+                    <div class="btn-fav">
+                        <button class="btn-fav-left">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path>
+                            </svg>
+                            Add to favorites
+                        </button>
+                        <button class="btn-fav-right">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M7 10l5 5 5-5z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <a href="plugins.html" class="btn-imdb-yellow">
+                        Browse All Items
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z">
+                            </path>
+                        </svg>
+                    </a>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <!-- RESOURCES SECTION -->
-        <section class="resources-section" id="resources" style="padding: 0;">
-            <div class="resources-grid" id="resources-grid">
-                <!-- Generated via JS -->
-            </div>
+        <!-- LIGHT GRAY BOTTOM SECTION -->
+        <section class="light-content-section">
+            <div class="light-grid">
+                <!-- Left details -->
+                <div>
+                    <h2 class="section-title">
+                        Personal details
+                        <a href="#" class="icon-btn">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z">
+                                </path>
+                            </svg>
+                        </a>
+                    </h2>
 
-            <div class="edit-page-btn">
-                <a href="#" class="btn-yellow">EDIT THIS PAGE</a>
+                    <div class="details-list">
+                        <div class="detail-row">
+                            <div class="detail-label">Official sites</div>
+                            <div class="detail-content">
+                                <a href="#">YouTube Fan Page</a>
+                                <a href="#">Instagram</a>
+                                <a href="#">Facebook</a>
+                            </div>
+                            <a href="#" class="detail-arrow">&gt;</a>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Downloads</div>
+                            <div class="detail-content"><span class="plain-text">25K+</span></div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Plugins</div>
+                            <div class="detail-content"><a href="#">120+</a></div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">SFX</div>
+                            <div class="detail-content"><a href="#">500+</a></div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Members</div>
+                            <div class="detail-content"><span class="plain-text">10K+</span></div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Skills</div>
+                            <div class="detail-content">
+                                <a href="#">Premiere Pro</a>
+                                <span class="bullet-separator" style="margin-right:0.5rem;">&middot;</span>
+                                <a href="#">After Effects</a>
+                                <span class="bullet-separator" style="margin-right:0.5rem;">&middot;</span>
+                                <a href="#">Video Editing</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="contribute-box">
+                        <h3 class="contribute-title">
+                            Contribute to this page
+                            <span class="detail-arrow">&gt;</span>
+                        </h3>
+                        <p class="contribute-desc">Suggest an edit or add missing content</p>
+                        <a href="#" class="contribute-link">Learn more about contributing &gt;</a>
+                        <a href="#" class="btn-imdb-yellow"
+                            style="width: auto; padding: 0.5rem 1.5rem; border-radius: 20px;">Edit page</a>
+                    </div>
+                </div>
+
+                <!-- Right Sidebar Details -->
+                <div class="sidebar-widget">
+                    <h2 class="sidebar-title">
+                        <span
+                            style="display:inline-block; width:4px; height:18px; background:var(--imdb-yellow); margin-right:8px; vertical-align:middle; border-radius:2px;"></span>
+                        More to explore
+                    </h2>
+
+                    <div class="sidebar-cards">
+                        <!-- Featured items styled for light mode -->
+                        <div class="light-card">
+                            <img src="https://via.placeholder.com/400x225/111/fff?text=Premium+Plugin"
+                                class="light-card-img" alt="Plugin">
+                            <div class="light-card-content">
+                                <div class="light-card-title">Ultimate Transitions Pack</div>
+                                <div class="light-card-meta">SIZE: 1.2GB | VER: 2.0</div>
+                                <a href="#" class="btn-imdb-yellow"
+                                    style="background: rgba(0,0,0,0.05); color: var(--imdb-link-blue); width: 100%;">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path>
+                                    </svg>
+                                    Watchlist
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="light-card">
+                            <img src="https://via.placeholder.com/400x225/111/fff?text=SFX+Library"
+                                class="light-card-img" alt="SFX">
+                            <div class="light-card-content">
+                                <div class="light-card-title">Cinematic Whooshes</div>
+                                <div class="light-card-meta">SIZE: 450MB | VER: 1.0</div>
+                                <a href="#" class="btn-imdb-yellow"
+                                    style="background: rgba(0,0,0,0.05); color: var(--imdb-link-blue); width: 100%;">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path>
+                                    </svg>
+                                    Watchlist
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
     </div>
@@ -425,7 +792,7 @@
     <!-- FOOTER SECTION -->
     <footer class="footer">
         <div class="footer-content">
-            <h2>Want free resources too?</h2>
+            <h2 style="color:#fff;">Want free resources too?</h2>
             <p>Browse our free plugins, SFX and presets<br>and download instantly.</p>
             <a href="#" class="btn-yellow">GET FREE RESOURCES NOW — IT'S FREE!</a>
             <hr>
@@ -567,22 +934,9 @@
         </div>
     </div>
 
-    <!-- GSAP & ScrollTrigger -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-
-    <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
     <script src="js/supabase-client.js"></script>
-    <script src="js/main.js"></script>
     <script src="js/auth.js"></script>
-    <script>
-        window.addEventListener('wheel', function (e) {
-            e.preventDefault();
-            window.scrollBy(0, e.deltaY * 3);
-        }, { passive: false });
-    </script>
 </body>
 
 </html>
