@@ -1,8 +1,8 @@
     /* VARIABLES & RESET */
     :root {
-      --bg-color: #000000;
+      --bg-color: #1a1a1a;
       --accent-color: #8B0000;
-      --btn-color: #FFE600;
+      --btn-color: #FFD700;
       --text-white: #FFFFFF;
       --font-heading: 'Cormorant Garamond', serif;
       --font-body: 'Montserrat', sans-serif;
@@ -1056,4 +1056,372 @@
       }
     }
 
-    </style>
+    /* --- IMDb Style Homepage Redesign --- */
+    .imdb-profile-layer {
+      background-color: #1a1a1a;
+      padding: 120px 5% 2rem 5%;
+      /* Top padding for navbar space */
+      border-bottom: 1px solid #333333;
+    }
+
+    .profile-content-inner {
+      display: flex;
+      max-width: 1200px;
+      margin: 0 auto;
+      gap: 2rem;
+    }
+
+    .profile-left {
+      flex: 0 0 25%;
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
+    }
+
+    .avatar-container {
+      position: relative;
+      width: 120px;
+      height: 120px;
+    }
+
+    .profile-avatar {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .add-avatar-btn {
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--btn-color);
+      color: #000;
+      border: none;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .profile-right {
+      flex: 0 0 75%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .profile-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .profile-name {
+      font-family: var(--font-body);
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0;
+    }
+
+    .profile-name .edit-icon {
+      font-size: 1.2rem;
+      color: #aaaaaa;
+      cursor: pointer;
+    }
+
+    .profile-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.5rem;
+    }
+
+    .btn-signin-gold {
+      background: var(--btn-color);
+      color: #000;
+      border: none;
+      border-radius: 4px;
+      padding: 0.5rem 1.5rem;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-signin-gold:hover {
+      background: #e6c200;
+    }
+
+    .create-account-link {
+      color: #aaaaaa;
+      font-size: 0.8rem;
+      text-decoration: none;
+    }
+
+    .create-account-link:hover {
+      text-decoration: underline;
+      color: #ffffff;
+    }
+
+    .profile-bio {
+      color: #aaaaaa;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+
+    .profile-links {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .profile-links a {
+      color: #aaaaaa;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .profile-links a:hover {
+      color: #ffffff;
+    }
+
+    .profile-bottom-actions {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .btn-favorite {
+      background: transparent;
+      color: var(--btn-color);
+      border: 1px solid var(--btn-color);
+      border-radius: 20px;
+      padding: 0.5rem 1rem;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-favorite:hover {
+      background: rgba(255, 215, 0, 0.1);
+    }
+
+    .btn-add-photos {
+      background: #333333;
+      color: #ffffff;
+      border: none;
+      border-radius: 20px;
+      padding: 0.5rem 1rem;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background 0.2s;
+    }
+
+    .btn-add-photos:hover {
+      background: #444444;
+    }
+
+    .imdb-divider {
+      height: 1px;
+      background: #333333;
+      width: 100%;
+    }
+
+    /* Layer 2: Featured Banner */
+    .imdb-banner-layer {
+      position: relative;
+      background: linear-gradient(135deg, #1a0533 0%, #0d0d2b 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow: hidden;
+      height: 100vh;
+      /* Adjust base height */
+    }
+
+    .banner-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at center, transparent 40%, rgba(0, 0, 0, 0.8) 100%);
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    .banner-content-top {
+      position: absolute;
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      z-index: 20;
+    }
+
+    .glowing-logo {
+      font-family: var(--font-body);
+      font-size: 3rem;
+      font-weight: 700;
+      color: #ffffff;
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+      letter-spacing: 0.2em;
+      margin-bottom: 0.5rem;
+    }
+
+    .glowing-subtitle {
+      font-family: var(--font-body);
+      font-size: 1.2rem;
+      color: #aaaaaa;
+      letter-spacing: 0.1em;
+    }
+
+    .canvas-play-overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80px;
+      height: 80px;
+      background: rgba(0, 0, 0, 0.5);
+      border: 2px solid rgba(255, 255, 255, 0.8);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 25;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .canvas-play-overlay:hover {
+      transform: translate(-50%, -50%) scale(1.1);
+      background: rgba(0, 0, 0, 0.7);
+    }
+
+    .video-duration-badge {
+      position: absolute;
+      bottom: 2rem;
+      left: 2rem;
+      background: rgba(0, 0, 0, 0.7);
+      color: #ffffff;
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      font-weight: 600;
+      z-index: 25;
+    }
+
+    /* Layer 3: Featured Content */
+    .imdb-content-preview-layer {
+      background-color: #1a1a1a;
+      padding: 4rem 10%;
+      border-top: 1px solid #333333;
+    }
+
+    .section-title {
+      font-family: var(--font-body);
+      font-size: 1.8rem;
+      color: var(--btn-color);
+      margin-bottom: 2rem;
+      border-left: 4px solid var(--btn-color);
+      padding-left: 1rem;
+    }
+
+    .imdb-cards-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+
+    .imdb-card {
+      background: #2a2a2a;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: filter 0.3s;
+      cursor: pointer;
+    }
+
+    .imdb-card:hover {
+      filter: brightness(1.2);
+    }
+
+    .imdb-card-thumb {
+      width: 100%;
+      padding-top: 56.25%;
+      /* 16:9 */
+      background-color: #111;
+      position: relative;
+    }
+
+    .imdb-card-title {
+      padding: 1rem;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      color: #ffffff;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    @media (max-width: 768px) {
+      .profile-content-inner {
+        flex-direction: column;
+      }
+
+      .profile-left {
+        justify-content: center;
+      }
+
+      .profile-header-row {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .profile-actions {
+        align-items: center;
+      }
+
+      .profile-bio {
+        text-align: center;
+      }
+
+      .profile-links {
+        justify-content: center;
+      }
+
+      .profile-bottom-actions {
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .imdb-cards-row {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .imdb-cards-row {
+        grid-template-columns: 1fr;
+      }
+    }

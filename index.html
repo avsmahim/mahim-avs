@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AVS MAHIM</title>
+  <title>AVS Control - Premium Plugins, SFX & Presets</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -22,7 +22,7 @@
 
   <!-- NAVBAR -->
   <nav class="navbar" id="navbar">
-    <div class="nav-left">AVS MAHIM</div>
+    <div class="nav-left" style="color: var(--btn-color);">AVS MAHIM</div>
     <div class="nav-right">
       <a href="index.html">HOME</a>
       <a href="plugins.html">PLUGIN</a>
@@ -46,13 +46,69 @@
     style="margin-top: 100px; text-align: center; height: 90px; width: 728px; background: #222; margin-left: auto; margin-right: auto; display: flex; align-items: center; justify-content: center; border: 1px dashed #555; color: #555;">
     AD BANNER 728x90</div>
 
+  <!-- LAYER 1: PROFILE -->
+  <section class="imdb-profile-layer">
+    <div class="profile-content-inner">
+      <div class="profile-left">
+        <div class="avatar-container">
+          <img src="https://ui-avatars.com/api/?name=AVSMahim&background=333&color=fff&size=120" alt="AVS Mahim"
+            class="profile-avatar">
+          <button class="add-avatar-btn">+</button>
+        </div>
+      </div>
+      <div class="profile-right">
+        <div class="profile-header-row">
+          <h1 class="profile-name">AVS Mahim <span class="edit-icon">✎</span></h1>
+          <div class="profile-actions">
+            <button class="btn-signin-gold" onclick="document.getElementById('auth-modal').classList.add('open')">Sign
+              in</button>
+            <a href="#" class="create-account-link"
+              onclick="document.getElementById('auth-modal').classList.add('open'); document.getElementById('tab-signup').click();">New
+              customer? Create account</a>
+          </div>
+        </div>
+        <p class="profile-bio">
+          AVS Mahim is a Bangladeshi Creator and Developer.<br>
+          He is the Founder of AVS Control - a professional<br>
+          platform for Plugins, SFX, Presets and Windows Apps.<br>
+          He creates content for video editors and creators.
+        </p>
+        <div class="profile-links">
+          <a href="#">More at AVS Control</a>
+          <a href="#">Contact info</a>
+        </div>
+        <div class="profile-bottom-actions">
+          <button class="btn-favorite">+ Add to favorite people</button>
+          <button class="btn-add-photos">Add photos, demo reels <svg width="12" height="12" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg></button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="imdb-divider"></div>
+
   <!-- LEFT SIDE FIXED TEXT -->
   <div class="fixed-left-text">AVS MAHIM</div>
 
-  <!-- SCROLL PNG ANIMATION -->
-  <section class="scroll-sequence" id="home">
+  <!-- SCROLL PNG ANIMATION (LAYER 2) -->
+  <section class="scroll-sequence imdb-banner-layer" id="home">
+    <div class="banner-overlay"></div>
+    <div class="banner-content-top">
+      <h2 class="glowing-logo">AVS MAHIM</h2>
+      <p class="glowing-subtitle">Premium Plugins, SFX & Presets</p>
+    </div>
     <div class="sticky-container">
       <div class="loading-screen" id="loading-screen">Loading... <span id="loading-progress">0%</span></div>
+      <div class="canvas-play-overlay">
+        <svg viewBox="0 0 24 24" fill="white" width="64" height="64">
+          <path d="M8 5v14l11-7z" />
+        </svg>
+      </div>
+      <div class="video-duration-badge">0:30</div>
       <canvas id="sequence-canvas"></canvas>
       <div class="scroll-text" id="scroll-text">
         <h1>PREMIERE PRO & AFTER EFFECTS</h1>
@@ -61,6 +117,37 @@
       </div>
       <div class="progress-bar-container">
         <div class="progress-bar" id="progress-bar"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LAYER 3: FEATURED CONTENT -->
+  <section class="imdb-content-preview-layer">
+    <h3 class="section-title">AVS Mahim - Featured Content</h3>
+    <div class="imdb-cards-row">
+      <div class="imdb-card">
+        <div class="imdb-card-thumb"
+          style="background: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=400&auto=format&fit=crop') center/cover;">
+        </div>
+        <div class="imdb-card-title">Ultimate Plugins Pack</div>
+      </div>
+      <div class="imdb-card">
+        <div class="imdb-card-thumb"
+          style="background: url('https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?q=80&w=400&auto=format&fit=crop') center/cover;">
+        </div>
+        <div class="imdb-card-title">Cinematic SFX Bundle</div>
+      </div>
+      <div class="imdb-card">
+        <div class="imdb-card-thumb"
+          style="background: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=400&auto=format&fit=crop') center/cover;">
+        </div>
+        <div class="imdb-card-title">Pro Color Presets</div>
+      </div>
+      <div class="imdb-card">
+        <div class="imdb-card-thumb"
+          style="background: url('https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=400&auto=format&fit=crop') center/cover;">
+        </div>
+        <div class="imdb-card-title">AVS Windows Hub</div>
       </div>
     </div>
   </section>
@@ -99,7 +186,7 @@
         <a href="#preset">PRESET</a> &bull;
         <a href="#" id="report-link">REPORT</a>
       </div>
-      <div class="copyright">Â© 2026 AVS MAHIM. MADE IN BD.</div>
+      <div class="copyright">&copy; 2026 AVS Mahim. All rights reserved.</div>
     </div>
   </footer>
 

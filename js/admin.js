@@ -1,5 +1,5 @@
 ﻿(function () {
-    const PASSWORD = 'admin123'; // Hardcoded password requirement
+    const PASSWORD = 'n5&@7-mahim'; // Hardcoded password requirement
     const BUCKET_NAME = 'downloads'; // Ensure this bucket exists in Supabase Storage
 
     // Login UI Logic
