@@ -359,3 +359,42 @@ if (fpGrid) {
     });
   });
 }
+
+/* =========================================
+   LAYER 4 - PRODUCT CATEGORY COUNTS
+   ========================================= */
+async function loadL4Counts() {
+  const categoryMap = {
+    plugins: { el: document.getElementById('l4-count-plugins'), filter: { category: 'plugins' } },
+    sfx: { el: document.getElementById('l4-count-sfx'), filter: { category: 'sfx' } },
+    presets: { el: document.getElementById('l4-count-presets'), filter: { category: 'presets' } },
+    apps: { el: document.getElementById('l4-count-apps'), filter: { category: 'apps' } },
+    tutorials: { el: document.getElementById('l4-count-tutorials'), filter: null }, // videos
+  };
+
+  try {
+    // Fetch all items once
+    const { data, error } = await supabaseClient.from('items').select('id, category, video_url');
+    if (error || !data) return;
+
+    const counts = { plugins: 0, sfx: 0, presets: 0, apps: 0, tutorials: 0 };
+    data.forEach(item => {
+      if (item.video_url) counts.tutorials++;
+      if (item.category === 'plugins') counts.plugins++;
+      if (item.category === 'sfx') counts.sfx++;
+      if (item.category === 'presets') counts.presets++;
+      if (item.category === 'apps') counts.apps++;
+    });
+
+    Object.entries(categoryMap).forEach(([key, { el }]) => {
+      if (el) el.textContent = counts[key] > 0 ? counts[key] : '0';
+    });
+  } catch (e) {
+    // silently ignore – counts just stay as '—'
+  }
+}
+
+// Run on pages that have l4 section
+if (document.getElementById('l4-count-plugins')) {
+  loadL4Counts();
+}

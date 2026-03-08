@@ -1698,6 +1698,211 @@
       }
     }
 
+    /* Layer 4: Hero / CTA Section */
+    .l4-section {
+      position: relative;
+      background: #000000;
+      padding: 7rem 10% 5rem;
+      overflow: hidden;
+      border-top: 1px solid #1a1a1a;
+      z-index: 60;
+    }
+
+    .l4-glow {
+      position: absolute;
+      width: 700px;
+      height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(123, 47, 190, 0.18) 0%, transparent 70%);
+      pointer-events: none;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .l4-glow-left {
+      left: -300px;
+    }
+
+    .l4-glow-right {
+      right: -300px;
+    }
+
+    .l4-hero {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto 5rem;
+    }
+
+    .l4-eyebrow {
+      font-family: var(--font-body);
+      font-size: 0.72rem;
+      letter-spacing: 0.25em;
+      color: #888888;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .l4-heading {
+      font-family: var(--font-body);
+      font-size: 3.2rem;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+
+    .l4-heading span {
+      color: #888888;
+      font-weight: 300;
+    }
+
+    .l4-heading strong {
+      color: #ffffff;
+      font-weight: 800;
+      display: block;
+    }
+
+    .l4-desc {
+      color: #777;
+      font-size: 0.95rem;
+      line-height: 1.7;
+      margin-bottom: 2rem;
+    }
+
+    .l4-avatars {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 0.8rem;
+    }
+
+    .l4-avatars img {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 2px solid #000;
+      margin-left: -10px;
+      object-fit: cover;
+    }
+
+    .l4-avatars img:first-child {
+      margin-left: 0;
+    }
+
+    .l4-trust {
+      color: #aaaaaa;
+      font-size: 0.88rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .l4-trust strong {
+      color: #ffffff;
+    }
+
+    .l4-trust-sub {
+      color: #666;
+      font-size: 0.78rem;
+      margin-bottom: 2rem;
+    }
+
+    .btn-l4-explore {
+      display: inline-block;
+      background: #3B6FD4;
+      color: #ffffff;
+      border: none;
+      border-radius: 30px;
+      padding: 0.85rem 2.2rem;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-l4-explore:hover {
+      background: #2d58b8;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(59, 111, 212, 0.35);
+    }
+
+    /* Product cards */
+    .l4-cards {
+      position: relative;
+      z-index: 10;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1.2rem;
+    }
+
+    .l4-card {
+      background: #111111;
+      border: 1px solid #222;
+      border-radius: 12px;
+      padding: 2rem 1.2rem;
+      text-align: center;
+      text-decoration: none;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+      transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+    }
+
+    .l4-card:hover {
+      border-color: #FFD700;
+      transform: translateY(-6px);
+      box-shadow: 0 12px 30px rgba(255, 215, 0, 0.1);
+    }
+
+    .l4-card-icon {
+      font-size: 2rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .l4-card-label {
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      color: #888;
+      text-transform: uppercase;
+    }
+
+    .l4-card-count {
+      font-family: var(--font-body);
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #FFD700;
+    }
+
+    .l4-card-btn {
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      color: #aaaaaa;
+      margin-top: 0.3rem;
+      transition: color 0.2s;
+    }
+
+    .l4-card:hover .l4-card-btn {
+      color: #FFD700;
+    }
+
+    @media (max-width: 900px) {
+      .l4-cards {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .l4-cards {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .l4-heading {
+        font-size: 2.2rem;
+      }
+    }
+
     /* Layer 3: Featured Content */
     .imdb-content-preview-layer {
       background-color: #1a1a1a;
