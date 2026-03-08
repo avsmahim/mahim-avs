@@ -1246,234 +1246,323 @@
       width: 100%;
     }
 
-    /* Layer 2: MZ Media Video Section */
-    .mz-media-layer {
+    /* =============================================
+       LAYER 2: MZ MEDIA HERO (Rebuilt)
+       ============================================= */
+
+    /* Outer wrapper */
+    .mz2-wrapper {
       position: relative;
-      background-color: #000000;
-      min-height: 100vh;
-      padding: 8rem 5% 4rem 5%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      width: 100%;
       overflow: hidden;
-      border-bottom: 1px solid #333333;
     }
 
-    .mz-glow-effect {
-      position: absolute;
-      top: 50%;
-      right: -200px;
-      transform: translateY(-50%);
-      width: 800px;
-      height: 800px;
-      background: radial-gradient(circle, rgba(123, 47, 190, 0.25) 0%, transparent 70%);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    .mz-above-video {
-      position: relative;
-      z-index: 10;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-bottom: 3rem;
-      text-align: center;
-    }
-
-    .mz-above-video h2 {
-      font-family: var(--font-body);
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: #ffffff;
-      margin-bottom: 1.5rem;
-    }
-
-    .mz-avatars {
+    /* ---- TOP: Black CTA block ---- */
+    .mz2-top {
+      background: #000000;
+      padding: 8rem 5% 5rem;
       display: flex;
       justify-content: center;
-      margin-bottom: 1rem;
+      align-items: center;
     }
 
-    .mz-avatars img {
-      width: 40px;
-      height: 40px;
+    .mz2-text-block {
+      text-align: center;
+      max-width: 640px;
+    }
+
+    .mz2-line1 {
+      font-family: var(--font-body);
+      font-size: 3rem;
+      font-weight: 300;
+      color: #888888;
+      line-height: 1.1;
+      margin: 0;
+    }
+
+    .mz2-line2 {
+      font-family: var(--font-body);
+      font-size: 3rem;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.1;
+      margin: 0 0 1.5rem;
+    }
+
+    .mz2-desc {
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      color: #888888;
+      line-height: 1.7;
+      margin-bottom: 2.2rem;
+      max-width: 540px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .mz2-avatars {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 0.9rem;
+    }
+
+    .mz2-avatars img {
+      width: 42px;
+      height: 42px;
       border-radius: 50%;
-      border: 2px solid #000000;
-      margin-left: -10px;
+      border: 2.5px solid #000;
+      margin-left: -12px;
       object-fit: cover;
     }
 
-    .mz-avatars img:first-child {
+    .mz2-avatars img:first-child {
       margin-left: 0;
     }
 
-    .mz-above-video p {
-      color: #aaaaaa;
-      font-size: 0.9rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .btn-explore-gold {
-      background: var(--btn-color);
-      color: #000000;
-      border: none;
-      border-radius: 30px;
-      padding: 0.8rem 2rem;
+    .mz2-loved {
       font-family: var(--font-body);
-      font-weight: 600;
+      font-size: 0.92rem;
+      color: #ffffff;
+      margin-bottom: 0.3rem;
+    }
+
+    .mz2-loved strong {
+      font-weight: 700;
+    }
+
+    .mz2-sub {
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      color: #555;
+      margin-bottom: 2.2rem;
+    }
+
+    .mz2-btn {
+      display: inline-block;
+      background: #2563EB;
+      color: #ffffff;
+      text-decoration: none;
+      border-radius: 50px;
+      padding: 0.85rem 2.4rem;
+      font-family: var(--font-body);
       font-size: 0.95rem;
-      cursor: pointer;
-      transition: transform 0.2s, background 0.2s;
+      font-weight: 600;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
     }
 
-    .btn-explore-gold:hover {
-      background: #e6c200;
-      transform: translateY(-2px);
+    .mz2-btn:hover {
+      background: #1d4fcf;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4);
     }
 
-    .mz-video-wrapper {
+    /* ---- BOTTOM: Dark purple visual block ---- */
+    .mz2-bottom {
       position: relative;
-      z-index: 10;
       width: 100%;
-      display: flex;
-      justify-content: center;
-      margin-bottom: 4rem;
-    }
-
-    .mz-video-container {
-      width: 100%;
-      max-width: 700px;
-      background: #1a0533;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(123, 47, 190, 0.2);
-      border: 1px solid rgba(123, 47, 190, 0.3);
-      position: relative;
-    }
-
-    .mz-video-thumbnail {
-      position: relative;
-      padding-top: 56.25%;
-      /* 16:9 Aspect Ratio */
-      width: 100%;
+      min-height: 65vh;
+      background: linear-gradient(90deg, #0d0d1a 0%, #1a0533 50%, #0d0d1a 100%);
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      align-items: center;
+      overflow: hidden;
+      padding-top: 3.5rem;
     }
 
-    .mz-thumbnail-glow {
+    /* Diagonal beam glow (right side) */
+    .mz2-beam {
       position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 300px;
-      height: 300px;
-      background: radial-gradient(circle, rgba(123, 47, 190, 0.4) 0%, transparent 60%);
+      top: -10%;
+      right: -5%;
+      width: 55%;
+      height: 130%;
+      background: linear-gradient(135deg,
+          transparent 0%,
+          rgba(123, 47, 190, 0.12) 30%,
+          rgba(100, 60, 200, 0.22) 55%,
+          rgba(123, 47, 190, 0.08) 75%,
+          transparent 100%);
+      transform: skewX(-15deg);
       pointer-events: none;
+      z-index: 0;
     }
 
-    .mz-logo-top {
-      position: absolute;
-      top: 1.5rem;
-      left: 50%;
-      transform: translateX(-50%);
+    /* Logo at top */
+    .mz2-logo {
+      position: relative;
+      z-index: 10;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      color: #ffffff;
+      gap: 0.75rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .mz2-logo-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+
+    .mz2-logo-text {
       font-family: var(--font-body);
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      z-index: 15;
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: 0.08em;
     }
 
-    .mz-logo-icon {
-      color: #7B2FBE;
+    /* 3D Orb area (float + glow) */
+    .mz2-orb-area {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 2rem;
     }
 
-    .mz-3d-orb {
-      position: absolute;
-      top: 45%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 100px;
-      height: 100px;
+    /* Floating orb */
+    .mz2-orb {
+      position: relative;
+      width: 160px;
+      height: 160px;
       border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, #a252eb, #4b147d);
-      box-shadow: inset -10px -10px 20px rgba(0, 0, 0, 0.5), 0 10px 30px rgba(123, 47, 190, 0.6);
-      z-index: 12;
-      animation: float 4s ease-in-out infinite;
+      background: radial-gradient(circle at 35% 30%, #3c3c52, #2a2a3a 60%, #1a1a2e 100%);
+      box-shadow:
+        inset -12px -12px 25px rgba(0, 0, 0, 0.6),
+        inset 6px 6px 15px rgba(255, 255, 255, 0.06),
+        0 20px 50px rgba(100, 40, 200, 0.5),
+        0 0 80px rgba(100, 40, 200, 0.25);
+      animation: mz2Float 3s ease-in-out infinite;
+      z-index: 5;
     }
 
-    @keyframes float {
-      0% {
-        transform: translate(-50%, -50%);
+    @keyframes mz2Float {
+
+      0%,
+      100% {
+        transform: translateY(0px);
       }
 
       50% {
-        transform: translate(-50%, -60%);
-      }
-
-      100% {
-        transform: translate(-50%, -50%);
+        transform: translateY(-20px);
       }
     }
 
-    .mz-planet-bottom {
+    /* Eyes */
+    .mz2-eye {
       position: absolute;
-      bottom: -50px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #ffffff;
+      top: 52px;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+    }
+
+    .mz2-eye::after {
+      content: '';
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: #1a1a2e;
+      border-radius: 50%;
+      top: 6px;
+      left: 6px;
+    }
+
+    .mz2-eye-l {
+      left: 38px;
+    }
+
+    .mz2-eye-r {
+      right: 38px;
+    }
+
+    /* Smile */
+    .mz2-smile {
+      position: absolute;
+      bottom: 42px;
       left: 50%;
       transform: translateX(-50%);
-      width: 600px;
-      height: 200px;
-      background: radial-gradient(ellipse at top, #2b0b4a 0%, #0d0d2b 100%);
+      width: 50px;
+      height: 22px;
+      border-bottom: 4px solid rgba(255, 255, 255, 0.7);
+      border-radius: 0 0 50px 50px;
+    }
+
+    /* Orb glow underneath */
+    .mz2-orb-glow {
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+      height: 60px;
+      background: radial-gradient(ellipse at center, rgba(120, 40, 220, 0.55) 0%, transparent 70%);
+      filter: blur(12px);
+      z-index: 4;
+    }
+
+    /* Planet hemisphere */
+    .mz2-planet {
+      position: absolute;
+      bottom: -60px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 900px;
+      height: 340px;
+      background: radial-gradient(ellipse at 50% 0%, #2a1650 0%, #1a1a2e 50%, #0d0d1a 100%);
       border-radius: 50% 50% 0 0;
-      z-index: 10;
-      opacity: 0.8;
+      z-index: 2;
     }
 
-    .mz-video-controls {
-      position: absolute;
-      bottom: 12px;
-      left: 0;
-      right: 0;
-      padding: 0 1.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 15;
-    }
+    /* Responsive */
+    @media (max-width: 768px) {
 
-    .controls-left,
-    .controls-right {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
+      .mz2-line1,
+      .mz2-line2 {
+        font-size: 2.2rem;
+      }
 
-    .mz-timer {
-      color: #ffffff;
-      font-family: var(--font-body);
-      font-size: 0.85rem;
-      opacity: 0.8;
-    }
+      .mz2-bottom {
+        min-height: 55vh;
+      }
 
-    .mz-progress-bar {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 4px;
-      background: rgba(255, 255, 255, 0.1);
-      z-index: 15;
-    }
+      .mz2-orb {
+        width: 120px;
+        height: 120px;
+      }
 
-    .mz-progress-fill {
-      height: 100%;
-      width: 35%;
-      background: #7B2FBE;
+      .mz2-eye {
+        width: 16px;
+        height: 16px;
+        top: 38px;
+      }
+
+      .mz2-eye-l {
+        left: 26px;
+      }
+
+      .mz2-eye-r {
+        right: 26px;
+      }
+
+      .mz2-smile {
+        width: 38px;
+        bottom: 30px;
+      }
+
+      .mz2-planet {
+        width: 600px;
+        height: 220px;
+      }
     }
 
     /* Featured Projects Section */

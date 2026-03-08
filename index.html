@@ -94,72 +94,67 @@
   <!-- LEFT SIDE FIXED TEXT -->
   <div class="fixed-left-text">AVS MAHIM</div>
 
-  <!-- LAYER 2: MZ MEDIA VIDEO SECTION -->
-  <section class="mz-media-layer" id="home">
-    <div class="mz-glow-effect"></div>
+  <!-- LAYER 2: MZ MEDIA HERO (Rebuilt) -->
+  <section class="mz2-wrapper" id="home">
 
-    <div class="mz-above-video">
-      <h2>AVS Mahim - Creator & Developer</h2>
-      <div class="mz-avatars">
-        <img src="https://ui-avatars.com/api/?name=User1&background=random" alt="Viewer 1">
-        <img src="https://ui-avatars.com/api/?name=User2&background=random" alt="Viewer 2">
-        <img src="https://ui-avatars.com/api/?name=User3&background=random" alt="Viewer 3">
-        <img src="https://ui-avatars.com/api/?name=User4&background=random" alt="Viewer 4">
+    <!-- TOP: Black text/CTA block -->
+    <div class="mz2-top">
+      <div class="mz2-text-block">
+        <h2 class="mz2-line1">Get More Plugins</h2>
+        <h2 class="mz2-line2">Using Quality Effects</h2>
+        <p class="mz2-desc">
+          We provide premium Plugins, SFX, Presets and Windows Apps<br>
+          for video editors and content creators worldwide.
+        </p>
+        <div class="mz2-avatars">
+          <img src="https://i.pravatar.cc/80?img=1" alt="u1">
+          <img src="https://i.pravatar.cc/80?img=2" alt="u2">
+          <img src="https://i.pravatar.cc/80?img=3" alt="u3">
+          <img src="https://i.pravatar.cc/80?img=4" alt="u4">
+        </div>
+        <p class="mz2-loved"><strong>Loved by 500+ Creators</strong> worldwide.</p>
+        <p class="mz2-sub">Our Users Speak for Us</p>
+        <a href="plugins.html" class="mz2-btn">Explore Now ↗</a>
       </div>
-      <p>Our viewers speak for us</p>
-      <button class="btn-explore-gold">Explore Now ↗</button>
     </div>
 
-    <!-- The actual interactive scroll canvas is moved back under the content for the effect -->
-    <!-- SCROLL PNG ANIMATION -->
-    <div class="mz-video-wrapper">
-      <div class="mz-video-container">
+    <!-- BOTTOM: Dark purple visual block -->
+    <div class="mz2-bottom">
+      <!-- Diagonal beam glow on the right -->
+      <div class="mz2-beam"></div>
 
-        <div class="mz-video-thumbnail">
-          <div class="mz-thumbnail-glow"></div>
-          <div class="mz-logo-top">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="mz-logo-icon" stroke="currentColor"
-              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-              <polyline points="2 17 12 22 22 17"></polyline>
-              <polyline points="2 12 12 17 22 12"></polyline>
-            </svg>
-            <span>AVS MAHIM</span>
-          </div>
+      <!-- Logo at top center -->
+      <div class="mz2-logo">
+        <div class="mz2-logo-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+        </div>
+        <span class="mz2-logo-text">AVS MAHIM</span>
+      </div>
 
-          <div class="mz-3d-orb"></div>
-          <div class="mz-planet-bottom"></div>
-
-          <div class="mz-video-controls">
-            <div class="controls-left">
-              <svg viewBox="0 0 24 24" fill="white" width="16" height="16">
-                <path d="M8 5v14l11-7z" />
-              </svg>
-              <span class="mz-timer">01:31</span>
-            </div>
-            <div class="controls-right">
-              <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" width="16" height="16">
-                <path d="M11 5L6 9H2v6h4l5 4V5z" />
-                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
-              </svg>
-              <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" width="16" height="16">
-                <polyline points="15 3 21 3 21 9" />
-                <polyline points="9 21 3 21 3 15" />
-                <line x1="21" x2="14" y1="3" y2="10" />
-                <line x1="3" x2="10" y1="21" y2="14" />
-              </svg>
-            </div>
-          </div>
-          <div class="mz-progress-bar">
-            <div class="mz-progress-fill"></div>
-          </div>
+      <!-- 3D floating orb character -->
+      <div class="mz2-orb-area">
+        <div class="mz2-orb-glow"></div>
+        <div class="mz2-orb">
+          <!-- Eyes -->
+          <div class="mz2-eye mz2-eye-l"></div>
+          <div class="mz2-eye mz2-eye-r"></div>
+          <!-- Smile -->
+          <div class="mz2-smile"></div>
         </div>
       </div>
+
+      <!-- Planet hemisphere at bottom -->
+      <div class="mz2-planet"></div>
     </div>
 
-    <!-- Retaining the sticky container logic for scroll animations -->
+    <!-- Hidden canvas kept for scroll animation JS (invisible) -->
     <section class="scroll-sequence"
-      style="position: absolute; top:0; left:0; width:100%; height:100vh; pointer-events: none; opacity: 0;">
+      style="position:absolute;top:0;left:0;width:1px;height:1px;pointer-events:none;opacity:0;">
       <div class="sticky-container">
         <canvas id="sequence-canvas"></canvas>
       </div>
