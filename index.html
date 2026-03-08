@@ -94,30 +94,99 @@
   <!-- LEFT SIDE FIXED TEXT -->
   <div class="fixed-left-text">AVS MAHIM</div>
 
-  <!-- SCROLL PNG ANIMATION (LAYER 2) -->
-  <section class="scroll-sequence imdb-banner-layer" id="home">
-    <div class="banner-overlay"></div>
-    <div class="banner-content-top">
-      <h2 class="glowing-logo">AVS MAHIM</h2>
-      <p class="glowing-subtitle">Premium Plugins, SFX & Presets</p>
+  <!-- LAYER 2: MZ MEDIA VIDEO SECTION -->
+  <section class="mz-media-layer" id="home">
+    <div class="mz-glow-effect"></div>
+
+    <div class="mz-above-video">
+      <h2>AVS Mahim - Creator & Developer</h2>
+      <div class="mz-avatars">
+        <img src="https://ui-avatars.com/api/?name=User1&background=random" alt="Viewer 1">
+        <img src="https://ui-avatars.com/api/?name=User2&background=random" alt="Viewer 2">
+        <img src="https://ui-avatars.com/api/?name=User3&background=random" alt="Viewer 3">
+        <img src="https://ui-avatars.com/api/?name=User4&background=random" alt="Viewer 4">
+      </div>
+      <p>Our viewers speak for us</p>
+      <button class="btn-explore-gold">Explore Now ↗</button>
     </div>
-    <div class="sticky-container">
-      <div class="loading-screen" id="loading-screen">Loading... <span id="loading-progress">0%</span></div>
-      <div class="canvas-play-overlay">
-        <svg viewBox="0 0 24 24" fill="white" width="64" height="64">
-          <path d="M8 5v14l11-7z" />
-        </svg>
+
+    <!-- The actual interactive scroll canvas is moved back under the content for the effect -->
+    <!-- SCROLL PNG ANIMATION -->
+    <div class="mz-video-wrapper">
+      <div class="mz-video-container">
+
+        <div class="mz-video-thumbnail">
+          <div class="mz-thumbnail-glow"></div>
+          <div class="mz-logo-top">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="mz-logo-icon" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+              <polyline points="2 12 12 17 22 12"></polyline>
+            </svg>
+            <span>AVS MAHIM</span>
+          </div>
+
+          <div class="mz-3d-orb"></div>
+          <div class="mz-planet-bottom"></div>
+
+          <div class="mz-video-controls">
+            <div class="controls-left">
+              <svg viewBox="0 0 24 24" fill="white" width="16" height="16">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+              <span class="mz-timer">01:31</span>
+            </div>
+            <div class="controls-right">
+              <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" width="16" height="16">
+                <path d="M11 5L6 9H2v6h4l5 4V5z" />
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
+              </svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" width="16" height="16">
+                <polyline points="15 3 21 3 21 9" />
+                <polyline points="9 21 3 21 3 15" />
+                <line x1="21" x2="14" y1="3" y2="10" />
+                <line x1="3" x2="10" y1="21" y2="14" />
+              </svg>
+            </div>
+          </div>
+          <div class="mz-progress-bar">
+            <div class="mz-progress-fill"></div>
+          </div>
+        </div>
       </div>
-      <div class="video-duration-badge">0:30</div>
-      <canvas id="sequence-canvas"></canvas>
-      <div class="scroll-text" id="scroll-text">
-        <h1>PREMIERE PRO & AFTER EFFECTS</h1>
-        <p>SCROLL TO EXPLORE</p>
-        <div class="scroll-line"></div>
+    </div>
+
+    <!-- Retaining the sticky container logic for scroll animations -->
+    <section class="scroll-sequence"
+      style="position: absolute; top:0; left:0; width:100%; height:100vh; pointer-events: none; opacity: 0;">
+      <div class="sticky-container">
+        <canvas id="sequence-canvas"></canvas>
       </div>
-      <div class="progress-bar-container">
-        <div class="progress-bar" id="progress-bar"></div>
-      </div>
+    </section>
+
+  </section>
+
+  <!-- FEATURED PROJECTS SECTION -->
+  <section class="fp-section" id="featured-projects">
+    <!-- Header -->
+    <div class="fp-header">
+      <p class="fp-label">OUR WORK</p>
+      <h2 class="fp-title">Some Of Our<br><strong>Featured Projects</strong></h2>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="fp-tabs">
+      <button class="fp-tab active" data-fp-filter="all">All</button>
+      <button class="fp-tab" data-fp-filter="youtube">Youtube Videos</button>
+      <button class="fp-tab" data-fp-filter="shorts">Shorts</button>
+      <button class="fp-tab" data-fp-filter="tutorial">Tutorial Videos</button>
+      <button class="fp-tab" data-fp-filter="free">Free Resources</button>
+    </div>
+
+    <!-- Video Grid -->
+    <div class="fp-grid" id="fp-grid">
+      <!-- Populated by JS from Supabase, or shows placeholders -->
     </div>
   </section>
 

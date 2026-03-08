@@ -275,3 +275,87 @@ if (navbar) {
     });
   });
 }
+
+/* =========================================
+   FEATURED PROJECTS SECTION
+   ========================================= */
+const fpGrid = document.getElementById('fp-grid');
+const fpTabs = document.querySelectorAll('.fp-tab');
+
+// Placeholder cards shown when no Supabase videos are uploaded yet
+const FP_PLACEHOLDERS = [
+  { title: 'Ultimate Plugins Pack', meta: '05:57 • Youtube Videos', category: 'youtube', progress: 45 },
+  { title: 'Cinematic SFX Bundle', meta: '02:14 • Shorts', category: 'shorts', progress: 20 },
+  { title: 'Pro Color Presets Tutorial', meta: '12:30 • Tutorial Videos', category: 'tutorial', progress: 70 },
+  { title: 'Free Motion Pack Download', meta: '03:45 • Free Resources', category: 'free', progress: 10 },
+];
+
+function buildFpCard(item) {
+  const durationMatch = item.meta ? item.meta.match(/(\d+:\d+)/) : null;
+  const duration = durationMatch ? durationMatch[1] : '05:00';
+  const progress = item.progress || Math.floor(Math.random() * 60 + 10);
+  const thumbHtml = item.thumbnail_url
+    ? `<img src="${item.thumbnail_url}" alt="${item.title}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'fp-card-thumb-placeholder\\'><span>NO PREVIEW</span></div>'">`
+    : `<div class="fp-card-thumb-placeholder"><span>AVS MAHIM</span></div>`;
+
+  return `
+    <div class="fp-card" data-category="${item.category || 'all'}">
+      <div class="fp-card-thumb">
+        ${thumbHtml}
+        <div class="fp-play-btn">
+          <svg viewBox="0 0 24 24" fill="white" width="12" height="12"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <span class="fp-duration">${duration}</span>
+        <div class="fp-card-icons">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" width="14" height="14"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" width="14" height="14"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" x2="14" y1="3" y2="10"/><line x1="3" x2="10" y1="21" y2="14"/></svg>
+        </div>
+        <div class="fp-progress-bar"><div class="fp-progress-fill" style="width:${progress}%"></div></div>
+      </div>
+      <div class="fp-card-info">
+        <div class="fp-card-title">${item.title}</div>
+        <div class="fp-card-meta">${item.meta || item.category || 'AVS Mahim'}</div>
+      </div>
+    </div>`;
+}
+
+async function renderFpSection(activeFilter = 'all') {
+  if (!fpGrid) return;
+  fpGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:#555;font-size:0.9rem;letter-spacing:0.1em;">LOADING...</div>';
+
+  let items = [];
+  try {
+    // Try fetching from Supabase items table - use video_url presence as indicator of video items
+    const { data, error } = await supabaseClient.from('items').select('*').not('video_url', 'is', null).limit(8);
+    if (!error && data && data.length > 0) {
+      items = data.map(d => ({
+        title: d.title,
+        thumbnail_url: d.thumbnail_url,
+        category: d.video_category || d.category || 'youtube',
+        meta: `${d.duration || '05:00'} • ${d.video_category || d.category || 'Video'}`,
+        progress: d.progress || Math.floor(Math.random() * 60 + 10),
+      }));
+    }
+  } catch (e) { /* silently fall back to placeholders */ }
+
+  // Fall back to placeholders if no video items found
+  if (items.length === 0) items = FP_PLACEHOLDERS;
+
+  // Filter
+  const filtered = activeFilter === 'all' ? items : items.filter(i => i.category === activeFilter);
+  const display = filtered.length > 0 ? filtered : items.slice(0, 4);
+
+  fpGrid.innerHTML = display.map(buildFpCard).join('');
+}
+
+if (fpGrid) {
+  renderFpSection();
+  fpTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      fpTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      renderFpSection(tab.getAttribute('data-fp-filter'));
+    });
+  });
+}
