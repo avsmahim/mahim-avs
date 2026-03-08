@@ -129,7 +129,7 @@ async function renderResources(filter = 'all', searchQuery = '') {
   // Determine user and purchases
   let userId = null;
   let purchasedItemIds = [];
-  const { data: { session } } = await supabase.auth.getSession();
+  const { data: { session } } = await supabaseClient.auth.getSession();
   if (session && session.user) {
     userId = session.user.id;
     purchasedItemIds = await fetchPurchases(userId);
