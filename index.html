@@ -126,21 +126,34 @@
   <section class="mz2-wrapper" id="home">
 
     <!-- TOP: Black text/CTA block -->
-    <div class="mz2-top">
+    <div class="mz2-top mz2-animate-trigger" id="mz2-trigger-section">
+      <!-- Faint purple glow right side -->
+      <div class="mz2-bg-glow"></div>
+
+      <!-- Floating light particles -->
+      <div class="mz2-bg-particles">
+        <div class="mz2-bg-particle" style="left: 15%; animation-duration: 20s; animation-delay: 2s;"></div>
+        <div class="mz2-bg-particle" style="left: 30%; animation-duration: 25s; animation-delay: 5s;"></div>
+        <div class="mz2-bg-particle" style="left: 60%; animation-duration: 22s; animation-delay: 1s;"></div>
+        <div class="mz2-bg-particle" style="left: 75%; animation-duration: 18s; animation-delay: 4s;"></div>
+        <div class="mz2-bg-particle" style="left: 85%; animation-duration: 24s; animation-delay: 0s;"></div>
+        <div class="mz2-bg-particle" style="left: 50%; animation-duration: 28s; animation-delay: 3s;"></div>
+      </div>
+
       <div class="mz2-text-block">
         <h2 class="mz2-line1">Get More Plugins</h2>
         <h2 class="mz2-line2">Using Quality Effects</h2>
         <p class="mz2-desc">
-          We provide premium Plugins, SFX, Presets and Windows Apps<br>
-          for video editors and content creators worldwide.
+          <span>We provide premium Plugins, SFX, Presets and Windows Apps<br>
+            for video editors and content creators worldwide.</span>
         </p>
         <div class="mz2-avatars">
-          <img src="https://i.pravatar.cc/80?img=1" alt="u1">
-          <img src="https://i.pravatar.cc/80?img=2" alt="u2">
-          <img src="https://i.pravatar.cc/80?img=3" alt="u3">
-          <img src="https://i.pravatar.cc/80?img=4" alt="u4">
+          <img src="https://i.pravatar.cc/80?img=1" alt="u1" style="transition-delay: 0.6s;">
+          <img src="https://i.pravatar.cc/80?img=2" alt="u2" style="transition-delay: 0.7s;">
+          <img src="https://i.pravatar.cc/80?img=3" alt="u3" style="transition-delay: 0.8s;">
+          <img src="https://i.pravatar.cc/80?img=4" alt="u4" style="transition-delay: 0.9s;">
         </div>
-        <p class="mz2-loved"><strong>Loved by 500+ Creators</strong> worldwide.</p>
+        <p class="mz2-loved"><strong>Loved by <span id="mz2-counter">0</span>+ Creators</strong> worldwide.</p>
         <p class="mz2-sub">Our Users Speak for Us</p>
         <a href="plugins.html" class="mz2-btn">Explore Now ↗</a>
       </div>

@@ -398,3 +398,63 @@ async function loadL4Counts() {
 if (document.getElementById('l4-count-plugins')) {
   loadL4Counts();
 }
+
+/* =========================================
+   MZ MEDIA HERO (LAYER 2) ANIMATIONS
+   ========================================= */
+document.addEventListener('DOMContentLoaded', () => {
+  const mz2Section = document.getElementById('mz2-trigger-section');
+  const mz2Counter = document.getElementById('mz2-counter');
+
+  if (!mz2Section || !mz2Counter) return;
+
+  let hasAnimated = false;
+
+  const observerOptions = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.3 // Trigger when 30% of the section is visible
+  };
+
+  const mz2Observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !hasAnimated) {
+        hasAnimated = true;
+        // Add class to trigger CSS transitions
+        mz2Section.classList.add('mz2-in-view');
+
+        // Run counter animation after 1s delay (matching text fade-in)
+        setTimeout(() => {
+          animateCounter(mz2Counter, 0, 500, 1500); // 0 to 500 over 1.5 seconds
+        }, 1000);
+
+        // Optional: stop observing once activated
+        observer.unobserve(mz2Section);
+      }
+    });
+  }, observerOptions);
+
+  mz2Observer.observe(mz2Section);
+
+  // Helper function for smooth number counting
+  function animateCounter(element, start, end, duration) {
+    let startTime = null;
+
+    function step(timestamp) {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+
+      // using ease-out cubic
+      const easeProgress = 1 - Math.pow(1 - progress, 3);
+      element.innerText = Math.floor(easeProgress * (end - start) + start);
+
+      if (progress < 1) {
+        window.requestAnimationFrame(step);
+      } else {
+        element.innerText = end;
+      }
+    }
+
+    window.requestAnimationFrame(step);
+  }
+});
