@@ -137,7 +137,7 @@ async function renderResources(filter = 'all', searchQuery = '') {
 
   grid.innerHTML = fixedAdHTML;
 
-  const filtered = filter === 'all' ? resourcesData : resourcesData.filter(item => item.category === filter);
+  const filtered = filter === 'all' ? resourcesData : resourcesData.filter(item => (item.category || '').toLowerCase() === filter.toLowerCase());
 
   if (filtered.length === 0) {
     grid.innerHTML += '<div style="grid-column: 1/-1; text-align: center; padding: 4rem; opacity: 0.5;">NO ITEMS FOUND.</div>';
@@ -150,7 +150,7 @@ async function renderResources(filter = 'all', searchQuery = '') {
 
     const badgeHtml = isPremium
       ? `<span class="card-badge premium-badge">PREMIUM</span>`
-      : `<span class="card-badge">${item.category}</span>`;
+      : `<span class="card-badge">${(item.category || '').toUpperCase()}</span>`;
 
     let btnHtml = '';
     if (isPremium && !hasPurchased) {
@@ -163,6 +163,7 @@ async function renderResources(filter = 'all', searchQuery = '') {
     const sizeText = item.size ? `SIZE: ${item.size}` : '';
     const versionText = item.version ? ` | VER: ${item.version}` : '';
     const downloadsText = ` | DLs: ${item.download_count || 0}`;
+    const descHtml = item.description ? `<p style="font-size: 0.85rem; color: #aaa; margin: 0.5rem 0; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${item.description}</p>` : '';
 
     const card = document.createElement('div');
     card.className = 'resource-card';
@@ -174,6 +175,7 @@ async function renderResources(filter = 'all', searchQuery = '') {
           </div>
           <div class="card-content">
             <h3 class="card-title">${item.title}</h3>
+            ${descHtml}
             <div class="card-meta">${sizeText}${versionText}${downloadsText}</div>
             ${btnHtml}
           </div>
