@@ -204,20 +204,32 @@
   </section>
 
   <!-- FEATURED PROJECTS SECTION -->
-  <section class="fp-section" id="featured-projects">
-    <!-- Header -->
-    <div class="fp-header">
-      <p class="fp-label">OUR WORK</p>
-      <h2 class="fp-title">Some Of Our<br><strong>Featured Projects</strong></h2>
+  <section class="fp-section mz3-animate-trigger" id="featured-projects">
+    <!-- Subtle background particles -->
+    <div class="l3-bg-particles">
+      <div class="l3-bg-particle" style="left: 20%; animation-delay: 0s;"></div>
+      <div class="l3-bg-particle" style="left: 50%; animation-delay: 2s;"></div>
+      <div class="l3-bg-particle" style="left: 80%; animation-delay: 4s;"></div>
+      <div class="l3-bg-particle" style="left: 35%; animation-delay: 1s;"></div>
+      <div class="l3-bg-particle" style="left: 65%; animation-delay: 3s;"></div>
+    </div>
+
+    <!-- Header with Scroll Parallax -->
+    <div class="fp-header" data-scroll-parallax>
+      <p class="fp-label" style="opacity: 0;">OUR WORK</p>
+      <h2 class="fp-title">
+        <span class="mz3-heading1">Some Of Our</span><br>
+        <span class="mz3-heading2"><strong>Featured Projects</strong></span>
+      </h2>
     </div>
 
     <!-- Filter Tabs -->
     <div class="fp-tabs">
-      <button class="fp-tab active" data-fp-filter="all">All</button>
-      <button class="fp-tab" data-fp-filter="youtube">Youtube Videos</button>
-      <button class="fp-tab" data-fp-filter="shorts">Shorts</button>
-      <button class="fp-tab" data-fp-filter="tutorial">Tutorial Videos</button>
-      <button class="fp-tab" data-fp-filter="free">Free Resources</button>
+      <button class="fp-tab active" data-fp-filter="all" style="transition-delay: 0.1s;">All</button>
+      <button class="fp-tab" data-fp-filter="youtube" style="transition-delay: 0.2s;">Youtube Videos</button>
+      <button class="fp-tab" data-fp-filter="shorts" style="transition-delay: 0.3s;">Shorts</button>
+      <button class="fp-tab" data-fp-filter="tutorial" style="transition-delay: 0.4s;">Tutorial Videos</button>
+      <button class="fp-tab" data-fp-filter="free" style="transition-delay: 0.5s;">Free Resources</button>
     </div>
 
     <!-- Video Grid -->

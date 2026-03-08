@@ -1841,10 +1841,52 @@
     .fp-section {
       background: #000000;
       padding: 6rem 10%;
-      border-top: 1px solid #222;
-      border-bottom: 1px solid #222;
+      border-top: 1px solid rgba(255, 215, 0, 0.1);
+      border-bottom: 1px solid rgba(255, 215, 0, 0.1);
       position: relative;
       z-index: 60;
+      overflow: hidden;
+    }
+
+    /* Subdued background particles */
+    .l3-bg-particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .l3-bg-particle {
+      position: absolute;
+      bottom: -10px;
+      width: 3px;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 50%;
+      animation: l3FloatUp 9s linear infinite;
+    }
+
+    @keyframes l3FloatUp {
+      0% {
+        transform: translateY(0);
+        opacity: 0;
+      }
+
+      10% {
+        opacity: 0.5;
+      }
+
+      90% {
+        opacity: 0.5;
+      }
+
+      100% {
+        transform: translateY(-500px);
+        opacity: 0;
+      }
     }
 
     .fp-header {
@@ -1859,6 +1901,14 @@
       color: #888888;
       text-transform: uppercase;
       margin-bottom: 0.8rem;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .mz3-in-view .fp-label {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     .fp-title {
@@ -1867,6 +1917,30 @@
       color: #ffffff;
       font-weight: 400;
       line-height: 1.2;
+    }
+
+    .mz3-heading1 {
+      display: inline-block;
+      opacity: 0;
+      transform: translateX(-40px);
+      transition: opacity 1s ease-out, transform 1s ease-out;
+    }
+
+    .mz3-in-view .mz3-heading1 {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .mz3-heading2 {
+      display: inline-block;
+      opacity: 0;
+      transform: translateX(40px);
+      transition: opacity 1.2s ease-out, transform 1.2s ease-out;
+    }
+
+    .mz3-in-view .mz3-heading2 {
+      opacity: 1;
+      transform: translateX(0);
     }
 
     .fp-title strong {
@@ -1892,12 +1966,22 @@
       font-size: 0.85rem;
       font-weight: 500;
       cursor: pointer;
-      transition: all 0.25s ease;
+      opacity: 0;
+      transform: scale(0);
+      transition: all 0.25s ease, opacity 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .mz3-in-view .fp-tab {
+      opacity: 1;
+      transform: scale(1);
     }
 
     .fp-tab:hover {
       border-color: #FFD700;
       color: #FFD700;
+      transform: scale(1.05);
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+      transition-delay: 0s !important;
     }
 
     .fp-tab.active {
@@ -1905,6 +1989,19 @@
       border-color: #FFD700;
       color: #000000;
       font-weight: 700;
+      animation: mz3TabPulse 2s infinite;
+    }
+
+    @keyframes mz3TabPulse {
+
+      0%,
+      100% {
+        box-shadow: 0 0 5px rgba(255, 215, 0, 0.2);
+      }
+
+      50% {
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+      }
     }
 
     .fp-grid {
@@ -1919,12 +2016,22 @@
       overflow: hidden;
       position: relative;
       cursor: pointer;
-      transition: filter 0.3s, transform 0.3s;
+      border: 1px solid transparent;
+      opacity: 0;
+      transform: translateY(60px);
+      transition: filter 0.6s ease, transform 0.6s ease, border-color 0.6s ease, box-shadow 0.6s ease, opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .mz3-in-view .fp-card {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     .fp-card:hover {
       filter: brightness(1.15);
-      transform: translateY(-4px);
+      transform: scale(1.03) translateY(-4px);
+      border-color: rgba(255, 215, 0, 0.5);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 215, 0, 0.15);
     }
 
     .fp-card-thumb {
@@ -1933,6 +2040,23 @@
       padding-top: 56.25%;
       background: #1a1a1a;
       overflow: hidden;
+    }
+
+    .fp-card-thumb::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.4);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      z-index: 2;
+    }
+
+    .fp-card:hover .fp-card-thumb::after {
+      opacity: 1;
     }
 
     .fp-card-thumb img {
@@ -1964,10 +2088,10 @@
 
     .fp-play-btn {
       position: absolute;
-      bottom: 2rem;
-      left: 1rem;
-      width: 32px;
-      height: 32px;
+      top: 50%;
+      left: 50%;
+      width: 48px;
+      height: 48px;
       background: rgba(0, 0, 0, 0.75);
       border-radius: 50%;
       display: flex;
@@ -1975,11 +2099,31 @@
       justify-content: center;
       z-index: 5;
       border: 1px solid rgba(255, 255, 255, 0.2);
-      transition: background 0.2s;
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.5);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    .fp-play-btn:hover {
-      background: rgba(255, 215, 0, 0.15);
+    .fp-card:hover .fp-play-btn {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+      animation: mz3PlayPulse 2s infinite 0.4s;
+      border-color: #FFD700;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+    }
+
+    @keyframes mz3PlayPulse {
+
+      0%,
+      100% {
+        transform: translate(-50%, -50%) scale(1);
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+      }
+
+      50% {
+        transform: translate(-50%, -50%) scale(1.1);
+        box-shadow: 0 0 25px rgba(255, 215, 0, 0.8);
+      }
     }
 
     .fp-duration {
@@ -2021,11 +2165,35 @@
       width: 100%;
       height: 3px;
       background: rgba(255, 255, 255, 0.1);
+      z-index: 5;
     }
 
     .fp-progress-fill {
       height: 100%;
       background: #FFD700;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .fp-progress-fill::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+      animation: mz3ProgressShimmer 2s linear infinite;
+    }
+
+    @keyframes mz3ProgressShimmer {
+      0% {
+        left: -100%;
+      }
+
+      100% {
+        left: 200%;
+      }
     }
 
     .fp-card-info {

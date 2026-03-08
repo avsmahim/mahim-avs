@@ -290,7 +290,7 @@ const FP_PLACEHOLDERS = [
   { title: 'Free Motion Pack Download', meta: '03:45 • Free Resources', category: 'free', progress: 10 },
 ];
 
-function buildFpCard(item) {
+function buildFpCard(item, index) {
   const durationMatch = item.meta ? item.meta.match(/(\d+:\d+)/) : null;
   const duration = durationMatch ? durationMatch[1] : '05:00';
   const progress = item.progress || Math.floor(Math.random() * 60 + 10);
@@ -298,8 +298,11 @@ function buildFpCard(item) {
     ? `<img src="${item.thumbnail_url}" alt="${item.title}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'fp-card-thumb-placeholder\\'><span>NO PREVIEW</span></div>'">`
     : `<div class="fp-card-thumb-placeholder"><span>AVS MAHIM</span></div>`;
 
+  // Stagger card slide up: left=0.8s, right=1.0s (based on index)
+  const animDelay = 0.8 + (index * 0.2);
+
   return `
-    <div class="fp-card" data-category="${item.category || 'all'}">
+    <div class="fp-card" data-category="${item.category || 'all'}" style="transition-delay: ${animDelay}s, 0s, 0s, 0s, 0s;">
       <div class="fp-card-thumb">
         ${thumbHtml}
         <div class="fp-play-btn">
@@ -346,7 +349,7 @@ async function renderFpSection(activeFilter = 'all') {
   const filtered = activeFilter === 'all' ? items : items.filter(i => i.category === activeFilter);
   const display = filtered.length > 0 ? filtered : items.slice(0, 4);
 
-  fpGrid.innerHTML = display.map(buildFpCard).join('');
+  fpGrid.innerHTML = display.map((item, i) => buildFpCard(item, i)).join('');
 }
 
 if (fpGrid) {
@@ -456,5 +459,82 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     window.requestAnimationFrame(step);
+  }
+});
+
+/* =========================================
+   FEATURED PROJECTS (LAYER 3) ANIMATIONS
+   ========================================= */
+document.addEventListener('DOMContentLoaded', () => {
+  // 1. Scroll Triggers
+  const mz3Section = document.querySelector('.mz3-animate-trigger');
+  if (mz3Section) {
+    let hasMz3Animated = false;
+    const mz3Observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !hasMz3Animated) {
+          hasMz3Animated = true;
+          mz3Section.classList.add('mz3-in-view');
+          observer.unobserve(mz3Section);
+        }
+      });
+    }, { root: null, rootMargin: '0px', threshold: 0.1 });
+    mz3Observer.observe(mz3Section);
+  }
+
+  // 2. Scroll Parallax for Header
+  const l3Header = document.querySelector('[data-scroll-parallax]');
+  if (l3Header) {
+    window.addEventListener('scroll', () => {
+      const rect = l3Header.getBoundingClientRect();
+      const viewHeight = window.innerHeight;
+      // Only do parallax when it's near/in viewport
+      if (rect.top <= viewHeight && rect.bottom >= 0) {
+        // Slowing down the scroll for depth
+        const scrollOffset = (viewHeight / 2 - rect.top) * 0.1;
+        l3Header.style.transform = `translateY(${-scrollOffset}px)`;
+      }
+    });
+  }
+
+  // 3. Mouse Parallax for Cards (Event Delegation on fp-grid)
+  const layer3Grid = document.getElementById('fp-grid');
+  if (layer3Grid) {
+    layer3Grid.addEventListener('mousemove', (e) => {
+      const card = e.target.closest('.fp-card');
+      if (!card) return;
+
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+
+      // Calculate max 3 degree tilt
+      const rotateX = ((y - centerY) / centerY) * -3;
+      const rotateY = ((x - centerX) / centerX) * 3;
+
+      // Apply transform, preserving the initial CSS hover translation/scale
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03) translateY(-4px)`;
+    });
+
+    layer3Grid.addEventListener('mouseleave', () => {
+      resetCards();
+    });
+
+    layer3Grid.addEventListener('mouseout', (e) => {
+      const card = e.target.closest('.fp-card');
+      if (card && !card.contains(e.relatedTarget)) {
+        card.style.transform = ''; // clears inline transform, falls back to CSS
+      }
+    });
+
+    function resetCards() {
+      const cards = layer3Grid.querySelectorAll('.fp-card');
+      cards.forEach(c => {
+        c.style.transform = '';
+      });
+    }
   }
 });
