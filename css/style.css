@@ -1058,10 +1058,12 @@
 
     /* --- IMDb Style Homepage Redesign --- */
     .imdb-profile-layer {
-      background-color: #1a1a1a;
-      padding: 120px 5% 2rem 5%;
-      /* Top padding for navbar space */
+      background: radial-gradient(ellipse at 20% 50%, rgba(255, 215, 0, 0.04) 0%, transparent 60%),
+        linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
+      padding: 120px 5% 2.5rem 5%;
       border-bottom: 1px solid #333333;
+      position: relative;
+      overflow: hidden;
     }
 
     .profile-content-inner {
@@ -1089,6 +1091,40 @@
       height: 100%;
       border-radius: 50%;
       object-fit: cover;
+    }
+
+    /* 3D floating avatar */
+    .profile-3d-avatar {
+      border: 3px solid rgba(255, 215, 0, 0.5);
+      box-shadow:
+        0 0 0 4px rgba(255, 215, 0, 0.1),
+        0 0 20px rgba(255, 215, 0, 0.35),
+        0 0 50px rgba(255, 215, 0, 0.15),
+        0 15px 35px rgba(0, 0, 0, 0.6);
+      animation: profileFloat 4s ease-in-out infinite;
+      transform: perspective(500px) rotateY(0deg);
+      transition: box-shadow 0.3s, transform 0.3s;
+    }
+
+    .profile-3d-avatar:hover {
+      box-shadow:
+        0 0 0 4px rgba(255, 215, 0, 0.2),
+        0 0 30px rgba(255, 215, 0, 0.5),
+        0 0 70px rgba(255, 215, 0, 0.2),
+        0 15px 35px rgba(0, 0, 0, 0.6);
+      transform: perspective(500px) rotateY(8deg) scale(1.04);
+    }
+
+    @keyframes profileFloat {
+
+      0%,
+      100% {
+        transform: perspective(500px) translateY(0px);
+      }
+
+      50% {
+        transform: perspective(500px) translateY(-8px);
+      }
     }
 
     .add-avatar-btn {
@@ -1127,6 +1163,10 @@
       font-size: 2.5rem;
       font-weight: 700;
       color: #ffffff;
+      text-shadow:
+        2px 2px 0px #b8860b,
+        4px 4px 0px rgba(255, 215, 0, 0.25),
+        0 0 30px rgba(255, 215, 0, 0.15);
       display: flex;
       align-items: center;
       gap: 0.5rem;
@@ -2083,5 +2123,96 @@
     @media (max-width: 480px) {
       .imdb-cards-row {
         grid-template-columns: 1fr;
+      }
+    }
+
+    /* =====================================
+       PROFILE SECTION - 3D ENHANCEMENTS
+       ===================================== */
+
+    /* Sign-in button: 3D raised gold */
+    .btn-signin-gold {
+      box-shadow: 0 6px 0 #7a5c00, 0 8px 15px rgba(255, 215, 0, 0.3);
+      transform: translateY(0);
+      transition: transform 0.15s, box-shadow 0.15s, background 0.2s;
+    }
+
+    .btn-signin-gold:hover {
+      background: #e6c200;
+      transform: translateY(-3px);
+      box-shadow: 0 9px 0 #7a5c00, 0 12px 20px rgba(255, 215, 0, 0.4);
+    }
+
+    .btn-signin-gold:active {
+      transform: translateY(3px);
+      box-shadow: 0 3px 0 #7a5c00, 0 4px 8px rgba(255, 215, 0, 0.2);
+    }
+
+    /* Favorite button: 3D raised */
+    .btn-favorite {
+      box-shadow: 0 5px 0 rgba(184, 134, 11, 0.6), 0 6px 12px rgba(255, 215, 0, 0.2);
+      transform: translateY(0);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .btn-favorite:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 7px 0 rgba(184, 134, 11, 0.7), 0 8px 16px rgba(255, 215, 0, 0.3);
+    }
+
+    /* Star / particle elements */
+    .profile-star {
+      position: absolute;
+      color: #FFD700;
+      font-size: 0.7rem;
+      opacity: 0;
+      pointer-events: none;
+      animation: starTwinkle 2.5s ease-in-out infinite;
+    }
+
+    .ps1 {
+      top: -8px;
+      left: 10px;
+      animation-delay: 0s;
+      font-size: 0.6rem;
+    }
+
+    .ps2 {
+      top: 10px;
+      right: -6px;
+      animation-delay: 0.7s;
+      font-size: 0.8rem;
+    }
+
+    .ps3 {
+      bottom: 5px;
+      left: -4px;
+      animation-delay: 1.3s;
+      font-size: 0.55rem;
+    }
+
+    .ps4 {
+      bottom: 20px;
+      right: 10px;
+      animation-delay: 1.9s;
+      font-size: 0.65rem;
+    }
+
+    @keyframes starTwinkle {
+
+      0%,
+      100% {
+        opacity: 0;
+        transform: scale(0.5) rotate(0deg);
+      }
+
+      30% {
+        opacity: 0.9;
+        transform: scale(1.2) rotate(20deg);
+      }
+
+      60% {
+        opacity: 0.4;
+        transform: scale(0.8) rotate(-10deg);
       }
     }
