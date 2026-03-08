@@ -376,8 +376,8 @@ async function loadL4Counts() {
   };
 
   try {
-    // Fetch all items once
-    const { data, error } = await supabaseClient.from('items').select('id, category, video_url');
+    // Fetch all items once (avoiding specific column names that might crash if missing)
+    const { data, error } = await supabaseClient.from('items').select('*');
     if (error || !data) return;
 
     const counts = { plugins: 0, sfx: 0, presets: 0, apps: 0, tutorials: 0 };

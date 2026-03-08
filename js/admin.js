@@ -1,5 +1,5 @@
 ﻿(function () {
-    const PASSWORD = 'n5&@7-mahim'; // Hardcoded password requirement
+    const PASSWORD = 'admin123'; // Hardcoded password requirement
     const BUCKET_NAME = 'downloads'; // Ensure this bucket exists in Supabase Storage
 
     // Login UI Logic
@@ -206,6 +206,8 @@
 
         document.getElementById('item-file-url').value = item.file_url || '';
         document.getElementById('item-thumbnail-url').value = item.thumbnail_url || '';
+        document.getElementById('item-video-url').value = item.video_url || '';
+        document.getElementById('item-desc').value = item.description || '';
 
         document.getElementById('item-size').value = item.size || '';
         document.getElementById('item-version').value = item.version || '';
@@ -237,6 +239,8 @@
                 price: parseFloat(document.getElementById('item-price').value) || 0,
                 file_url: document.getElementById('item-file-url').value,
                 thumbnail_url: document.getElementById('item-thumbnail-url').value,
+                video_url: document.getElementById('item-video-url').value || null,
+                description: document.getElementById('item-desc').value || null,
                 size: document.getElementById('item-size').value,
                 version: document.getElementById('item-version').value
             };
