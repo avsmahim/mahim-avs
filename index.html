@@ -43,8 +43,25 @@
 
 
   <!-- LAYER 1: PROFILE -->
+  <section class="imdb-profile-layer l1-animate-enter">
 
-  <section class="imdb-profile-layer">
+    <!-- Floating background particles -->
+    <div class="l1-bg-particles">
+      <div class="l1-bg-particle" style="left: 10%; animation-duration: 25s; animation-delay: 0s;"></div>
+      <div class="l1-bg-particle" style="left: 25%; animation-duration: 28s; animation-delay: 4s;"></div>
+      <div class="l1-bg-particle" style="left: 40%; animation-duration: 22s; animation-delay: 2s;"></div>
+      <div class="l1-bg-particle" style="left: 60%; animation-duration: 30s; animation-delay: 8s;"></div>
+      <div class="l1-bg-particle" style="left: 75%; animation-duration: 26s; animation-delay: 5s;"></div>
+      <div class="l1-bg-particle" style="left: 85%; animation-duration: 20s; animation-delay: 1s;"></div>
+      <div class="l1-bg-particle" style="left: 15%; animation-duration: 24s; animation-delay: 7s;"></div>
+      <div class="l1-bg-particle" style="left: 50%; animation-duration: 27s; animation-delay: 3s;"></div>
+      <div class="l1-bg-particle" style="left: 95%; animation-duration: 29s; animation-delay: 6s;"></div>
+      <div class="l1-bg-particle" style="left: 5%; animation-duration: 23s; animation-delay: 9s;"></div>
+    </div>
+
+    <!-- Vignette borders -->
+    <div class="l1-vignette"></div>
+
     <div class="profile-content-inner">
       <div class="profile-left">
         <div class="avatar-container">
@@ -53,8 +70,13 @@
           <span class="profile-star ps2">✦</span>
           <span class="profile-star ps3">✦</span>
           <span class="profile-star ps4">✦</span>
+
+          <!-- Rotating gold ring -->
+          <div class="l1-avatar-ring"></div>
+
           <img src="https://ui-avatars.com/api/?name=AVSMahim&background=333&color=fff&size=120" alt="AVS Mahim"
-            class="profile-avatar profile-3d-avatar">
+            class="profile-avatar profile-3d-avatar l1-avatar-pulse">
+
           <button class="add-avatar-btn">+</button>
         </div>
       </div>
@@ -70,10 +92,14 @@
           </div>
         </div>
         <p class="profile-bio">
-          AVS Mahim is a Bangladeshi Creator and Developer.<br>
-          He is the Founder of AVS Control - a professional<br>
-          platform for Plugins, SFX, Presets and Windows Apps.<br>
-          He creates content for video editors and creators.
+          <span class="l1-bio-line" style="animation-delay: 0.2s;">AVS Mahim is a Bangladeshi Creator and
+            Developer.</span><br>
+          <span class="l1-bio-line" style="animation-delay: 0.4s;">He is the Founder of AVS Control - a
+            professional</span><br>
+          <span class="l1-bio-line" style="animation-delay: 0.6s;">platform for Plugins, SFX, Presets and Windows
+            Apps.</span><br>
+          <span class="l1-bio-line" style="animation-delay: 0.8s;">He creates content for video editors and
+            creators.</span>
         </p>
         <div class="profile-links">
           <a href="#">More at AVS Control</a>

@@ -1089,10 +1089,37 @@
       align-items: flex-start;
     }
 
+    /* Profile Avatar specific container Z-index */
     .avatar-container {
       position: relative;
       width: 120px;
       height: 120px;
+      z-index: 10;
+    }
+
+    /* Rotating gold ring */
+    .l1-avatar-ring {
+      position: absolute;
+      top: -8px;
+      left: -8px;
+      right: -8px;
+      bottom: -8px;
+      border-radius: 50%;
+      border: 2px dashed rgba(255, 215, 0, 0.5);
+      border-top-color: #FFD700;
+      border-bottom-color: #FFD700;
+      animation: l1RotateRing 10s linear infinite;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.2) inset, 0 0 15px rgba(255, 215, 0, 0.2);
+    }
+
+    @keyframes l1RotateRing {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
     }
 
     .profile-avatar {
@@ -1100,28 +1127,35 @@
       height: 100%;
       border-radius: 50%;
       object-fit: cover;
+      position: relative;
+      z-index: 2;
     }
 
-    /* 3D floating avatar */
+    /* 3D floating avatar with gold pulse */
     .profile-3d-avatar {
-      border: 3px solid rgba(255, 215, 0, 0.5);
-      box-shadow:
-        0 0 0 4px rgba(255, 215, 0, 0.1),
-        0 0 20px rgba(255, 215, 0, 0.35),
-        0 0 50px rgba(255, 215, 0, 0.15),
-        0 15px 35px rgba(0, 0, 0, 0.6);
-      animation: profileFloat 4s ease-in-out infinite;
+      border: 3px solid rgba(255, 215, 0, 0.8);
       transform: perspective(500px) rotateY(0deg);
-      transition: box-shadow 0.3s, transform 0.3s;
+      transition: transform 0.3s;
+    }
+
+    .l1-avatar-pulse {
+      animation: profileFloat 4s ease-in-out infinite, l1PulseGlow 3s ease-in-out infinite;
     }
 
     .profile-3d-avatar:hover {
-      box-shadow:
-        0 0 0 4px rgba(255, 215, 0, 0.2),
-        0 0 30px rgba(255, 215, 0, 0.5),
-        0 0 70px rgba(255, 215, 0, 0.2),
-        0 15px 35px rgba(0, 0, 0, 0.6);
       transform: perspective(500px) rotateY(8deg) scale(1.04);
+    }
+
+    @keyframes l1PulseGlow {
+
+      0%,
+      100% {
+        box-shadow: 0 0 20px #FFD700;
+      }
+
+      50% {
+        box-shadow: 0 0 40px #FFD700, 0 0 60px rgba(255, 215, 0, 0.5);
+      }
     }
 
     @keyframes profileFloat {
@@ -1173,13 +1207,40 @@
       font-weight: 700;
       color: #ffffff;
       text-shadow:
+        1px 1px 0px #b8860b,
         2px 2px 0px #b8860b,
-        4px 4px 0px rgba(255, 215, 0, 0.25),
-        0 0 30px rgba(255, 215, 0, 0.15);
+        3px 3px 0px #b8860b,
+        4px 4px 20px rgba(255, 215, 0, 0.5);
       display: flex;
       align-items: center;
       gap: 0.5rem;
       margin: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Name Shimmer Effect */
+    .profile-name::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      transform: skewX(-20deg);
+      animation: l1Shimmer 4s infinite 2s;
+    }
+
+    @keyframes l1Shimmer {
+      0% {
+        left: -100%;
+      }
+
+      30%,
+      100% {
+        left: 200%;
+      }
     }
 
     .profile-name .edit-icon {
@@ -1228,6 +1289,27 @@
       font-size: 0.95rem;
       line-height: 1.5;
       margin-bottom: 1rem;
+      position: relative;
+      z-index: 10;
+    }
+
+    .l1-bio-line {
+      display: inline-block;
+      opacity: 0;
+      transform: translateX(-20px);
+      animation: l1SlideFadeIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+
+    @keyframes l1SlideFadeIn {
+      0% {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateX(0);
+      }
     }
 
     .profile-links {
@@ -1272,7 +1354,7 @@
     .btn-add-photos {
       background: #333333;
       color: #ffffff;
-      border: none;
+      border: 1px solid transparent;
       border-radius: 20px;
       padding: 0.5rem 1rem;
       font-family: var(--font-body);
@@ -1282,11 +1364,13 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      transition: background 0.2s;
+      transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
     }
 
     .btn-add-photos:hover {
       background: #444444;
+      border-color: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.1) inset, 0 0 10px rgba(255, 255, 255, 0.2);
     }
 
     .imdb-divider {
