@@ -102,13 +102,32 @@ let resourcesData = [];
 let purchasesData = [];
 
 async function fetchResources(searchQuery = '') {
-  let query = supabaseClient.from('items').select('*');
-  if (searchQuery) {
-    query = query.ilike('title', `%${searchQuery}%`);
+  const tables = [
+    { name: 'plugins', category: 'plugins' },
+    { name: 'sfx', category: 'sfx' },
+    { name: 'presets', category: 'presets' }
+  ];
+
+  let allResults = [];
+
+  for (const table of tables) {
+    let query = supabaseClient.from(table.name).select('*');
+    if (searchQuery) query = query.ilike('title', `%${searchQuery}%`);
+    const { data } = await query;
+    if (data) {
+      allResults = allResults.concat(data.map(item => ({ ...item, category: table.category, type: item.is_premium ? 'premium' : 'free' })));
+    }
   }
-  const { data, error } = await query;
-  if (error) { console.error('Error fetching items:', error); return []; }
-  return data || [];
+
+  // Fetch legacy 'apps' from items table
+  let appsQuery = supabaseClient.from('items').select('*').eq('category', 'apps');
+  if (searchQuery) appsQuery = appsQuery.ilike('title', `%${searchQuery}%`);
+  const { data: appsData } = await appsQuery;
+  if (appsData) {
+    allResults = allResults.concat(appsData);
+  }
+
+  return allResults.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
 }
 
 async function fetchPurchases(userId) {

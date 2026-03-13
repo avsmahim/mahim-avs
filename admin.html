@@ -1944,6 +1944,7 @@
     <div id="admin-login-overlay">
         <div class="login-box">
             <h1>ADMIN ACCESS</h1>
+            <input type="email" id="admin-email" placeholder="ADMIN EMAIL ADDRESS" style="margin-bottom: 1rem;">
             <input type="password" id="admin-password" placeholder="ENTER ADMIN PASSWORD">
             <button id="admin-login-btn" class="btn-primary" style="width: 100%;">AUTHENTICATE</button>
             <div id="admin-error" style="color: #ff4d4d; margin-top: 1rem; display: none; font-size: 0.9rem;">Invalid
@@ -1963,52 +1964,45 @@
                 </svg>
                 Dashboard
             </div>
-            <div class="nav-item" data-target="items">
-                <svg viewBox="0 0 24 24">
-                    <path
-                        d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z" />
-                </svg>
-                Items Manager
-            </div>
-            <div class="nav-item" data-target="media">
-                <svg viewBox="0 0 24 24">
-                    <path
-                        d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" />
-                </svg>
-                Media Library
-            </div>
             <div class="nav-item" data-target="posts">
                 <svg viewBox="0 0 24 24">
-                    <path
-                        d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
                 </svg>
-                Posts / Blog
+                Posts
+            </div>
+            <div class="nav-item" data-target="plugins">
+                <svg viewBox="0 0 24 24">
+                    <path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z" />
+                </svg>
+                Plugins
+            </div>
+            <div class="nav-item" data-target="sfx">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 3v9.28c-.47-.17-.97-.28-1.5-.28C8.01 12 6 14.01 6 16.5S8.01 21 10.5 21c2.31 0 4.2-1.75 4.45-4H15V6h4V3h-7z" />
+                </svg>
+                SFX
+            </div>
+            <div class="nav-item" data-target="presets">
+                <svg viewBox="0 0 24 24">
+                    <path d="M11 20v-3H7v3H11zM15 20h4v-3h-4v3zM15 15h4v-3h-4v3zM11 15h4v-3h-4v3zM11 10h4V7h-4v3zM7 15h4v-3H7v3zM7 10h4V7H7v3z" />
+                </svg>
+                Presets
             </div>
             <div class="nav-item" data-target="users">
                 <svg viewBox="0 0 24 24">
-                    <path
-                        d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
+                    <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
                 </svg>
-                Users Manager
+                Users
             </div>
-            <div class="nav-item" data-target="orders">
+            <div class="nav-item" data-target="media">
                 <svg viewBox="0 0 24 24">
-                    <path
-                        d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z" />
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" />
                 </svg>
-                Orders & Sales
-            </div>
-            <div class="nav-item" data-target="ads">
-                <svg viewBox="0 0 24 24">
-                    <path
-                        d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14zM8 15h2v-5H8v5zm4 0h2V9h-2v6zm4 0h2v-3h-2v3z" />
-                </svg>
-                Ad Manager
+                Media
             </div>
             <div class="nav-item" data-target="settings">
                 <svg viewBox="0 0 24 24">
-                    <path
-                        d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.06-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.73,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.06,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.43-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.49-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z" />
+                    <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.06-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.73,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.06,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.43-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.49-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z" />
                 </svg>
                 Settings
             </div>
@@ -2056,108 +2050,205 @@
             </div>
         </div>
 
-        <!-- SECTION 2: ITEMS MANAGER -->
-        <div id="section-items" class="admin-section">
+        <!-- SECTION 2: PLUGINS MANAGER -->
+        <div id="section-plugins" class="admin-section">
             <div class="section-header">
-                <h1>Items Manager</h1>
+                <h1>Plugins Manager</h1>
             </div>
 
             <div class="panel">
-                <h3 class="panel-title" id="item-form-title">Add New Resource</h3>
-                <form id="item-form" class="admin-form">
-                    <input type="hidden" id="item-id">
+                <h3 class="panel-title" id="plugin-form-title">Add New Plugin</h3>
+                <form id="plugin-form" class="admin-form">
+                    <input type="hidden" id="plugin-id">
                     <div class="form-group">
                         <label>Title</label>
-                        <input type="text" id="item-title" class="admin-input" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Category</label>
-                        <select id="item-category" class="admin-select" required>
-                            <option value="plugins">Plugins</option>
-                            <option value="sfx">SFX</option>
-                            <option value="presets">Presets</option>
-                            <option value="apps">Windows Apps</option>
-                        </select>
+                        <input type="text" id="plugin-title" class="admin-input" required>
                     </div>
                     <div class="form-group">
                         <label>Type</label>
-                        <select id="item-type" class="admin-select" required>
+                        <select id="plugin-type" class="admin-select" required>
                             <option value="free">Free</option>
                             <option value="premium">Premium</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label>Price (USD)</label>
-                        <input type="number" step="0.01" id="item-price" class="admin-input" value="0.00" required>
+                        <input type="number" step="0.01" id="plugin-price" class="admin-input" value="0.00" required>
                     </div>
                     <div class="form-group">
                         <label>Direct File URL (or choose from Media Library)</label>
-                        <input type="url" id="item-file-url" class="admin-input" placeholder="https://...">
+                        <input type="url" id="plugin-file-url" class="admin-input" placeholder="https://...">
                     </div>
                     <div class="form-group">
-                        <label>Thumbnail URL (or choose from Media Library)</label>
-                        <input type="url" id="item-thumbnail-url" class="admin-input" placeholder="https://...">
-                    </div>
-                    <div class="form-group">
-                        <label>YouTube Video URL (for Featured Projects)</label>
-                        <input type="url" id="item-video-url" class="admin-input" placeholder="https://youtube.com/...">
+                        <label>Image URL</label>
+                        <input type="url" id="plugin-image-url" class="admin-input" placeholder="https://...">
                     </div>
                     <div class="form-group full">
                         <label>Description</label>
-                        <textarea id="item-desc" class="admin-textarea" rows="3"
-                            placeholder="Enter full details..."></textarea>
+                        <textarea id="plugin-desc" class="admin-textarea" rows="3" placeholder="Enter details..."></textarea>
                     </div>
-                    <div class="form-group">
-                        <label>File Size (e.g., 2.5 GB)</label>
-                        <input type="text" id="item-size" class="admin-input" placeholder="Optional">
-                    </div>
-                    <div class="form-group">
-                        <label>Version (for Apps/Plugins)</label>
-                        <input type="text" id="item-version" class="admin-input" placeholder="Optional">
-                    </div>
-                    <div class="form-group full"
-                        style="display: flex; gap: 1rem; align-items: center; margin-top: 1rem;">
-                        <button type="submit" class="btn-primary" id="save-item-btn">Save Resource</button>
-                        <button type="button" class="btn-secondary" id="cancel-item-btn" style="display: none;">Cancel
-                            Edit</button>
-                        <span id="item-form-msg" style="margin-left: auto;"></span>
+                    <div class="form-group full" style="display: flex; gap: 1rem; align-items: center; margin-top: 1rem;">
+                        <button type="submit" class="btn-primary" id="save-plugin-btn">Save Plugin</button>
+                        <button type="button" class="btn-secondary" id="cancel-plugin-btn" style="display: none;">Cancel Edit</button>
+                        <span id="plugin-form-msg" style="margin-left: auto;"></span>
                     </div>
                 </form>
             </div>
 
             <div class="panel">
                 <div class="table-controls">
-                    <h3 class="panel-title" style="margin: 0;">Resource Directory</h3>
-                    <div class="filters">
-                        <select id="filter-category">
-                            <option value="all">All Categories</option>
-                            <option value="plugins">Plugins</option>
-                            <option value="sfx">SFX</option>
-                            <option value="presets">Presets</option>
-                            <option value="apps">Apps</option>
-                        </select>
-                        <select id="filter-type">
-                            <option value="all">All Types</option>
-                            <option value="free">Free</option>
-                            <option value="premium">Premium</option>
-                        </select>
-                    </div>
+                    <h3 class="panel-title" style="margin: 0;">Plugins Directory</h3>
                 </div>
                 <div class="admin-table-wrapper">
                     <table class="admin-table">
                         <thead>
                             <tr>
                                 <th>Title</th>
-                                <th>Details</th>
+                                <th>Type</th>
                                 <th>Price</th>
-                                <th>Downloads</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="items-table-body">
+                        <tbody id="plugins-table-body">
+                            <tr><td colspan="4" style="text-align: center;">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION: SFX MANAGER -->
+        <div id="section-sfx" class="admin-section">
+            <div class="section-header">
+                <h1>SFX Manager</h1>
+            </div>
+
+            <div class="panel">
+                <h3 class="panel-title" id="sfx-form-title">Add New SFX</h3>
+                <form id="sfx-form" class="admin-form">
+                    <input type="hidden" id="sfx-id">
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" id="sfx-title" class="admin-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Type</label>
+                        <select id="sfx-type" class="admin-select" required>
+                            <option value="free">Free</option>
+                            <option value="premium">Premium</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Price (USD)</label>
+                        <input type="number" step="0.01" id="sfx-price" class="admin-input" value="0.00" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Audio File URL</label>
+                        <input type="url" id="sfx-audio-url" class="admin-input" placeholder="https://...">
+                    </div>
+                    <div class="form-group">
+                        <label>Direct Download URL</label>
+                        <input type="url" id="sfx-file-url" class="admin-input" placeholder="https://...">
+                    </div>
+                    <div class="form-group">
+                        <label>Image URL</label>
+                        <input type="url" id="sfx-image-url" class="admin-input" placeholder="https://...">
+                    </div>
+                    <div class="form-group full">
+                        <label>Description</label>
+                        <textarea id="sfx-desc" class="admin-textarea" rows="3" placeholder="Enter details..."></textarea>
+                    </div>
+                    <div class="form-group full" style="display: flex; gap: 1rem; align-items: center; margin-top: 1rem;">
+                        <button type="submit" class="btn-primary" id="save-sfx-btn">Save SFX</button>
+                        <button type="button" class="btn-secondary" id="cancel-sfx-btn" style="display: none;">Cancel Edit</button>
+                        <span id="sfx-form-msg" style="margin-left: auto;"></span>
+                    </div>
+                </form>
+            </div>
+
+            <div class="panel">
+                <div class="table-controls">
+                    <h3 class="panel-title" style="margin: 0;">SFX Directory</h3>
+                </div>
+                <div class="admin-table-wrapper">
+                    <table class="admin-table">
+                        <thead>
                             <tr>
-                                <td colspan="5" style="text-align: center;">Loading...</td>
+                                <th>Title</th>
+                                <th>Type</th>
+                                <th>Price</th>
+                                <th>Actions</th>
                             </tr>
+                        </thead>
+                        <tbody id="sfx-table-body">
+                            <tr><td colspan="4" style="text-align: center;">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION: PRESETS MANAGER -->
+        <div id="section-presets" class="admin-section">
+            <div class="section-header">
+                <h1>Presets Manager</h1>
+            </div>
+
+            <div class="panel">
+                <h3 class="panel-title" id="preset-form-title">Add New Preset</h3>
+                <form id="preset-form" class="admin-form">
+                    <input type="hidden" id="preset-id">
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" id="preset-title" class="admin-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Type</label>
+                        <select id="preset-type" class="admin-select" required>
+                            <option value="free">Free</option>
+                            <option value="premium">Premium</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Price (USD)</label>
+                        <input type="number" step="0.01" id="preset-price" class="admin-input" value="0.00" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Direct File URL (or choose from Media Library)</label>
+                        <input type="url" id="preset-file-url" class="admin-input" placeholder="https://...">
+                    </div>
+                    <div class="form-group">
+                        <label>Image URL</label>
+                        <input type="url" id="preset-image-url" class="admin-input" placeholder="https://...">
+                    </div>
+                    <div class="form-group full">
+                        <label>Description</label>
+                        <textarea id="preset-desc" class="admin-textarea" rows="3" placeholder="Enter details..."></textarea>
+                    </div>
+                    <div class="form-group full" style="display: flex; gap: 1rem; align-items: center; margin-top: 1rem;">
+                        <button type="submit" class="btn-primary" id="save-preset-btn">Save Preset</button>
+                        <button type="button" class="btn-secondary" id="cancel-preset-btn" style="display: none;">Cancel Edit</button>
+                        <span id="preset-form-msg" style="margin-left: auto;"></span>
+                    </div>
+                </form>
+            </div>
+
+            <div class="panel">
+                <div class="table-controls">
+                    <h3 class="panel-title" style="margin: 0;">Presets Directory</h3>
+                </div>
+                <div class="admin-table-wrapper">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Type</th>
+                                <th>Price</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="presets-table-body">
+                            <tr><td colspan="4" style="text-align: center;">Loading...</td></tr>
                         </tbody>
                     </table>
                 </div>

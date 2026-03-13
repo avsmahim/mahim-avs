@@ -1,27 +1,71 @@
-﻿(function () {
+(function () {
     const PASSWORD = 'admin123'; // Hardcoded password requirement
     const BUCKET_NAME = 'downloads'; // Ensure this bucket exists in Supabase Storage
 
     // Login UI Logic
     const overlay = document.getElementById('admin-login-overlay');
+    const emailInput = document.getElementById('admin-email');
     const passInput = document.getElementById('admin-password');
     const loginBtn = document.getElementById('admin-login-btn');
     const errorMsg = document.getElementById('admin-error');
     const logoutBtn = document.getElementById('admin-logout');
 
-    // Check session storage
-    if (sessionStorage.getItem('admin_auth') === 'true') {
-        overlay.style.display = 'none';
-        initAdminPanel();
+    // Check session
+    async function checkAdminSession() {
+        if (!supabaseClient) return;
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (session) {
+            verifyAdminAccess(session.user.id);
+        } else {
+            overlay.style.display = 'flex'; // Show login
+        }
     }
 
-    function handleLogin() {
-        if (passInput.value === PASSWORD) {
-            sessionStorage.setItem('admin_auth', 'true');
+    async function verifyAdminAccess(userId) {
+        const { data, error } = await supabaseClient
+            .from('profiles')
+            .select('is_admin')
+            .eq('id', userId)
+            .single();
+
+        if (data && data.is_admin) {
             overlay.style.display = 'none';
             initAdminPanel();
         } else {
+            errorMsg.innerText = 'Access Denied: You are not an administrator.';
             errorMsg.style.display = 'block';
+            await supabaseClient.auth.signOut();
+        }
+    }
+
+    async function handleLogin() {
+        errorMsg.style.display = 'none';
+        loginBtn.innerText = 'AUTHENTICATING...';
+        loginBtn.disabled = true;
+
+        const email = emailInput ? emailInput.value : passInput.value; // Fallback if no email field yet
+        const password = passInput.value;
+
+        if (!email || !password) {
+            errorMsg.innerText = 'Please enter email and password.';
+            errorMsg.style.display = 'block';
+            loginBtn.innerText = 'AUTHENTICATE';
+            loginBtn.disabled = false;
+            return;
+        }
+
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
+            email: email,
+            password: password,
+        });
+
+        if (error) {
+            errorMsg.innerText = error.message;
+            errorMsg.style.display = 'block';
+            loginBtn.innerText = 'AUTHENTICATE';
+            loginBtn.disabled = false;
+        } else {
+            verifyAdminAccess(data.user.id);
         }
     }
 
@@ -29,12 +73,20 @@
     passInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') handleLogin();
     });
+    if (emailInput) {
+        emailInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') passInput.focus();
+        });
+    }
 
-    logoutBtn.addEventListener('click', (e) => {
+    logoutBtn.addEventListener('click', async (e) => {
         e.preventDefault();
-        sessionStorage.removeItem('admin_auth');
+        await supabaseClient.auth.signOut();
         location.reload();
     });
+
+    // Initialize session check after Supabase loads (using a small delay to ensure client is ready)
+    setTimeout(checkAdminSession, 500);
 
     // Sidebar Navigation Logic
     const navItems = document.querySelectorAll('.nav-item');
@@ -51,7 +103,9 @@
 
             // Load data based on section
             if (target === 'dashboard') loadDashboardStats();
-            if (target === 'items') loadItems();
+            if (target === 'plugins') loadPlugins();
+            if (target === 'sfx') loadSFX();
+            if (target === 'presets') loadPresets();
             if (target === 'media') loadMedia();
             if (target === 'posts') loadPosts();
             if (target === 'users') loadUsers();
@@ -112,160 +166,259 @@
         }
     }
 
-
-    /* ==========================
-       ITEMS MANAGER
-       ========================== */
-    const itemForm = document.getElementById('item-form');
-    const itemsTableBody = document.getElementById('items-table-body');
-    const itemFormMsg = document.getElementById('item-form-msg');
-    const itemFormTitle = document.getElementById('item-form-title');
-    const cancelItemBtn = document.getElementById('cancel-item-btn');
-
-    let editingItemId = null;
-
-    async function loadItems() {
-        if (!supabaseClient) return;
-        itemsTableBody.innerHTML = `<tr><td colspan="5" style="text-align:center; opacity:0.5;">Loading items...</td></tr>`;
-
-        const filterCategory = document.getElementById('filter-category').value;
-        const filterType = document.getElementById('filter-type').value;
-
-        let query = supabaseClient.from('items').select('*').order('created_at', { ascending: false });
-
-        if (filterCategory !== 'all') query = query.eq('category', filterCategory);
-        if (filterType !== 'all') query = query.eq('type', filterType);
-
-        const { data, error } = await query;
-
-        if (error) {
-            itemsTableBody.innerHTML = `<tr><td colspan="5" style="color:#ff4d4d">Error loading items: ${error.message}</td></tr>`;
-            return;
-        }
-
-        itemsTableBody.innerHTML = '';
-        if (data.length === 0) {
-            itemsTableBody.innerHTML = `<tr><td colspan="5" style="text-align:center; opacity:0.5;">No items found.</td></tr>`;
-            return;
-        }
-
-        data.forEach(item => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>
-                    <div style="font-weight: 600;">${item.title}</div>
-                    ${item.version ? `<div style="font-size: 0.8rem; color: var(--admin-text-muted);">v${item.version} | ${item.size || ''}</div>` : ''}
-                </td>
-                <td>
-                    <span class="badge badge-category">${item.category}</span>
-                    <span class="badge ${item.type === 'premium' ? 'badge-premium' : 'badge-free'}">${item.type}</span>
-                </td>
-                <td>$${item.price}</td>
-                <td>${item.download_count || 0}</td>
+    // Generic helper for CRUD tables
+    function createRowHTML(item, typeClass) {
+        return `
+            <tr>
+                <td><div style="font-weight: 600;">${item.title}</div></td>
+                <td><span class="badge ${item.type === 'premium' ? 'badge-premium' : 'badge-free'}">${item.type || (item.is_premium ? 'premium' : 'free')}</span></td>
+                <td>$${item.price || 0}</td>
                 <td>
                     <button class="btn-action btn-edit" data-item='${JSON.stringify(item).replace(/'/g, "&#39;")}'>Edit</button>
                     <button class="btn-action btn-delete" data-id="${item.id}">Del</button>
                 </td>
-            `;
-            itemsTableBody.appendChild(tr);
-        });
-
-        // Attach events
-        document.querySelectorAll('#items-table-body .btn-edit').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const item = JSON.parse(e.target.getAttribute('data-item'));
-                editItem(item);
-            });
-        });
-
-        document.querySelectorAll('#items-table-body .btn-delete').forEach(btn => {
-            btn.addEventListener('click', async (e) => {
-                const id = e.target.getAttribute('data-id');
-                if (confirm('Are you sure you want to delete this item?')) {
-                    await supabaseClient.from('items').delete().eq('id', id);
-                    loadItems();
-                    loadDashboardStats();
-                }
-            });
-        });
+            </tr>
+        `;
     }
 
-    // Filters event listeners
-    document.getElementById('filter-category').addEventListener('change', loadItems);
-    document.getElementById('filter-type').addEventListener('change', loadItems);
 
-    function editItem(item) {
-        editingItemId = item.id;
-        itemFormTitle.innerText = "Edit Item: " + item.title;
-        cancelItemBtn.style.display = 'inline-block';
+    /* ==========================
+       PLUGINS MANAGER
+       ========================== */
+    const pluginForm = document.getElementById('plugin-form');
+    const pluginsTableBody = document.getElementById('plugins-table-body');
+    const pluginFormMsg = document.getElementById('plugin-form-msg');
+    const pluginFormTitle = document.getElementById('plugin-form-title');
+    const cancelPluginBtn = document.getElementById('cancel-plugin-btn');
+    let editingPluginId = null;
 
-        document.getElementById('item-title').value = item.title || '';
-        document.getElementById('item-category').value = item.category || 'plugins';
-        document.getElementById('item-type').value = item.type || 'free';
-        document.getElementById('item-price').value = item.price || 0;
+    async function loadPlugins() {
+        if (!supabaseClient) return;
+        pluginsTableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; opacity:0.5;">Loading plugins...</td></tr>`;
+        const { data, error } = await supabaseClient.from('plugins').select('*').order('created_at', { ascending: false });
 
-        document.getElementById('item-file-url').value = item.file_url || '';
-        document.getElementById('item-thumbnail-url').value = item.thumbnail_url || '';
-        document.getElementById('item-video-url').value = item.video_url || '';
-        document.getElementById('item-desc').value = item.description || '';
+        if (error) { pluginsTableBody.innerHTML = `<tr><td colspan="4" style="color:#ff4d4d">Error: ${error.message}</td></tr>`; return; }
+        if (!data || data.length === 0) { pluginsTableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; opacity:0.5;">No plugins found.</td></tr>`; return; }
 
-        document.getElementById('item-size').value = item.size || '';
-        document.getElementById('item-version').value = item.version || '';
+        pluginsTableBody.innerHTML = data.map(item => createRowHTML(item, 'plugins')).join('');
+        
+        pluginsTableBody.querySelectorAll('.btn-edit').forEach(btn => btn.addEventListener('click', (e) => editPlugin(JSON.parse(e.target.getAttribute('data-item')))));
+        pluginsTableBody.querySelectorAll('.btn-delete').forEach(btn => btn.addEventListener('click', async (e) => {
+            if (confirm('Are you sure you want to delete this plugin?')) {
+                await supabaseClient.from('plugins').delete().eq('id', e.target.getAttribute('data-id'));
+                loadPlugins(); loadDashboardStats();
+            }
+        }));
+    }
 
-        document.getElementById('item-title').focus();
+    function editPlugin(item) {
+        editingPluginId = item.id;
+        pluginFormTitle.innerText = "Edit Plugin: " + item.title;
+        cancelPluginBtn.style.display = 'inline-block';
+        document.getElementById('plugin-title').value = item.title || '';
+        document.getElementById('plugin-type').value = item.is_premium ? 'premium' : 'free';
+        document.getElementById('plugin-price').value = item.price || 0;
+        document.getElementById('plugin-file-url').value = item.file_url || '';
+        document.getElementById('plugin-image-url').value = item.image_url || '';
+        document.getElementById('plugin-desc').value = item.description || '';
         document.querySelector('.main-content').scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    cancelItemBtn.addEventListener('click', () => {
-        editingItemId = null;
-        itemFormTitle.innerText = "Add New Resource";
-        cancelItemBtn.style.display = 'none';
-        itemForm.reset();
+    cancelPluginBtn.addEventListener('click', () => {
+        editingPluginId = null;
+        pluginFormTitle.innerText = "Add New Plugin";
+        cancelPluginBtn.style.display = 'none';
+        pluginForm.reset();
     });
 
-    itemForm.addEventListener('submit', async (e) => {
+    pluginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        itemFormMsg.style.color = 'var(--admin-text-muted)';
-        itemFormMsg.innerText = 'Saving...';
+        pluginFormMsg.style.color = 'var(--admin-text-muted)'; pluginFormMsg.innerText = 'Saving...';
+        const saveBtn = document.getElementById('save-plugin-btn'); saveBtn.disabled = true;
 
-        const saveBtn = document.getElementById('save-item-btn');
-        saveBtn.disabled = true;
+        const payload = {
+            title: document.getElementById('plugin-title').value,
+            is_premium: document.getElementById('plugin-type').value === 'premium',
+            price: parseFloat(document.getElementById('plugin-price').value) || 0,
+            file_url: document.getElementById('plugin-file-url').value,
+            image_url: document.getElementById('plugin-image-url').value,
+            description: document.getElementById('plugin-desc').value || null
+        };
 
         try {
-            const payload = {
-                title: document.getElementById('item-title').value,
-                category: document.getElementById('item-category').value,
-                type: document.getElementById('item-type').value,
-                price: parseFloat(document.getElementById('item-price').value) || 0,
-                file_url: document.getElementById('item-file-url').value,
-                thumbnail_url: document.getElementById('item-thumbnail-url').value,
-                video_url: document.getElementById('item-video-url').value || null,
-                description: document.getElementById('item-desc').value || null,
-                size: document.getElementById('item-size').value,
-                version: document.getElementById('item-version').value
-            };
-
-            if (editingItemId) {
-                const { error } = await supabaseClient.from('items').update(payload).eq('id', editingItemId);
+            if (editingPluginId) {
+                const { error } = await supabaseClient.from('plugins').update(payload).eq('id', editingPluginId);
                 if (error) throw error;
             } else {
-                const { error } = await supabaseClient.from('items').insert([payload]);
+                const { error } = await supabaseClient.from('plugins').insert([payload]);
                 if (error) throw error;
             }
-
-            itemFormMsg.style.color = '#4dff91';
-            itemFormMsg.innerText = 'Item saved successfully!';
-
-            cancelItemBtn.click(); // Reset form and mode
-            loadItems();
-            loadDashboardStats();
-
-            setTimeout(() => itemFormMsg.innerText = '', 3000);
-
+            pluginFormMsg.style.color = '#4caf50'; pluginFormMsg.innerText = 'Saved successfully!';
+            cancelPluginBtn.click(); loadPlugins(); loadDashboardStats();
         } catch (err) {
-            console.error(err);
-            itemFormMsg.style.color = '#ff4d4d';
-            itemFormMsg.innerText = 'Error: ' + err.message;
+            pluginFormMsg.style.color = '#ff4d4d'; pluginFormMsg.innerText = 'Error: ' + err.message;
+        } finally {
+            saveBtn.disabled = false;
+        }
+    });
+
+    /* ==========================
+       SFX MANAGER
+       ========================== */
+    const sfxForm = document.getElementById('sfx-form');
+    const sfxTableBody = document.getElementById('sfx-table-body');
+    const sfxFormMsg = document.getElementById('sfx-form-msg');
+    const sfxFormTitle = document.getElementById('sfx-form-title');
+    const cancelSfxBtn = document.getElementById('cancel-sfx-btn');
+    let editingSfxId = null;
+
+    async function loadSFX() {
+        if (!supabaseClient) return;
+        sfxTableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; opacity:0.5;">Loading SFX...</td></tr>`;
+        const { data, error } = await supabaseClient.from('sfx').select('*').order('created_at', { ascending: false });
+
+        if (error) { sfxTableBody.innerHTML = `<tr><td colspan="4" style="color:#ff4d4d">Error: ${error.message}</td></tr>`; return; }
+        if (!data || data.length === 0) { sfxTableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; opacity:0.5;">No SFX found.</td></tr>`; return; }
+
+        sfxTableBody.innerHTML = data.map(item => createRowHTML(item, 'sfx')).join('');
+        
+        sfxTableBody.querySelectorAll('.btn-edit').forEach(btn => btn.addEventListener('click', (e) => editSFX(JSON.parse(e.target.getAttribute('data-item')))));
+        sfxTableBody.querySelectorAll('.btn-delete').forEach(btn => btn.addEventListener('click', async (e) => {
+            if (confirm('Are you sure you want to delete this SFX?')) {
+                await supabaseClient.from('sfx').delete().eq('id', e.target.getAttribute('data-id'));
+                loadSFX(); loadDashboardStats();
+            }
+        }));
+    }
+
+    function editSFX(item) {
+        editingSfxId = item.id;
+        sfxFormTitle.innerText = "Edit SFX: " + item.title;
+        cancelSfxBtn.style.display = 'inline-block';
+        document.getElementById('sfx-title').value = item.title || '';
+        document.getElementById('sfx-type').value = item.is_premium ? 'premium' : 'free';
+        document.getElementById('sfx-price').value = item.price || 0;
+        document.getElementById('sfx-audio-url').value = item.audio_url || '';
+        document.getElementById('sfx-file-url').value = item.file_url || '';
+        document.getElementById('sfx-image-url').value = item.image_url || '';
+        document.getElementById('sfx-desc').value = item.description || '';
+        document.querySelector('.main-content').scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    cancelSfxBtn.addEventListener('click', () => {
+        editingSfxId = null;
+        sfxFormTitle.innerText = "Add New SFX";
+        cancelSfxBtn.style.display = 'none';
+        sfxForm.reset();
+    });
+
+    sfxForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        sfxFormMsg.style.color = 'var(--admin-text-muted)'; sfxFormMsg.innerText = 'Saving...';
+        const saveBtn = document.getElementById('save-sfx-btn'); saveBtn.disabled = true;
+
+        const payload = {
+            title: document.getElementById('sfx-title').value,
+            is_premium: document.getElementById('sfx-type').value === 'premium',
+            price: parseFloat(document.getElementById('sfx-price').value) || 0,
+            audio_url: document.getElementById('sfx-audio-url').value,
+            file_url: document.getElementById('sfx-file-url').value,
+            image_url: document.getElementById('sfx-image-url').value,
+            description: document.getElementById('sfx-desc').value || null
+        };
+
+        try {
+            if (editingSfxId) {
+                const { error } = await supabaseClient.from('sfx').update(payload).eq('id', editingSfxId);
+                if (error) throw error;
+            } else {
+                const { error } = await supabaseClient.from('sfx').insert([payload]);
+                if (error) throw error;
+            }
+            sfxFormMsg.style.color = '#4caf50'; sfxFormMsg.innerText = 'Saved successfully!';
+            cancelSfxBtn.click(); loadSFX(); loadDashboardStats();
+        } catch (err) {
+            sfxFormMsg.style.color = '#ff4d4d'; sfxFormMsg.innerText = 'Error: ' + err.message;
+        } finally {
+            saveBtn.disabled = false;
+        }
+    });
+
+    /* ==========================
+       PRESETS MANAGER
+       ========================== */
+    const presetForm = document.getElementById('preset-form');
+    const presetsTableBody = document.getElementById('presets-table-body');
+    const presetFormMsg = document.getElementById('preset-form-msg');
+    const presetFormTitle = document.getElementById('preset-form-title');
+    const cancelPresetBtn = document.getElementById('cancel-preset-btn');
+    let editingPresetId = null;
+
+    async function loadPresets() {
+        if (!supabaseClient) return;
+        presetsTableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; opacity:0.5;">Loading presets...</td></tr>`;
+        const { data, error } = await supabaseClient.from('presets').select('*').order('created_at', { ascending: false });
+
+        if (error) { presetsTableBody.innerHTML = `<tr><td colspan="4" style="color:#ff4d4d">Error: ${error.message}</td></tr>`; return; }
+        if (!data || data.length === 0) { presetsTableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; opacity:0.5;">No presets found.</td></tr>`; return; }
+
+        presetsTableBody.innerHTML = data.map(item => createRowHTML(item, 'presets')).join('');
+        
+        presetsTableBody.querySelectorAll('.btn-edit').forEach(btn => btn.addEventListener('click', (e) => editPreset(JSON.parse(e.target.getAttribute('data-item')))));
+        presetsTableBody.querySelectorAll('.btn-delete').forEach(btn => btn.addEventListener('click', async (e) => {
+            if (confirm('Are you sure you want to delete this preset?')) {
+                await supabaseClient.from('presets').delete().eq('id', e.target.getAttribute('data-id'));
+                loadPresets(); loadDashboardStats();
+            }
+        }));
+    }
+
+    function editPreset(item) {
+        editingPresetId = item.id;
+        presetFormTitle.innerText = "Edit Preset: " + item.title;
+        cancelPresetBtn.style.display = 'inline-block';
+        document.getElementById('preset-title').value = item.title || '';
+        document.getElementById('preset-type').value = item.is_premium ? 'premium' : 'free';
+        document.getElementById('preset-price').value = item.price || 0;
+        document.getElementById('preset-file-url').value = item.file_url || '';
+        document.getElementById('preset-image-url').value = item.image_url || '';
+        document.getElementById('preset-desc').value = item.description || '';
+        document.querySelector('.main-content').scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    cancelPresetBtn.addEventListener('click', () => {
+        editingPresetId = null;
+        presetFormTitle.innerText = "Add New Preset";
+        cancelPresetBtn.style.display = 'none';
+        presetForm.reset();
+    });
+
+    presetForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        presetFormMsg.style.color = 'var(--admin-text-muted)'; presetFormMsg.innerText = 'Saving...';
+        const saveBtn = document.getElementById('save-preset-btn'); saveBtn.disabled = true;
+
+        const payload = {
+            title: document.getElementById('preset-title').value,
+            is_premium: document.getElementById('preset-type').value === 'premium',
+            price: parseFloat(document.getElementById('preset-price').value) || 0,
+            file_url: document.getElementById('preset-file-url').value,
+            image_url: document.getElementById('preset-image-url').value,
+            description: document.getElementById('preset-desc').value || null
+        };
+
+        try {
+            if (editingPresetId) {
+                const { error } = await supabaseClient.from('presets').update(payload).eq('id', editingPresetId);
+                if (error) throw error;
+            } else {
+                const { error } = await supabaseClient.from('presets').insert([payload]);
+                if (error) throw error;
+            }
+            presetFormMsg.style.color = '#4caf50'; presetFormMsg.innerText = 'Saved successfully!';
+            cancelPresetBtn.click(); loadPresets(); loadDashboardStats();
+        } catch (err) {
+            presetFormMsg.style.color = '#ff4d4d'; presetFormMsg.innerText = 'Error: ' + err.message;
         } finally {
             saveBtn.disabled = false;
         }
