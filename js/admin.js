@@ -38,8 +38,6 @@
         }
     }
 
-    const MASTER_PASS = 'mahim@1234';
-
     async function handleLogin() {
         errorMsg.style.display = 'none';
         loginBtn.innerText = 'AUTHENTICATING...';
@@ -56,19 +54,10 @@
             return;
         }
 
-        // MASTER BYPASS: If password matches the user's requested master password
-        if (password === MASTER_PASS) {
-            console.log('Master bypass triggered');
-            overlay.style.display = 'none';
-            initAdminPanel();
-            return;
-        }
-
         const { data, error } = await supabaseClient.auth.signInWithPassword({
             email: email,
             password: password,
         });
-
 
         if (error) {
             errorMsg.innerText = error.message;
@@ -79,6 +68,7 @@
             verifyAdminAccess(data.user.id);
         }
     }
+
 
     loginBtn.addEventListener('click', handleLogin);
     passInput.addEventListener('keypress', (e) => {
