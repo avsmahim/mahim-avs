@@ -1,540 +1,458 @@
 /* =====================================================
-   ADMIN MASTER — Unified Control Logic for EVERYTHING
-   Logic for: Navbar, Hero, Profile, Plugins, SFX, 
-   Presets, Apps, Posts, Users, Media, Theme, Settings
+   AVS MASTER ADMIN LOGIN & LOGIC (V2 REBUILD)
+   Unifies: Auth, Builder, Navbar, Hero, CRUD, Users, Media
    ===================================================== */
 
 (function () {
-    const BUCKET_NAME = 'downloads'; 
+    const BUCKET_NAME = 'downloads';
+    let currentUser = null;
 
     // UI Elements
-    const overlay = document.getElementById('admin-login-overlay');
-    const emailInput = document.getElementById('admin-email');
-    const passInput = document.getElementById('admin-password');
-    const loginBtn = document.getElementById('admin-login-btn');
-    const errorMsg = document.getElementById('admin-error');
-    const logoutBtn = document.getElementById('admin-logout');
-    const navItems = document.querySelectorAll('.nav-item');
-    const adminSections = document.querySelectorAll('.admin-section');
+    const overlay = document.getElementById('login-overlay');
+    const authBtn = document.getElementById('auth-btn');
+    const emailInput = document.getElementById('email');
+    const passInput = document.getElementById('password');
+    const errorMsg = document.getElementById('error-msg');
+    const menuItems = document.querySelectorAll('.menu-item');
+    const sections = document.querySelectorAll('.section');
+    const logoutBtn = document.getElementById('logout-btn');
 
     /* ==========================
-       SESSION & AUTH
+       1. AUTHENTICATION & ACCESS
        ========================== */
-    async function checkAdminSession() {
+    async function checkSession() {
         if (!supabaseClient) return;
         const { data: { session } } = await supabaseClient.auth.getSession();
         if (session) {
-            verifyAdminAccess(session.user.id);
+            verifyAdmin(session.user);
         } else {
             overlay.style.display = 'flex';
         }
     }
 
-    async function verifyAdminAccess(userId) {
+    async function verifyAdmin(user) {
         const { data, error } = await supabaseClient
             .from('profiles')
             .select('is_admin')
-            .eq('id', userId)
+            .eq('id', user.id)
             .single();
 
         if (data && data.is_admin) {
+            currentUser = user;
             overlay.style.display = 'none';
-            initAdminPanel();
+            initApp();
         } else {
-            errorMsg.innerText = 'Access Denied: You are not an administrator.';
+            errorMsg.innerText = "ACCESS DENIED: Not an administrator.";
             errorMsg.style.display = 'block';
             await supabaseClient.auth.signOut();
         }
     }
 
-    async function handleLogin() {
+    authBtn.addEventListener('click', async () => {
         errorMsg.style.display = 'none';
-        loginBtn.innerText = 'AUTHENTICATING...';
-        loginBtn.disabled = true;
-
-        const email = emailInput ? emailInput.value : '';
-        const password = passInput.value;
-
-        if (!email || !password) {
-            errorMsg.innerText = 'Please enter email and password.';
-            errorMsg.style.display = 'block';
-            loginBtn.innerText = 'AUTHENTICATE';
-            loginBtn.disabled = false;
-            return;
-        }
-
+        authBtn.innerText = "AUTHENTICATING...";
         const { data, error } = await supabaseClient.auth.signInWithPassword({
-            email: email,
-            password: password,
+            email: emailInput.value,
+            password: passInput.value
         });
-
         if (error) {
             errorMsg.innerText = error.message;
             errorMsg.style.display = 'block';
-            loginBtn.innerText = 'AUTHENTICATE';
-            loginBtn.disabled = false;
+            authBtn.innerText = "Sign In";
         } else {
-            verifyAdminAccess(data.user.id);
+            verifyAdmin(data.user);
         }
-    }
+    });
 
-    loginBtn.addEventListener('click', handleLogin);
-    if (passInput) passInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleLogin(); });
-    if (emailInput) emailInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') passInput.focus(); });
-
-    if (logoutBtn) logoutBtn.addEventListener('click', async (e) => {
-        e.preventDefault();
+    logoutBtn.addEventListener('click', async () => {
         await supabaseClient.auth.signOut();
         location.reload();
     });
 
     /* ==========================
-       NAV & INITIALIZATION
+       2. NAVIGATION
        ========================== */
-    navItems.forEach(item => {
+    menuItems.forEach(item => {
         item.addEventListener('click', () => {
-            navItems.forEach(n => n.classList.remove('active'));
-            adminSections.forEach(s => s.classList.remove('active'));
+            if (item.id === 'logout-btn') return;
+            const target = item.getAttribute('data-target');
+            
+            menuItems.forEach(m => m.classList.remove('active'));
+            sections.forEach(s => s.classList.remove('active'));
 
             item.classList.add('active');
-            const target = item.getAttribute('data-target');
-            const sectionEl = document.getElementById(`section-${target}`);
-            if (sectionEl) sectionEl.classList.add('active');
+            document.getElementById(`section-${target}`).classList.add('active');
 
-            // Load data based on section
-            if (target === 'dashboard') loadDashboardStats();
-            if (target === 'plugins') loadPlugins();
-            if (target === 'sfx') loadSFX();
-            if (target === 'presets') loadPresets();
-            if (target === 'media') loadMedia();
-            if (target === 'posts') loadPosts();
-            if (target === 'users') loadUsers();
-            if (target === 'orders') loadOrders();
-            if (target === 'ads') loadAds();
-            if (target === 'navbar') loadNavbarSettings();
-            if (target === 'hero') loadHeroSettings();
-            if (target === 'profile-sec') loadProfileSettings();
-            if (target === 'footer-sec') loadFooterSettings();
-            if (target === 'theme') loadThemeSettings();
-            if (target === 'apps') loadApps();
-            if (target === 'settings') loadSiteSettings();
+            // Load data for section
+            loadSectionData(target);
         });
     });
 
-    function initAdminPanel() {
-        if (!supabaseClient) return;
-        loadDashboardStats();
-        if (typeof window.initBlogEditor === 'function') {
-            window.initBlogEditor(supabaseClient);
+    function loadSectionData(target) {
+        if (target === 'dashboard') loadDashboard();
+        if (target === 'builder') loadBuilder();
+        if (target === 'navbar') loadNavbar();
+        if (target === 'hero') loadHero();
+        if (target === 'plugins') loadTable('plugins');
+        if (target === 'sfx') loadTable('sfx');
+        if (target === 'presets') loadTable('presets');
+        if (target === 'apps') loadTable('apps');
+        if (target === 'posts') loadTable('posts');
+        if (target === 'users') loadUsers();
+        if (target === 'media') loadMedia();
+        if (target === 'theme') loadTheme();
+        if (target === 'settings') loadSettings();
+    }
+
+    /* ==========================
+       3. DASHBOARD
+       ========================== */
+    async function loadDashboard() {
+        const getCount = async (table) => {
+            const { count } = await supabaseClient.from(table).select('*', { count: 'exact', head: true });
+            return count || 0;
+        };
+        document.getElementById('dash-users').innerText = await getCount('profiles');
+        const pCount = await getCount('plugins');
+        const sCount = await getCount('sfx');
+        const prCount = await getCount('presets');
+        document.getElementById('dash-items').innerText = pCount + sCount + prCount;
+        document.getElementById('dash-posts').innerText = await getCount('posts');
+    }
+
+    /* ==========================
+       4. PAGE BUILDER (DRAGGABLE)
+       ========================== */
+    async function loadBuilder() {
+        const list = document.getElementById('layout-list');
+        list.innerHTML = "Loading...";
+        const { data } = await supabaseClient.from('page_layout').select('*').order('position', { ascending: true });
+        
+        list.innerHTML = "";
+        data.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'sortable-item';
+            div.setAttribute('data-id', item.id);
+            div.setAttribute('data-name', item.section_name);
+            div.innerHTML = `
+                <span>${item.section_name}</span>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <label class="toggle">
+                        <input type="checkbox" class="vis-toggle" ${item.is_visible ? 'checked' : ''}>
+                        <span class="slider"></span>
+                    </label>
+                    <svg viewBox="0 0 24 24" width="20" height="20" style="opacity: 0.3;"><path fill="currentColor" d="M11 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                </div>
+            `;
+            list.appendChild(div);
+        });
+
+        new Sortable(list, { animation: 150 });
+    }
+
+    window.saveLayout = async function() {
+        const items = document.querySelectorAll('.sortable-item');
+        const layout = [];
+        items.forEach((item, index) => {
+            layout.push({
+                id: item.getAttribute('data-id'),
+                position: index + 1,
+                is_visible: item.querySelector('.vis-toggle').checked
+            });
+        });
+
+        for (const row of layout) {
+            await supabaseClient.from('page_layout').update({ position: row.position, is_visible: row.is_visible }).eq('id', row.id);
         }
-    }
+        alert("Layout saved! Open main site to see changes.");
+    };
 
     /* ==========================
-       DASHBOARD STATS
+       5. SETTINGS HELPERS
        ========================== */
-    async function loadDashboardStats() {
-        if (!supabaseClient) return;
-        try {
-            const getCount = async (table) => {
-                const { count } = await supabaseClient.from(table).select('*', { count: 'exact', head: true });
-                return count || 0;
-            };
-
-            const pCount = await getCount('plugins');
-            const sCount = await getCount('sfx');
-            const prCount = await getCount('presets');
-            const aCount = await getCount('apps');
-            const poCount = await getCount('posts');
-            const uCount = await getCount('profiles');
-
-            document.getElementById('stat-items').innerText = pCount + sCount + prCount + aCount;
-            document.getElementById('stat-users').innerText = uCount;
-            document.getElementById('stat-downloads').innerText = poCount; 
-            
-            const { data: pData } = await supabaseClient.from('purchases').select('id');
-            document.getElementById('stat-revenue').innerText = pData ? `$${pData.length * 10}` : '$0';
-
-        } catch (e) { console.error('Stats error:', e); }
-    }
-
-    /* ==========================
-       HELPERS
-       ========================== */
-    function showMsg(id, text, ok) {
-        const el = document.getElementById(id);
-        if (!el) return;
-        el.style.color = ok ? '#4caf50' : '#ff4d4d';
-        el.innerText = text;
-        setTimeout(() => { el.innerText = ''; }, 3500);
-    }
-    function getVal(id) { const el = document.getElementById(id); return el ? el.value : ''; }
-    function setVal(id, val) { const el = document.getElementById(id); if (el) el.value = val; }
-
-    async function bulkGetSettings(keys) {
-        if (!supabaseClient) return {};
-        const { data } = await supabaseClient.from('settings').select('key, value').in('key', keys);
+    async function bulkGet(keys) {
+        const { data } = await supabaseClient.from('site_settings').select('*').in('key', keys);
         const map = {};
-        (data || []).forEach(r => { map[r.key] = r.value; });
+        (data || []).forEach(r => map[r.key] = r.value);
         return map;
     }
 
-    async function bulkSaveSettings(obj) {
-        if (!supabaseClient) return { error: { message: 'No Supabase client' } };
+    async function bulkSet(obj) {
         const rows = Object.entries(obj).map(([key, value]) => ({ key, value: String(value) }));
-        return supabaseClient.from('settings').upsert(rows, { onConflict: 'key' });
+        return supabaseClient.from('site_settings').upsert(rows);
     }
 
-    function createRowHTML(item, type) {
-        return `
+    const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
+    const getVal = (id) => document.getElementById(id).value;
+
+    /* ==========================
+       6. NAVBAR & HERO
+       ========================== */
+    async function loadNavbar() {
+        const s = await bulkGet(['nav_logo_text', 'nav_btn_text', 'nav_btn_color']);
+        setVal('nav-logo-text', s.nav_logo_text || 'AVS MAHIM');
+        setVal('nav-btn-text', s.nav_btn_text || 'SIGN UP');
+        setVal('nav-btn-color', s.nav_btn_color || '#ffd700');
+    }
+
+    window.saveNavbar = async function() {
+        await bulkSet({
+            nav_logo_text: getVal('nav-logo-text'),
+            nav_btn_text: getVal('nav-btn-text'),
+            nav_btn_color: getVal('nav-btn-color')
+        });
+        alert("Navbar settings saved!");
+    };
+
+    async function loadHero() {
+        const s = await bulkGet(['hero_title', 'hero_subtitle', 'hero_bg', 'hero_btn_text', 'hero_btn_link']);
+        setVal('hero-title', s.hero_title || '');
+        setVal('hero-subtitle', s.hero_subtitle || '');
+        setVal('hero-bg', s.hero_bg || '');
+        setVal('hero-btn-text', s.hero_btn_text || '');
+        setVal('hero-btn-link', s.hero_btn_link || '');
+    }
+
+    window.saveHero = async function() {
+        await bulkSet({
+            hero_title: getVal('hero-title'),
+            hero_subtitle: getVal('hero-subtitle'),
+            hero_bg: getVal('hero-bg'),
+            hero_btn_text: getVal('hero-btn-text'),
+            hero_btn_link: getVal('hero-btn-link')
+        });
+        alert("Hero settings saved!");
+    };
+
+    /* ==========================
+       7. CRUD TABLES (Plugins, SFX, etc)
+       ========================== */
+    async function loadTable(table) {
+        const body = document.getElementById(`${table}-table`);
+        body.innerHTML = "<tr><td colspan='5'>Loading...</td></tr>";
+        const { data } = await supabaseClient.from(table).select('*').order('created_at', { ascending: false });
+        
+        body.innerHTML = (data || []).map(item => `
             <tr>
+                ${item.image_url ? `<td><img src="${item.image_url}" class="row-image"></td>` : table === 'sfx' ? '' : '<td>—</td>'}
                 <td><strong>${item.title}</strong></td>
-                <td><span class="badge ${item.is_premium ? 'badge-premium' : 'badge-free'}">${item.is_premium ? 'Premium' : 'Free'}</span></td>
-                <td>$${item.price || 0}</td>
+                ${table !== 'posts' && table !== 'apps' ? `<td><span class="badge ${item.is_premium ? 'badge-premium' : 'badge-free'}">${item.is_premium ? 'Premium' : 'Free'}</span></td>` : ''}
+                ${table !== 'posts' && table !== 'apps' ? `<td>$${item.price || 0}</td>` : table === 'apps' ? `<td>${(item.description || '').substring(0,30)}...</td>` : ''}
+                ${table === 'posts' ? `<td>${item.status}</td>` : ''}
                 <td>
-                    <button class="btn-action" onclick="window.editItem('${type}', '${item.id}')">Edit</button>
-                    <button class="btn-action btn-danger" onclick="window.deleteItem('${type}', '${item.id}')">Del</button>
+                    <button class="btn btn-primary btn-small" onclick="window.editItem('${table}', '${item.id}')">Edit</button>
+                    <button class="btn btn-danger btn-small" onclick="window.deleteItem('${table}', '${item.id}')">Del</button>
                 </td>
             </tr>
-        `;
+        `).join('');
     }
 
-    /* ==========================
-       ITEM MANAGERS (Plugins, SFX, Presets)
-       ========================== */
-    async function loadTableData(table, bodyId) {
-        const body = document.getElementById(bodyId);
-        if (!body) return;
-        body.innerHTML = '<tr><td colspan="4" style="text-align:center; opacity:0.5;">Loading...</td></tr>';
-        const { data, error } = await supabaseClient.from(table).select('*').order('created_at', { ascending: false });
-        if (error || !data) { body.innerHTML = '<tr><td colspan="4">Error loading data</td></tr>'; return; }
-        if (data.length === 0) { body.innerHTML = '<tr><td colspan="4" style="text-align:center; opacity:0.5;">No items found.</td></tr>'; return; }
-        body.innerHTML = data.map(item => createRowHTML(item, table)).join('');
-    }
-
-    window.loadPlugins = () => loadTableData('plugins', 'plugins-table-body');
-    window.loadSFX = () => loadTableData('sfx', 'sfx-table-body');
-    window.loadPresets = () => loadTableData('presets', 'presets-table-body');
-
-    window.deleteItem = async (table, id) => {
-        if (!confirm('Delete this item?')) return;
+    window.deleteItem = async function(table, id) {
+        if (!confirm("Delete this item permanently?")) return;
         await supabaseClient.from(table).delete().eq('id', id);
-        if (table === 'plugins') loadPlugins();
-        if (table === 'sfx') loadSFX();
-        if (table === 'presets') loadPresets();
-        if (table === 'apps') loadApps();
-        loadDashboardStats();
+        loadTable(table);
     };
 
-    window.editItem = async (table, id) => {
+    window.openModal = function(type, id = null) {
+        const modal = document.getElementById('item-modal');
+        const form = document.getElementById('item-form');
+        const fields = document.getElementById('form-fields');
+        document.getElementById('modal-title').innerText = (id ? 'Edit ' : 'Add ') + type.toUpperCase();
+        document.getElementById('item-id').value = id || '';
+        document.getElementById('item-type-hidden').value = type;
+
+        let html = `
+            <div class="form-group"><label class="form-label">Title</label><input type="text" name="title" class="input" required></div>
+            <div class="form-group"><label class="form-label">Description</label><textarea name="description" class="input" rows="2"></textarea></div>
+        `;
+
+        if (type !== 'post' && type !== 'app') {
+            html += `
+                <div class="form-group"><label class="form-label">Price</label><input type="number" name="price" step="0.01" class="input" value="0"></div>
+                <div class="form-group">
+                    <label class="form-label">Type</label>
+                    <select name="is_premium" class="input">
+                        <option value="false">Free</option>
+                        <option value="true">Premium</option>
+                    </select>
+                </div>
+            `;
+        }
+
+        if (type === 'plugin' || type === 'preset') {
+            html += `<div class="form-group"><label class="form-label">Image URL</label><input type="text" name="image_url" class="input"></div>`;
+            html += `<div class="form-group"><label class="form-label">File URL</label><input type="text" name="file_url" class="input"></div>`;
+        } else if (type === 'sfx') {
+            html += `<div class="form-group"><label class="form-label">Audio URL</label><input type="text" name="audio_url" class="input"></div>`;
+        } else if (type === 'app') {
+            html += `<div class="form-group"><label class="form-label">Image URL</label><input type="text" name="image_url" class="input"></div>`;
+            html += `<div class="form-group"><label class="form-label">Download URL</label><input type="text" name="download_url" class="input"></div>`;
+        } else if (type === 'post') {
+            html += `<div class="form-group"><label class="form-label">Image URL</label><input type="text" name="image_url" class="input"></div>`;
+            html += `
+                <div class="form-group">
+                    <label class="form-label">Status</label>
+                    <select name="status" class="input"><option value="published">Published</option><option value="draft">Draft</option></select>
+                </div>
+            `;
+        }
+
+        fields.innerHTML = html;
+        modal.style.display = 'flex';
+    };
+
+    window.editItem = async function(table, id) {
+        const displayType = table.endsWith('s') ? table.slice(0, -1) : table; 
+        openModal(displayType, id);
         const { data } = await supabaseClient.from(table).select('*').eq('id', id).single();
-        if (!data) return;
-        if (table === 'plugins') {
-            document.getElementById('plugin-id').value = data.id;
-            document.getElementById('plugin-title').value = data.title;
-            document.getElementById('plugin-type').value = data.is_premium ? 'premium' : 'free';
-            document.getElementById('plugin-price').value = data.price || 0;
-            document.getElementById('plugin-file-url').value = data.file_url || '';
-            document.getElementById('plugin-image-url').value = data.image_url || '';
-            document.getElementById('plugin-desc').value = data.description || '';
-            document.getElementById('plugin-form-title').innerText = "Edit Plugin: " + data.title;
-            document.getElementById('cancel-plugin-btn').style.display = 'inline-block';
+        const form = document.getElementById('item-form');
+        for (const key in data) {
+            const input = form.querySelector(`[name="${key}"]`);
+            if (input) input.value = data[key];
         }
-        if (table === 'sfx') {
-            document.getElementById('sfx-id').value = data.id;
-            document.getElementById('sfx-title').value = data.title;
-            document.getElementById('sfx-type').value = data.is_premium ? 'premium' : 'free';
-            document.getElementById('sfx-price').value = data.price || 0;
-            document.getElementById('sfx-audio-url').value = data.audio_url || '';
-            document.getElementById('sfx-file-url').value = data.file_url || '';
-            document.getElementById('sfx-image-url').value = data.image_url || '';
-            document.getElementById('sfx-desc').value = data.description || '';
-            document.getElementById('sfx-form-title').innerText = "Edit SFX: " + data.title;
-            document.getElementById('cancel-sfx-btn').style.display = 'inline-block';
-        }
-        if (table === 'presets') {
-            document.getElementById('preset-id').value = data.id;
-            document.getElementById('preset-title').value = data.title;
-            document.getElementById('preset-type').value = data.is_premium ? 'premium' : 'free';
-            document.getElementById('preset-price').value = data.price || 0;
-            document.getElementById('preset-file-url').value = data.file_url || '';
-            document.getElementById('preset-image-url').value = data.image_url || '';
-            document.getElementById('preset-desc').value = data.description || '';
-            document.getElementById('preset-form-title').innerText = "Edit Preset: " + data.title;
-            document.getElementById('cancel-preset-btn').style.display = 'inline-block';
-        }
-        document.querySelector('.main-content').scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    const setupForm = (formId, table, loader) => {
-        const form = document.getElementById(formId);
-        if (!form) return;
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const id = form.querySelector('input[type="hidden"]').value;
-            const isPremium = form.querySelector('select').value === 'premium';
-            
-            const payload = {
-                title: form.querySelector('input[type="text"]').value,
-                is_premium: isPremium,
-                price: parseFloat(form.querySelector('input[type="number"]').value) || 0,
-                description: form.querySelector('textarea').value || null
-            };
-            if (table === 'plugins') { payload.file_url = getVal('plugin-file-url'); payload.image_url = getVal('plugin-image-url'); }
-            if (table === 'sfx') { payload.audio_url = getVal('sfx-audio-url'); payload.file_url = getVal('sfx-file-url'); payload.image_url = getVal('sfx-image-url'); }
-            if (table === 'presets') { payload.file_url = getVal('preset-file-url'); payload.image_url = getVal('preset-image-url'); }
+    document.getElementById('item-form').onsubmit = async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const payload = Object.fromEntries(formData.entries());
+        const type = document.getElementById('item-type-hidden').value;
+        const table = type + (type === 'sfx' ? '' : 's'); 
+        const id = document.getElementById('item-id').value;
 
-            const { error } = id 
-                ? await supabaseClient.from(table).update(payload).eq('id', id)
-                : await supabaseClient.from(table).insert([payload]);
+        if (payload.is_premium) payload.is_premium = payload.is_premium === 'true';
 
-            if (error) { showMsg(formId + '-msg', error.message, false); }
-            else { 
-                showMsg(formId + '-msg', 'Saved!', true); 
-                form.reset(); 
-                form.querySelector('input[type="hidden"]').value = '';
-                const title = form.parentElement.querySelector('.panel-title');
-                if (title) title.innerText = "Add New " + (table.toUpperCase());
-                const cancelBtn = form.querySelector('.btn-secondary');
-                if (cancelBtn) cancelBtn.style.display = 'none';
-                loader(); loadDashboardStats();
-            }
-        });
+        const { error } = id 
+            ? await supabaseClient.from(table).update(payload).eq('id', id)
+            : await supabaseClient.from(table).insert([payload]);
+
+        if (error) alert(error.message);
+        else {
+            closeModal();
+            loadTable(table);
+        }
     };
 
-    setupForm('plugin-form', 'plugins', loadPlugins);
-    setupForm('sfx-form', 'sfx', loadSFX);
-    setupForm('preset-form', 'presets', loadPresets);
+    window.closeModal = () => document.getElementById('item-modal').style.display = 'none';
 
     /* ==========================
-       MEDIA MANAGER
+       8. USER MANAGER
+       ========================== */
+    async function loadUsers() {
+        const body = document.getElementById('users-table');
+        const search = getVal('user-search').toLowerCase();
+        let query = supabaseClient.from('profiles').select('*').order('created_at', { ascending: false });
+        if (search) query = query.ilike('email', `%${search}%`);
+        
+        const { data } = await query;
+        body.innerHTML = (data || []).map(u => `
+            <tr>
+                <td>${u.name || 'User'}</td>
+                <td>${u.email}</td>
+                <td>
+                    <label class="toggle">
+                        <input type="checkbox" onchange="toggleAdminStatus('${u.id}', this.checked)" ${u.is_admin ? 'checked' : ''}>
+                        <span class="slider"></span>
+                    </label>
+                </td>
+                <td>${new Date(u.created_at).toLocaleDateString()}</td>
+                <td><button class="btn btn-danger btn-small" onclick="deleteUser('${u.id}')">Delete</button></td>
+            </tr>
+        `).join('');
+    }
+
+    window.toggleAdminStatus = async (id, status) => {
+        await supabaseClient.from('profiles').update({ is_admin: status }).eq('id', id);
+    };
+
+    window.deleteUser = async (id) => {
+        if (!confirm("Delete user profile?")) return;
+        await supabaseClient.from('profiles').delete().eq('id', id);
+        loadUsers();
+    };
+
+    /* ==========================
+       9. MEDIA LIBRARY
        ========================== */
     async function loadMedia() {
         const grid = document.getElementById('media-grid');
-        if (!grid) return;
-        grid.innerHTML = '<p style="grid-column: 1/-1;">Loading media...</p>';
-        const { data, error } = await supabaseClient.storage.from(BUCKET_NAME).list('', { limit: 100 });
-        if (error || !data) { grid.innerHTML = '<p>Error loading media</p>'; return; }
-        grid.innerHTML = data.filter(f => f.name !== '.emptyFolderPlaceholder').map(file => {
+        grid.innerHTML = "Loading...";
+        const { data } = await supabaseClient.storage.from(BUCKET_NAME).list('', { limit: 100 });
+        
+        grid.innerHTML = (data || []).filter(f => f.name !== '.emptyFolderPlaceholder').map(file => {
             const url = supabaseClient.storage.from(BUCKET_NAME).getPublicUrl(file.name).data.publicUrl;
             return `
                 <div class="media-item">
-                    ${file.name.match(/\.(jpg|jpeg|png|gif|webp)$/i) ? `<img src="${url}">` : `<div style="height:80px;background:#111;display:flex;align-items:center;justify-content:center;">FILE</div>`}
-                    <div class="media-name">${file.name}</div>
-                    <button class="btn-action" onclick="navigator.clipboard.writeText('${url}'); alert('URL Copied!')">Copy</button>
-                    <button class="btn-action btn-danger" onclick="window.deleteMedia('${file.name}')">Del</button>
+                    <img src="${url}">
+                    <div class="media-overlay">
+                        <button class="btn btn-primary btn-small" onclick="copyUrl('${url}')">URL</button>
+                        <button class="btn btn-danger btn-small" onclick="deleteMedia('${file.name}')">DEL</button>
+                    </div>
                 </div>
             `;
         }).join('');
     }
 
+    window.copyUrl = (url) => { navigator.clipboard.writeText(url); alert("URL Copied!"); };
+
     window.deleteMedia = async (name) => {
-        if (!confirm('Delete file?')) return;
+        if (!confirm("Delete media?")) return;
         await supabaseClient.storage.from(BUCKET_NAME).remove([name]);
         loadMedia();
     };
 
-    const mediaForm = document.getElementById('media-form');
-    if (mediaForm) {
-        mediaForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const file = document.getElementById('media-file').files[0];
-            if (!file) return;
-            const { error } = await supabaseClient.storage.from(BUCKET_NAME).upload(`${Date.now()}_${file.name}`, file);
-            if (!error) { showMsg('media-msg', 'Uploaded!', true); loadMedia(); }
-            else { showMsg('media-msg', error.message, false); }
-        });
-    }
+    window.uploadMedia = async (file) => {
+        if (!file) return;
+        const name = `${Date.now()}_${file.name}`;
+        const { error } = await supabaseClient.storage.from(BUCKET_NAME).upload(name, file);
+        if (error) alert(error.message);
+        else loadMedia();
+    };
 
     /* ==========================
-       USERS & ORDERS
+       10. THEME & SETTINGS
        ========================== */
-    async function loadUsers() {
-        const body = document.getElementById('users-table-body');
-        const { data } = await supabaseClient.from('profiles').select('*').order('created_at', { ascending: false });
-        if (!data) return;
-        body.innerHTML = data.map(u => `
-            <tr>
-                <td><strong>${u.name || 'User'}</strong><br><small>${u.email}</small></td>
-                <td>${new Date(u.created_at).toLocaleDateString()}</td>
-                <td><span class="badge ${u.is_admin ? 'badge-premium' : ''}">${u.is_admin ? 'ADMIN' : 'User'}</span></td>
-                <td><button class="btn-action" onclick="window.toggleAdmin('${u.id}', ${u.is_admin})">${u.is_admin ? 'Revoke' : 'Make Admin'}</button></td>
-            </tr>
-        `).join('');
+    async function loadTheme() {
+        const s = await bulkGet(['color_primary', 'color_bg', 'color_text']);
+        setVal('color-primary', s.color_primary || '#ffd700');
+        setVal('color-bg', s.color_bg || '#030609');
+        setVal('color-text', s.color_text || '#ffffff');
     }
-    window.toggleAdmin = async (id, status) => {
-        await supabaseClient.from('profiles').update({ is_admin: !status }).eq('id', id);
-        loadUsers();
+
+    window.saveTheme = async function() {
+        await bulkSet({
+            color_primary: getVal('color-primary'),
+            color_bg: getVal('color-bg'),
+            color_text: getVal('color-text')
+        });
+        alert("Theme saved!");
     };
 
-    async function loadOrders() {
-        const body = document.getElementById('orders-table-body');
-        if (!body) return;
-        const { data } = await supabaseClient.from('purchases').select('id, user_id, item_id, created_at').order('created_at', { ascending: false });
-        if (!data || data.length === 0) { body.innerHTML = '<tr><td colspan="4" style="text-align:center;opacity:0.5">No orders found.</td></tr>'; return; }
-        body.innerHTML = data.map(o => `<tr><td>${o.id}</td><td>${o.user_id}</td><td>${o.item_id}</td><td>${new Date(o.created_at).toLocaleDateString()}</td></tr>`).join('');
+    async function loadSettings() {
+        const s = await bulkGet(['site_title', 'site_desc', 'site_favicon', 'maintenance_mode']);
+        setVal('site-title', s.site_title || '');
+        setVal('site-desc', s.site_desc || '');
+        setVal('site-favicon', s.site_favicon || '');
+        document.getElementById('site-maintenance').checked = s.maintenance_mode === 'true';
     }
 
-    async function loadPosts() {
-        const body = document.getElementById('posts-table-body');
-        const { data } = await supabaseClient.from('posts').select('*').order('published_at', { ascending: false });
-        if (!data) return;
-        body.innerHTML = data.map(p => `
-            <tr>
-                <td>${p.title}</td>
-                <td>${p.labels || ''}</td>
-                <td>${p.status}</td>
-                <td><button class="btn-action" onclick="window.editPost('${p.id}')">Edit</button></td>
-            </tr>
-        `).join('');
-    }
+    window.saveSettings = async function() {
+        await bulkSet({
+            site_title: getVal('site-title'),
+            site_desc: getVal('site-desc'),
+            site_favicon: getVal('site-favicon'),
+            maintenance_mode: document.getElementById('site-maintenance').checked
+        });
+        alert("General settings saved!");
+    };
 
     /* ==========================
-       SETTINGS
+       INIT
        ========================== */
-    window.loadNavbarSettings = async () => {
-        const m = await bulkGetSettings(['nav_logo_text', 'nav_logo_color', 'nav_signup_text', 'nav_signup_color']);
-        setVal('nav-logo-text', m.nav_logo_text || 'AVS MAHIM');
-        setVal('nav-logo-color', m.nav_logo_color || '#ffd700');
-        setVal('nav-signup-text', m.nav_signup_text || 'SIGN UP');
-        setVal('nav-signup-color', m.nav_signup_color || '#ffd700');
-    };
-    window.saveNavbarSettings = async () => {
-        const { error } = await bulkSaveSettings({
-            nav_logo_text: getVal('nav-logo-text'), nav_logo_color: getVal('nav-logo-color'),
-            nav_signup_text: getVal('nav-signup-text'), nav_signup_color: getVal('nav-signup-color')
-        });
-        showMsg('navbar-msg', error ? error.message : 'Saved!', !error);
-    };
+    function initApp() {
+        loadDashboard();
+    }
 
-    window.loadHeroSettings = async () => {
-        const m = await bulkGetSettings(['hero_title', 'hero_subtitle', 'hero_btn_text', 'hero_btn_link', 'hero_bg_image', 'hero_bg_video']);
-        setVal('hero-title', m.hero_title || '');
-        setVal('hero-subtitle', m.hero_subtitle || '');
-        setVal('hero-btn-text', m.hero_btn_text || '');
-        setVal('hero-btn-link', m.hero_btn_link || '');
-        setVal('hero-bg-image', m.hero_bg_image || '');
-        setVal('hero-bg-video', m.hero_bg_video || '');
-    };
-    window.saveHeroSettings = async () => {
-        const { error } = await bulkSaveSettings({
-            hero_title: getVal('hero-title'), hero_subtitle: getVal('hero-subtitle'),
-            hero_btn_text: getVal('hero-btn-text'), hero_btn_link: getVal('hero-btn-link'),
-            hero_bg_image: getVal('hero-bg-image'), hero_bg_video: getVal('hero-bg-video')
-        });
-        showMsg('hero-msg', error ? error.message : 'Saved!', !error);
-    };
-
-    window.loadProfileSettings = async () => {
-        const keys = ['profile_name', 'profile_image', 'profile_bio1', 'profile_bio2', 'profile_bio3', 'profile_bio4', 'profile_link1_text', 'profile_link1_url', 'profile_link2_text', 'profile_link2_url', 'profile_visible'];
-        const m = await bulkGetSettings(keys);
-        setVal('profile-name', m.profile_name || 'AVS Mahim');
-        setVal('profile-image', m.profile_image || '');
-        setVal('profile-bio1', m.profile_bio1 || '');
-        setVal('profile-bio2', m.profile_bio2 || '');
-        setVal('profile-bio3', m.profile_bio3 || '');
-        setVal('profile-bio4', m.profile_bio4 || '');
-        setVal('profile-link1-text', m.profile_link1_text || '');
-        setVal('profile-link1-url', m.profile_link1_url || '');
-        setVal('profile-link2-text', m.profile_link2_text || '');
-        setVal('profile-link2-url', m.profile_link2_url || '');
-        setVal('profile-visible', m.profile_visible || 'true');
-    };
-    window.saveProfileSettings = async () => {
-        const { error } = await bulkSaveSettings({
-            profile_name: getVal('profile-name'), profile_image: getVal('profile-image'),
-            profile_bio1: getVal('profile-bio1'), profile_bio2: getVal('profile-bio2'),
-            profile_bio3: getVal('profile-bio3'), profile_bio4: getVal('profile-bio4'),
-            profile_link1_text: getVal('profile-link1-text'), profile_link1_url: getVal('profile-link1-url'),
-            profile_link2_text: getVal('profile-link2-text'), profile_link2_url: getVal('profile-link2-url'),
-            profile_visible: getVal('profile-visible')
-        });
-        showMsg('profile-sec-msg', error ? error.message : 'Saved!', !error);
-    };
-
-    window.loadFooterSettings = async () => {
-        const m = await bulkGetSettings(['footer_desc', 'footer_copyright', 'footer_yt', 'footer_ig', 'footer_fb', 'footer_tw', 'footer_tt', 'footer_dc']);
-        setVal('footer-desc', m.footer_desc || '');
-        setVal('footer-copyright', m.footer_copyright || '');
-        setVal('footer-yt', m.footer_yt || '');
-        setVal('footer-ig', m.footer_ig || '');
-        setVal('footer-fb', m.footer_fb || '');
-        setVal('footer-tw', m.footer_tw || '');
-        setVal('footer-tt', m.footer_tt || '');
-        setVal('footer-dc', m.footer_dc || '');
-    };
-    window.saveFooterSettings = async () => {
-        const { error } = await bulkSaveSettings({
-            footer_desc: getVal('footer-desc'), footer_copyright: getVal('footer-copyright'),
-            footer_yt: getVal('footer-yt'), footer_ig: getVal('footer-ig'),
-            footer_fb: getVal('footer-fb'), footer_tw: getVal('footer-tw'),
-            footer_tt: getVal('footer-tt'), footer_dc: getVal('footer-dc')
-        });
-        showMsg('footer-msg', error ? error.message : 'Saved!', !error);
-    };
-
-    window.loadThemeSettings = async () => {
-        const m = await bulkGetSettings(['color_primary', 'color_bg', 'color_text', 'color_shadow']);
-        setVal('color-primary', m.color_primary || '#ffd700');
-        setVal('color-bg', m.color_bg || '#030609');
-        setVal('color-text', m.color_text || '#ffffff');
-        setVal('color-shadow', m.color_shadow || '#b8860b');
-        window.updateThemePreview();
-    };
-    window.saveThemeSettings = async () => {
-        const { error } = await bulkSaveSettings({
-            color_primary: getVal('color-primary'), color_bg: getVal('color-bg'),
-            color_text: getVal('color-text'), color_shadow: getVal('color-shadow')
-        });
-        showMsg('theme-msg', error ? error.message : 'Saved!', !error);
-    };
-
-    window.updateThemePreview = () => {
-        const p = getVal('color-primary'); const b = getVal('color-bg'); 
-        const nb = document.getElementById('preview-navbar');
-        const ph = document.getElementById('preview-hero');
-        if (nb) nb.style.background = b; if (ph) ph.style.background = b;
-        const pl = document.getElementById('preview-logo');
-        if (pl) pl.style.color = p;
-        const pb = document.getElementById('preview-btn');
-        if (pb) pb.style.background = p;
-    };
-
-    window.loadApps = async () => {
-        const body = document.getElementById('apps-table-body');
-        if (!body) return;
-        body.innerHTML = '<tr><td colspan="3">Loading...</td></tr>';
-        const { data } = await supabaseClient.from('apps').select('*').order('created_at', { ascending: false });
-        if (!data || data.length === 0) { body.innerHTML = '<tr><td colspan="3">No apps found.</td></tr>'; return; }
-        body.innerHTML = data.map(i => `<tr><td>${i.title}</td><td>${i.description || ''}</td><td><button class="btn-action" onclick="window.deleteItem('apps', '${i.id}')">Del</button></td></tr>`).join('');
-    };
-
-    window.loadAds = async () => {
-        const m = await bulkGetSettings(['ad_header_code']);
-        setVal('ad-header-code', m.ad_header_code || '');
-    };
-    window.saveAds = async () => {
-        const { error } = await bulkSaveSettings({ ad_header_code: getVal('ad-header-code') });
-        showMsg('ads-msg', error ? error.message : 'Saved!', !error);
-    };
-
-    window.loadSiteSettings = async () => {
-        const m = await bulkGetSettings(['site_title', 'site_tagline', 'site_meta_desc', 'site_favicon', 'maintenance_mode']);
-        setVal('setting-site-title', m.site_title || '');
-        setVal('setting-tagline', m.site_tagline || '');
-        setVal('setting-meta-desc', m.site_meta_desc || '');
-        setVal('setting-favicon', m.site_favicon || '');
-        setVal('setting-maintenance', m.maintenance_mode || 'false');
-    };
-    window.saveSiteSettings = async () => {
-        const { error } = await bulkSaveSettings({
-            site_title: getVal('setting-site-title'), site_tagline: getVal('setting-tagline'),
-            site_meta_desc: getVal('setting-meta-desc'), site_favicon: getVal('setting-favicon'),
-            maintenance_mode: getVal('setting-maintenance')
-        });
-        showMsg('settings-msg', error ? error.message : 'Saved!', !error);
-    };
-
-    // Init
-    setTimeout(checkAdminSession, 500);
+    checkSession();
 
 })();
