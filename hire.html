@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Senior Frontend Engineer — NovaTech Solutions</title>
+    <meta name="description"
+        content="Join NovaTech Solutions as a Senior Frontend Engineer. Remote-friendly, BDT 80K–1.2L/month, Dhaka.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+    <style>
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+        :root{--gold:#F0B429;--blue:#0066FF;--cyan:#00D4FF;--purple:#7B2FFF;--bg:#020408;--text:#fff;--muted:#8892A4}
+        html{scroll-behavior:smooth}
+        body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:300;overflow-x:hidden;line-height:1.7}
+        ::selection{background:rgba(240,180,41,.3)}
+        ::-webkit-scrollbar{width:5px}
+        ::-webkit-scrollbar-track{background:var(--bg)}
+        ::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px}
+        .orb{position:fixed;border-radius:50%;filter:blur(110px);pointer-events:none;z-index:0;animation:floatOrb 8s ease-in-out infinite alternate}
+        .o1{width:480px;height:480px;background:rgba(0,102,255,.16);top:-120px;left:-160px}
+        .o2{width:380px;height:380px;background:rgba(123,47,255,.16);top:38%;right:-80px;animation-delay:-3s}
+        .o3{width:320px;height:320px;background:rgba(240,180,41,.11);bottom:-60px;left:28%;animation-delay:-5.5s}
+        @keyframes floatOrb{to{transform:translateY(-45px) scale(1.06)}}
+        nav{position:fixed;top:0;inset-inline:0;z-index:1000;height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 6%;background:rgba(2,4,8,.8);backdrop-filter:blur(22px);border-bottom:1px solid transparent;transition:all .4s}
+        nav.sc{border-bottom:1px solid rgba(240,180,41,.28);box-shadow:0 4px 40px rgba(240,180,41,.07)}
+        .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.25rem;letter-spacing:.1em;background:linear-gradient(135deg,var(--gold),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;opacity:0;animation:fadeScaleIn .6s .05s forwards;text-decoration:none}
+        .nav-links{display:flex;gap:2.2rem;list-style:none}
+        .nav-links a{color:var(--muted);text-decoration:none;font-size:.82rem;letter-spacing:.09em;text-transform:uppercase;position:relative;transition:color .3s}
+        .nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1px;background:var(--gold);transition:width .3s}
+        .nav-links a:hover{color:#fff}
+        .nav-links a:hover::after{width:100%}
+        .nav-cta{background:linear-gradient(135deg,var(--gold),#FF6B00);color:#000;font-family:'Syne',sans-serif;font-weight:700;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;padding:10px 22px;border-radius:8px;text-decoration:none;border:none;cursor:pointer;transition:transform .3s,box-shadow .3s;display:inline-block}
+        .nav-cta:hover{transform:scale(1.06);box-shadow:0 0 28px rgba(240,180,41,.45)}
+        #hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 5% 60px;overflow:hidden}
+        #hero-canvas{position:absolute;inset:0;z-index:1}
+        .hero-content{position:relative;z-index:2;max-width:920px}
+        .hero-eyebrow{font-size:.78rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:1.4rem;opacity:0;animation:fadeUp .6s .15s forwards}
+        .hero-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(52px,9vw,128px);line-height:1;letter-spacing:.04em;text-transform:uppercase;background:linear-gradient(135deg,var(--gold) 0%,var(--blue) 55%,var(--cyan) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;opacity:0;animation:slideUp .85s .3s forwards}
+        .hero-sub{font-size:clamp(.95rem,2vw,1.2rem);color:var(--muted);margin-top:1.4rem;opacity:0;animation:fadeIn .8s .72s forwards}
+        .hero-sub span{color:#fff}
+        .hero-cta-wrap{margin-top:2.4rem;opacity:0;animation:scaleIn .6s .92s forwards}
+        .btn-primary{display:inline-flex;align-items:center;gap:.55rem;background:linear-gradient(135deg,var(--gold),#FF6B00);color:#000;font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;letter-spacing:.13em;text-transform:uppercase;padding:16px 38px;border-radius:12px;text-decoration:none;border:none;cursor:pointer;position:relative;overflow:hidden;transition:transform .3s,box-shadow .3s}
+        .btn-primary::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.28),transparent);transition:left .5s}
+        .btn-primary:hover::before{left:100%}
+        .btn-primary:hover{transform:scale(1.04) translateY(-2px);box-shadow:0 8px 42px rgba(240,180,41,.48)}
+        .hero-stats{position:relative;z-index:2;display:flex;gap:1.4rem;margin-top:3.5rem;flex-wrap:wrap;justify-content:center;opacity:0;animation:fadeUp .8s 1.1s forwards}
+        .stat-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:1.4rem 1.8rem;text-align:center;cursor:default;transition:all .4s;transform-style:preserve-3d;min-width:155px}
+        .stat-card:hover{box-shadow:0 0 42px rgba(240,180,41,.16),0 0 80px rgba(0,102,255,.1)}
+        .stat-num{font-family:'Syne',sans-serif;font-weight:800;font-size:1.9rem;background:linear-gradient(135deg,var(--gold),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .stat-label{font-size:.75rem;color:var(--muted);letter-spacing:.11em;text-transform:uppercase;margin-top:.25rem}
+        @keyframes fadeScaleIn{from{opacity:0;transform:scale(.78)}to{opacity:1;transform:scale(1)}}
+        @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes slideUp{from{opacity:0;transform:translateY(55px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+        @keyframes scaleIn{from{opacity:0;transform:scale(.68)}to{opacity:1;transform:scale(1)}}
+        section{position:relative;z-index:2}
+        .sec-label{font-size:.72rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin-bottom:.7rem}
+        .sec-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(1.9rem,4vw,3rem);letter-spacing:.08em;text-transform:uppercase;line-height:1.1}
+        .sec-title span{background:linear-gradient(135deg,var(--gold),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .reveal{opacity:0;transform:translateY(38px);transition:opacity .75s ease,transform .75s ease}
+        .reveal.visible{opacity:1;transform:translateY(0)}
+        .reveal-left{opacity:0;transform:translateX(-48px);transition:opacity .75s ease,transform .75s ease}
+        .reveal-left.visible{opacity:1;transform:translateX(0)}
+        .reveal-right{opacity:0;transform:translateX(48px);transition:opacity .75s ease,transform .75s ease}
+        .reveal-right.visible{opacity:1;transform:translateX(0)}
+        #job-details{padding:100px 5%}
+        .job-grid{display:grid;grid-template-columns:1.45fr 1fr;gap:3rem;max-width:1200px;margin:3rem auto 0;align-items:start}
+        .about-role h3{font-family:'Syne',sans-serif;font-weight:700;font-size:1.05rem;letter-spacing:.11em;text-transform:uppercase;color:var(--gold);margin:2rem 0 .9rem}
+        .about-role p{color:var(--muted);font-size:.93rem;line-height:1.85}
+        .bullet-list{list-style:none;display:flex;flex-direction:column;gap:.7rem;margin-top:.9rem}
+        .bullet-list li{display:flex;align-items:flex-start;gap:.7rem;color:var(--muted);font-size:.88rem;line-height:1.65}
+        .bullet-list li::before{content:'◆';color:var(--gold);font-size:.58rem;margin-top:.38rem;flex-shrink:0;filter:drop-shadow(0 0 5px var(--gold))}
+        .sidebar{position:sticky;top:88px}
+        .info-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:1.8rem;box-shadow:0 0 38px rgba(240,180,41,.07);transition:all .4s;transform-style:preserve-3d}
+        .info-card:hover{box-shadow:0 0 60px rgba(240,180,41,.17),0 0 100px rgba(0,102,255,.1)}
+        .info-row{display:flex;justify-content:space-between;align-items:center;padding:.8rem 0;border-bottom:1px solid rgba(255,255,255,.05)}
+        .info-row:last-of-type{border-bottom:none}
+        .info-key{font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
+        .info-val{font-size:.87rem;font-weight:500}
+        .badge{display:inline-block;padding:4px 11px;border-radius:20px;font-size:.71rem;letter-spacing:.08em;text-transform:uppercase;font-weight:500}
+        .bg{background:rgba(240,180,41,.14);color:var(--gold);border:1px solid rgba(240,180,41,.3)}
+        .bb{background:rgba(0,102,255,.14);color:var(--cyan);border:1px solid rgba(0,212,255,.28)}
+        .skills-wrap{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:1.4rem}
+        .skill-tag{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:5px 14px;font-size:.76rem;letter-spacing:.06em;color:#fff;transition:all .3s;cursor:default;opacity:0;transform:scale(.78)}
+        .skill-tag.popped{opacity:1;transform:scale(1)}
+        .skill-tag:hover{border-color:var(--gold);color:var(--gold);box-shadow:0 0 14px rgba(240,180,41,.22)}
+        .card-actions{display:flex;gap:.9rem;margin-top:1.4rem}
+        .act-btn{flex:1;padding:11px;border-radius:10px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.8rem;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:.38rem}
+        .act-btn:hover,.act-btn.saved{border-color:var(--gold);color:var(--gold)}
+        .act-btn.saved{background:rgba(240,180,41,.07)}
+        .tipwrap{position:relative}
+        .tip{position:absolute;bottom:calc(100% + 7px);left:50%;transform:translateX(-50%);background:var(--gold);color:#000;font-size:.68rem;padding:4px 10px;border-radius:6px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .3s}
+        .tip.show{opacity:1}
+        #apply{padding:100px 5%}
+        .form-wrap{max-width:800px;margin:0 auto}
+        .prog-bar{display:flex;position:relative;margin:2.5rem 0 3rem}
+        .prog-bar::before{content:'';position:absolute;top:50%;left:0;right:0;height:2px;background:rgba(255,255,255,.07);transform:translateY(-50%)}
+        .prog-fill{position:absolute;top:50%;left:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--cyan));transform:translateY(-50%);z-index:1;transition:width .55s ease;width:16.66%}
+        .step-dot{flex:1;display:flex;flex-direction:column;align-items:center;gap:.45rem;position:relative;z-index:2}
+        .dot{width:34px;height:34px;border-radius:50%;border:2px solid rgba(255,255,255,.14);background:var(--bg);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:.78rem;transition:all .4s;color:var(--muted)}
+        .dot.active{border-color:var(--gold);color:var(--gold);box-shadow:0 0 18px rgba(240,180,41,.38)}
+        .dot.done{border-color:var(--cyan);background:var(--cyan);color:#000}
+        .step-lbl{font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:center}
+        .step-lbl.al{color:var(--gold)}
+        .fsec-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.83rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin:2rem 0 1rem;padding-bottom:.45rem;border-bottom:1px solid rgba(240,180,41,.2)}
+        .fg{display:grid;grid-template-columns:1fr 1fr;gap:1.15rem;margin-bottom:1.15rem}
+        .fg.full{grid-template-columns:1fr}
+        .field{position:relative}
+        .field label{display:block;font-size:.7rem;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:.45rem;transition:color .3s}
+        .field:focus-within label{color:var(--gold)}
+        .field input,.field select,.field textarea{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:13px 17px;color:#fff;font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;transition:all .3s;-webkit-appearance:none;appearance:none}
+        .field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238892A4' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 15px center;padding-right:38px}
+        .field select option{background:var(--bg);color:#fff}
+        .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(240,180,41,.11),0 0 22px rgba(240,180,41,.07)}
+        .field input.valid{border-color:rgba(0,212,255,.48)}
+        .field input.err,.field select.err,.field textarea.err{border-color:#FF4444;box-shadow:0 0 0 3px rgba(255,68,68,.1)}
+        .ck{position:absolute;right:13px;bottom:13px;width:17px;height:17px;color:var(--cyan);opacity:0;transform:scale(0);transition:all .3s}
+        .ck.show{opacity:1;transform:scale(1);animation:bounceIn .4s ease}
+        .ferr{font-size:.7rem;color:#FF6B6B;margin-top:.35rem;display:none}
+        .ferr.show{display:block}
+        @keyframes bounceIn{0%,100%{transform:scale(1)}50%{transform:scale(1.35)}}
+        .field textarea{resize:vertical;min-height:135px}
+        .char-c{font-size:.69rem;color:var(--muted);text-align:right;margin-top:.35rem}
+        .char-c.warn{color:var(--gold)}
+        .file-drop{border:2px dashed rgba(255,255,255,.12);border-radius:12px;padding:1.8rem;text-align:center;cursor:pointer;transition:all .4s;position:relative}
+        .file-drop:hover,.file-drop.dv{border-color:var(--gold);background:rgba(240,180,41,.04)}
+        .file-drop input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+        .file-drop p{font-size:.83rem;color:var(--muted)}
+        .file-drop p span{color:var(--gold)}
+        .file-nm{font-size:.8rem;color:var(--cyan);margin-top:.55rem;display:none}
+        .cb-wrap{display:flex;align-items:flex-start;gap:.7rem;margin:1.4rem 0}
+        .cb-wrap input[type=checkbox]{width:19px;height:19px;accent-color:var(--gold);cursor:pointer;flex-shrink:0;margin-top:3px}
+        .cb-wrap label{font-size:.83rem;color:var(--muted);cursor:pointer}
+        .cb-wrap label a{color:var(--gold);text-decoration:none}
+        .sub-btn{width:100%;height:64px;border-radius:16px;background:linear-gradient(135deg,var(--gold),#FF6B00);border:none;cursor:pointer;font-family:'Syne',sans-serif;font-weight:700;font-size:.93rem;letter-spacing:.15em;text-transform:uppercase;color:#000;position:relative;overflow:hidden;transition:transform .3s,box-shadow .3s;display:flex;align-items:center;justify-content:center;gap:.75rem;margin-top:1.5rem}
+        .sub-btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);transition:left .5s}
+        .sub-btn:hover::before{left:100%}
+        .sub-btn:hover{transform:scale(1.022);box-shadow:0 12px 50px rgba(240,180,41,.52)}
+        .sub-btn:disabled{opacity:.72;cursor:not-allowed;transform:none}
+        .spin{width:22px;height:22px;border:2px solid rgba(0,0,0,.3);border-top-color:#000;border-radius:50%;animation:spinIt .7s linear infinite;display:none}
+        @keyframes spinIt{to{transform:rotate(360deg)}}
+        #scard{display:none;max-width:590px;margin:0 auto;background:rgba(255,255,255,.03);border:1px solid rgba(240,180,41,.2);border-radius:24px;padding:3rem;text-align:center;transform:perspective(1000px) rotateY(90deg);box-shadow:0 0 80px rgba(240,180,41,.14)}
+        #scard.flipped{transform:perspective(1000px) rotateY(0deg);transition:transform .85s cubic-bezier(.175,.885,.32,1.275)}
+        .sc-icon{width:80px;height:80px;margin:0 auto 1.4rem}
+        .sc-icon svg{width:100%;height:100%}
+        .sc-icon circle{stroke:var(--gold);stroke-width:2;fill:none;stroke-dasharray:251;stroke-dashoffset:251;animation:drawC 1s .3s ease forwards}
+        .sc-icon path{stroke:var(--gold);stroke-width:3.5;fill:none;stroke-dasharray:80;stroke-dashoffset:80;animation:drawK .5s 1.2s ease forwards;stroke-linecap:round;stroke-linejoin:round}
+        @keyframes drawC{to{stroke-dashoffset:0}}
+        @keyframes drawK{to{stroke-dashoffset:0}}
+        .sc-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1.9rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.7rem;background:linear-gradient(135deg,var(--gold),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .ref-num{font-family:'Syne',sans-serif;font-size:1.08rem;color:var(--cyan);letter-spacing:.16em;margin:1rem 0;min-height:1.5rem}
+        .sc-sub{color:var(--muted);font-size:.88rem;line-height:1.7}
+        .back-btn{margin-top:1.8rem;display:inline-flex;align-items:center;gap:.45rem;background:transparent;border:1px solid rgba(240,180,41,.4);color:var(--gold);padding:11px 26px;border-radius:10px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:700;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;transition:all .3s}
+        .back-btn:hover{background:rgba(240,180,41,.1);box-shadow:0 0 28px rgba(240,180,41,.2)}
+        #ccanvas{position:fixed;inset:0;pointer-events:none;z-index:9999;display:none}
+        footer{padding:2.8rem 5%;border-top:1px solid rgba(240,180,41,.18);display:flex;flex-direction:column;align-items:center;gap:1.4rem;position:relative;z-index:2}
+        .ft-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;letter-spacing:.1em;background:linear-gradient(135deg,var(--gold),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .ft-tag{font-size:.78rem;color:var(--muted);letter-spacing:.08em}
+        .socials{display:flex;gap:1.1rem}
+        .soc{width:38px;height:38px;border-radius:8px;border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:var(--muted);text-decoration:none;transition:all .3s}
+        .soc:hover{border-color:var(--gold);color:var(--gold);box-shadow:0 0 18px rgba(240,180,41,.2)}
+        .copy{font-size:.7rem;color:var(--muted);letter-spacing:.08em}
+        @media(max-width:768px){.job-grid,.fg{grid-template-columns:1fr}.nav-links{display:none}.hero-stats{gap:1rem}.hero-title{font-size:clamp(42px,12vw,80px)}}
+    </style>
+</head>
+
+<body>
+    <div class="orb o1"></div>
+    <div class="orb o2"></div>
+    <div class="orb o3"></div>
+    <canvas id="ccanvas"></canvas>
+
+    <nav id="navbar">
+        <a class="logo" href="#">NOVATECH</a>
+        <ul class="nav-links">
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#job-details">The Role</a></li>
+            <li><a href="#apply">Apply</a></li>
+        </ul>
+        <a class="nav-cta" href="#apply" id="nav-apply">Apply Now</a>
+    </nav>
+
+    <section id="hero">
+        <canvas id="hero-canvas"></canvas>
+        <div class="hero-content">
+            <p class="hero-eyebrow">🚀 NovaTech Solutions — We're Hiring</p>
+            <h1 class="hero-title">SHAPE<br>THE FUTURE</h1>
+            <p class="hero-sub"><span>Senior Frontend Engineer</span> &nbsp;·&nbsp; Dhaka, Bangladesh &nbsp;·&nbsp; Remote OK</p>
+            <div class="hero-cta-wrap">
+                <a class="btn-primary" href="#apply">
+                    Apply Now
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M3 8h10M9 4l4 4-4 4" stroke="#000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+        <div class="hero-stats">
+            <div class="stat-card tilt-card"><div class="stat-num" data-target="500" data-suffix="+">0+</div><div class="stat-label">Employees</div></div>
+            <div class="stat-card tilt-card"><div class="stat-num" data-target="40" data-suffix="+">0+</div><div class="stat-label">Countries</div></div>
+            <div class="stat-card tilt-card"><div class="stat-num" data-target="2" data-prefix="$" data-suffix="B">0</div><div class="stat-label">Valuation</div></div>
+        </div>
+    </section>
+
+    <section id="job-details">
+        <div style="max-width:1200px;margin:0 auto;padding:0">
+            <p class="sec-label reveal">THE OPPORTUNITY</p>
+            <h2 class="sec-title reveal">THE <span>ROLE</span></h2>
+        </div>
+        <div class="job-grid">
+            <div class="about-role reveal-left">
+                <p>We are looking for a <strong style="color:#fff">Senior Frontend Engineer</strong> who is passionate about crafting extraordinary digital experiences. You will lead frontend architecture decisions, mentor junior engineers, and build performant, accessible applications that serve millions of users globally across 40+ countries.</p>
+                <h3>Key Responsibilities</h3>
+                <ul class="bullet-list">
+                    <li>Architect and develop scalable, high-performance frontend systems using React.js and Next.js</li>
+                    <li>Drive technical decisions on component libraries, state management, and API integration patterns</li>
+                    <li>Collaborate closely with product, design, and backend teams in an agile environment</li>
+                    <li>Champion code quality through reviews, testing strategies, CI/CD pipelines, and documentation</li>
+                    <li>Mentor mid-level and junior engineers and contribute to technical hiring processes</li>
+                    <li>Build accessible, SEO-optimized interfaces with pixel-perfect attention to design detail</li>
+                </ul>
+                <h3>Requirements</h3>
+                <ul class="bullet-list">
+                    <li>3–5 years of professional frontend development experience in production environments</li>
+                    <li>Expert proficiency in React.js, TypeScript, and Next.js with a strong portfolio</li>
+                    <li>Solid understanding of REST APIs, state management (Redux/Zustand), and testing (Vitest/Jest)</li>
+                    <li>Experience with Three.js, WebGL, or advanced CSS animations is a strong advantage</li>
+                    <li>Excellent communication skills and a collaborative, growth-oriented mindset</li>
+                </ul>
+            </div>
+            <div class="sidebar reveal-right">
+                <div class="info-card tilt-card">
+                    <div class="info-row"><span class="info-key">Location</span><span class="info-val">Dhaka, BD / Remote</span></div>
+                    <div class="info-row"><span class="info-key">Salary</span><span class="info-val">BDT 80K – 1,20,000/mo</span></div>
+                    <div class="info-row"><span class="info-key">Deadline</span><span class="info-val"><span class="badge bg">Apr 30, 2025</span></span></div>
+                    <div class="info-row"><span class="info-key">Openings</span><span class="info-val"><span class="badge bb">3 Positions</span></span></div>
+                    <div class="info-row"><span class="info-key">Experience</span><span class="info-val">3 – 5 Years</span></div>
+                    <div class="info-row"><span class="info-key">Type</span><span class="info-val">Full-Time</span></div>
+                    <div class="skills-wrap" id="skill-tags">
+                        <span class="skill-tag">React.js</span>
+                        <span class="skill-tag">TypeScript</span>
+                        <span class="skill-tag">Next.js</span>
+                        <span class="skill-tag">Three.js</span>
+                        <span class="skill-tag">Tailwind CSS</span>
+                        <span class="skill-tag">REST API</span>
+                    </div>
+                    <div class="card-actions">
+                        <button class="act-btn" id="save-btn" onclick="toggleSave()">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="heart-icon">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                            </svg>
+                            Save Job
+                        </button>
+                        <div class="tipwrap">
+                            <button class="act-btn" onclick="copyURL()">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2"/>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                </svg>
+                                Share
+                            </button>
+                            <span class="tip" id="copy-tip">Copied!</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="apply">
+        <div class="form-wrap">
+            <p class="sec-label reveal">JOIN THE TEAM</p>
+            <h2 class="sec-title reveal">YOUR <span>APPLICATION</span></h2>
+            <div class="prog-bar reveal" id="prog-bar">
+                <div class="prog-fill" id="prog-fill"></div>
+                <div class="step-dot"><div class="dot active" id="d1">1</div><span class="step-lbl al" id="l1">Personal</span></div>
+                <div class="step-dot"><div class="dot" id="d2">2</div><span class="step-lbl" id="l2">Experience</span></div>
+                <div class="step-dot"><div class="dot" id="d3">3</div><span class="step-lbl" id="l3">Materials</span></div>
+            </div>
+            <form id="appform" novalidate>
+                <div class="fsec-title">Personal Information</div>
+                <div class="fg">
+                    <div class="field"><label>Full Name *</label><input type="text" id="fname" placeholder="John Doe" autocomplete="name"><svg class="ck" viewBox="0 0 20 20" fill="currentColor"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg><div class="ferr" id="fname-err">Please enter your full name (min 2 chars)</div></div>
+                    <div class="field"><label>Email Address *</label><input type="email" id="email" placeholder="john@example.com" autocomplete="email"><svg class="ck" viewBox="0 0 20 20" fill="currentColor"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg><div class="ferr" id="email-err">Enter a valid email address</div></div>
+                </div>
+                <div class="fg">
+                    <div class="field"><label>Phone Number *</label><input type="tel" id="phone" placeholder="+880 1XXX XXXXXX" autocomplete="tel"><svg class="ck" viewBox="0 0 20 20" fill="currentColor"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg><div class="ferr" id="phone-err">Minimum 11 digits required</div></div>
+                    <div class="field"><label>Current Location *</label><input type="text" id="location" placeholder="Dhaka, Bangladesh"><svg class="ck" viewBox="0 0 20 20" fill="currentColor"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg><div class="ferr" id="location-err">Please enter your location</div></div>
+                </div>
+                <div class="fsec-title">Professional Details</div>
+                <div class="fg">
+                    <div class="field"><label>LinkedIn URL</label><input type="url" id="linkedin" placeholder="https://linkedin.com/in/username"><div class="ferr" id="linkedin-err">Enter a valid URL (https://…)</div></div>
+                    <div class="field"><label>Portfolio / GitHub URL</label><input type="url" id="portfolio" placeholder="https://github.com/username"><div class="ferr" id="portfolio-err">Enter a valid URL (https://…)</div></div>
+                </div>
+                <div class="fg">
+                    <div class="field"><label>Years of Experience *</label><select id="exp"><option value="">Select experience…</option><option value="1-2">1–2 Years</option><option value="3-5">3–5 Years</option><option value="5-7">5–7 Years</option><option value="7+">7+ Years</option></select><div class="ferr" id="exp-err">Please select your experience level</div></div>
+                    <div class="field"><label>Expected Salary (BDT/month) *</label><input type="text" id="salary" placeholder="e.g. 1,00,000"><svg class="ck" viewBox="0 0 20 20" fill="currentColor"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg><div class="ferr" id="salary-err">Please enter your expected salary</div></div>
+                </div>
+                <div class="fg">
+                    <div class="field"><label>Notice Period *</label><select id="notice"><option value="">Select period…</option><option value="immediate">Immediate</option><option value="2weeks">2 Weeks</option><option value="1month">1 Month</option><option value="2months">2 Months</option><option value="3months">3+ Months</option></select><div class="ferr" id="notice-err">Please select your notice period</div></div>
+                    <div class="field"><label>How did you hear about us? *</label><select id="source"><option value="">Select source…</option><option value="linkedin">LinkedIn</option><option value="friend">Friend / Referral</option><option value="google">Google Search</option><option value="bdjobs">BDJobs</option><option value="other">Other</option></select><div class="ferr" id="source-err">Please select an option</div></div>
+                </div>
+                <div class="fsec-title">Application Materials</div>
+                <div class="fg full">
+                    <div class="field">
+                        <label>Cover Letter * <span style="color:var(--muted);font-size:.64rem;text-transform:none;letter-spacing:0">(max 500 characters)</span></label>
+                        <textarea id="cover" placeholder="Tell us why you're the perfect fit for this role." maxlength="500"></textarea>
+                        <div class="char-c" id="char-c">0 / 500</div>
+                        <div class="ferr" id="cover-err">Please write a cover letter (minimum 50 characters)</div>
+                    </div>
+                </div>
+                <div class="fg full">
+                    <div class="field">
+                        <label>Resume / CV * <span style="color:var(--muted);font-size:.64rem;text-transform:none;letter-spacing:0">(.pdf, .doc, .docx — max 5MB)</span></label>
+                        <div class="file-drop" id="file-drop">
+                            <input type="file" id="resume" accept=".pdf,.doc,.docx">
+                            <div style="font-size:2.2rem;margin-bottom:.7rem">📄</div>
+                            <p>Drag &amp; drop your file here, or <span>browse</span></p>
+                            <div class="file-nm" id="file-nm"></div>
+                        </div>
+                        <div class="ferr" id="resume-err">Please upload a valid resume (PDF or DOC, max 5MB)</div>
+                    </div>
+                </div>
+                <div class="cb-wrap">
+                    <input type="checkbox" id="confirm">
+                    <label for="confirm">I confirm that all information provided is accurate. I agree to the <a href="#">Terms &amp; Conditions</a> and <a href="#">Privacy Policy</a>.</label>
+                </div>
+                <div class="ferr" id="confirm-err" style="margin-bottom:.8rem">You must confirm the accuracy of your information to proceed</div>
+                <button type="submit" class="sub-btn" id="sub-btn"><span id="btn-text">SUBMIT APPLICATION</span><div class="spin" id="spin"></div></button>
+            </form>
+            <div id="scard">
+                <div class="sc-icon"><svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="40" cy="40" r="38"/><path d="M24 40l12 12 20-24"/></svg></div>
+                <div class="sc-title">APPLICATION RECEIVED</div>
+                <div class="ref-num" id="ref-num">&nbsp;</div>
+                <p class="sc-sub">We've received your application and our team will review it shortly.<br>Expect a response within <strong style="color:#fff">5–7 business days</strong>.</p>
+                <button class="back-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#8593; Back to Top</button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="ft-logo">NOVATECH SOLUTIONS</div>
+        <div class="ft-tag">Shaping Tomorrow · Built for the Future</div>
+        <div class="socials">
+            <a class="soc" href="#" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg></a>
+            <a class="soc" href="#" aria-label="Twitter/X"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg></a>
+            <a class="soc" href="#" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
+        </div>
+        <div class="copy">© 2025 NovaTech Solutions Ltd. All rights reserved.</div>
+    </footer>
+
+    <script>
+        (function(){var canvas=document.getElementById('hero-canvas');if(!canvas||typeof THREE==='undefined')return;var renderer=new THREE.WebGLRenderer({canvas:canvas,alpha:true,antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));var scene=new THREE.Scene();var camera=new THREE.PerspectiveCamera(70,1,.1,1000);camera.position.z=5;var N=220,geo=new THREE.BufferGeometry();var pos=new Float32Array(N*3),col=new Float32Array(N*3),vel=[];var palettes=[[240/255,180/255,41/255],[0,102/255,1],[0,212/255,255/255]];for(var i=0;i<N;i++){pos[i*3]=(Math.random()-.5)*14;pos[i*3+1]=(Math.random()-.5)*10;pos[i*3+2]=(Math.random()-.5)*8;var c=palettes[Math.floor(Math.random()*3)];col[i*3]=c[0];col[i*3+1]=c[1];col[i*3+2]=c[2];vel.push({x:(Math.random()-.5)*.006,y:(Math.random()-.5)*.006,z:(Math.random()-.5)*.003});}geo.setAttribute('position',new THREE.BufferAttribute(pos,3));geo.setAttribute('color',new THREE.BufferAttribute(col,3));var mat=new THREE.PointsMaterial({size:.065,vertexColors:true,transparent:true,opacity:.82});var pts=new THREE.Points(geo,mat);scene.add(pts);var mx=0,my=0;document.addEventListener('mousemove',function(e){mx=(e.clientX/innerWidth-.5)*2;my=(e.clientY/innerHeight-.5)*2;});function resize(){var p=canvas.parentElement,w=p.clientWidth,h=p.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}resize();window.addEventListener('resize',resize);var t=0;(function loop(){requestAnimationFrame(loop);t+=.008;var p=geo.attributes.position.array;for(var i=0;i<N;i++){p[i*3]+=vel[i].x;p[i*3+1]+=vel[i].y;p[i*3+2]+=vel[i].z;if(Math.abs(p[i*3])>7)vel[i].x*=-1;if(Math.abs(p[i*3+1])>5)vel[i].y*=-1;if(Math.abs(p[i*3+2])>4)vel[i].z*=-1;}geo.attributes.position.needsUpdate=true;pts.rotation.y=t*.04+mx*.09;pts.rotation.x=t*.02-my*.055;renderer.render(scene,camera);})();})();
+        window.addEventListener('scroll',function(){document.getElementById('navbar').classList.toggle('sc',scrollY>50);updateDots();});
+        document.querySelectorAll('.tilt-card').forEach(function(card){card.addEventListener('mousemove',function(e){var r=card.getBoundingClientRect();var x=(e.clientX-r.left)/r.width-.5;var y=(e.clientY-r.top)/r.height-.5;card.style.transform='perspective(1000px) rotateY('+(x*14)+'deg) rotateX('+(-y*14)+'deg) translateY(-6px)';});card.addEventListener('mouseleave',function(){card.style.transform='perspective(1000px) rotateX(0) rotateY(0)';});});
+        function animCounter(el){var target=+el.dataset.target,pre=el.dataset.prefix||'',suf=el.dataset.suffix||'';var dur=1800,step=16,inc=target/(dur/step),cur=0;var timer=setInterval(function(){cur+=inc;if(cur>=target){cur=target;clearInterval(timer);}el.textContent=pre+Math.floor(cur)+suf;},step);}
+        var countersDone=new Set();var statsObs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting&&!countersDone.has(e.target)){countersDone.add(e.target);e.target.querySelectorAll('.stat-num').forEach(animCounter);}});},{threshold:.3});document.querySelectorAll('.hero-stats').forEach(function(el){statsObs.observe(el);});
+        var io=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);}});},{threshold:.1});document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(function(el){io.observe(el);});
+        var skillsObs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.querySelectorAll('.skill-tag').forEach(function(t,i){setTimeout(function(){t.classList.add('popped');},i*85);});skillsObs.unobserve(e.target);}});},{threshold:.3});var sw=document.getElementById('skill-tags');if(sw)skillsObs.observe(sw);
+        function toggleSave(){var btn=document.getElementById('save-btn');var icon=document.getElementById('heart-icon');btn.classList.toggle('saved');icon.style.fill=btn.classList.contains('saved')?'var(--gold)':'none';}
+        function copyURL(){navigator.clipboard.writeText(location.href).catch(function(){});var tip=document.getElementById('copy-tip');tip.classList.add('show');setTimeout(function(){tip.classList.remove('show');},2200);}
+        function updateDots(){var sy=scrollY+350;var form=document.getElementById('appform');var ft=form?form.getBoundingClientRect().top+scrollY:99999;var step=sy>ft+700?3:(sy>ft+150?2:1);for(var i=1;i<=3;i++){var d=document.getElementById('d'+i),l=document.getElementById('l'+i);if(!d)continue;d.classList.remove('active','done');if(l)l.classList.remove('al');if(i<step){d.classList.add('done');d.textContent='✓';}else if(i===step){d.classList.add('active');d.textContent=i;if(l)l.classList.add('al');}else{d.textContent=i;}}var pf=document.getElementById('prog-fill');if(pf)pf.style.width=(step===1?'16.66':(step===2?'50':'83.33'))+'%';}
+        var validators={fname:function(v){return v.trim().length>=2;},email:function(v){return/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);},phone:function(v){return v.replace(/\D/g,'').length>=11;},location:function(v){return v.trim().length>=2;},salary:function(v){return v.trim().length>=2;},exp:function(v){return v!=='';},notice:function(v){return v!=='';},source:function(v){return v!=='';}}; 
+        function validateField(id){var el=document.getElementById(id);if(!el)return true;var isValid=validators[id]?validators[id](el.value):true;var err=document.getElementById(id+'-err');var ck=el.nextElementSibling;el.classList.toggle('err',!isValid&&el.value.length>0);el.classList.toggle('valid',isValid&&el.value.length>0);if(err){var showErr=(!isValid&&el.value.length>0)||(el.tagName==='SELECT'&&!isValid&&el.value==='');err.classList.toggle('show',showErr);}if(ck&&ck.classList.contains('ck'))ck.classList.toggle('show',isValid&&el.value.length>0);return isValid;}
+        Object.keys(validators).forEach(function(id){var el=document.getElementById(id);if(!el)return;el.addEventListener(el.tagName==='SELECT'?'change':'input',function(){validateField(id);});});
+        ['linkedin','portfolio'].forEach(function(id){var el=document.getElementById(id);if(!el)return;el.addEventListener('blur',function(){if(!el.value)return;var ok=/^https?:\/\/.+/.test(el.value);el.classList.toggle('err',!ok);el.classList.toggle('valid',ok);var err=document.getElementById(id+'-err');if(err)err.classList.toggle('show',!ok);});});
+        var cover=document.getElementById('cover');var charC=document.getElementById('char-c');if(cover&&charC){cover.addEventListener('input',function(){var l=cover.value.length;charC.textContent=l+' / 500';charC.classList.toggle('warn',l>400);});}
+        var resumeEl=document.getElementById('resume');var fileDrop=document.getElementById('file-drop');var fileNm=document.getElementById('file-nm');function handleFile(f){if(!f)return;var ok=/\.(pdf|doc|docx)$/i.test(f.name)&&f.size<=5*1024*1024;var err=document.getElementById('resume-err');if(err)err.classList.toggle('show',!ok);if(ok){fileNm.textContent='📎 '+f.name;fileNm.style.display='block';fileDrop.style.borderColor='var(--cyan)';}else{fileNm.style.display='none';fileDrop.style.borderColor='';}}
+        if(resumeEl){resumeEl.addEventListener('change',function(){handleFile(resumeEl.files[0]);});fileDrop.addEventListener('dragover',function(e){e.preventDefault();fileDrop.classList.add('dv');});fileDrop.addEventListener('dragleave',function(){fileDrop.classList.remove('dv');});fileDrop.addEventListener('drop',function(e){e.preventDefault();fileDrop.classList.remove('dv');if(e.dataTransfer.files[0]){try{resumeEl.files=e.dataTransfer.files;}catch(x){}handleFile(e.dataTransfer.files[0]);}});}
+        document.getElementById('appform').addEventListener('submit',function(e){e.preventDefault();var req=['fname','email','phone','location','exp','salary','notice','source'];var valid=req.map(validateField).every(Boolean);var cv=document.getElementById('cover'),cvE=document.getElementById('cover-err');if(!cv.value||cv.value.trim().length<50){valid=false;cv.classList.add('err');if(cvE)cvE.classList.add('show');}else{cv.classList.remove('err');if(cvE)cvE.classList.remove('show');}var rf=resumeEl&&resumeEl.files[0];var reE=document.getElementById('resume-err');if(!rf||!/\.(pdf|doc|docx)$/i.test(rf.name)||rf.size>5*1024*1024){valid=false;if(reE)reE.classList.add('show');}var cb=document.getElementById('confirm'),cbE=document.getElementById('confirm-err');if(!cb.checked){valid=false;if(cbE)cbE.classList.add('show');}else{if(cbE)cbE.classList.remove('show');}if(!valid)return;var btn=document.getElementById('sub-btn'),txt=document.getElementById('btn-text'),sp=document.getElementById('spin');btn.disabled=true;txt.style.display='none';sp.style.display='block';setTimeout(showSuccess,1600);});
+        function showSuccess(){document.getElementById('appform').style.display='none';var s=document.getElementById('scard');s.style.display='block';setTimeout(function(){s.classList.add('flipped');},60);var AB='ABCDEFGHJKLMNPQRSTVWXYZ0123456789';var code='NJ-2025-'+Array.from({length:4},function(){return AB[Math.floor(Math.random()*AB.length)];}).join('');typeRef(code);startConfetti();}
+        function typeRef(str){var el=document.getElementById('ref-num');el.textContent='';var i=0,t=setInterval(function(){if(i>=str.length)return clearInterval(t);el.textContent+=str[i++];},85);}
+        function startConfetti(){var c=document.getElementById('ccanvas');c.style.display='block';c.width=innerWidth;c.height=innerHeight;var ctx=c.getContext('2d');var colors=['#F0B429','#0066FF','#00D4FF','#7B2FFF','#FF6B00','#FF4793'];var parts=Array.from({length:150},function(){return{x:Math.random()*innerWidth,y:-20,r:Math.random()*6+2,vx:(Math.random()-.5)*2.4,vy:Math.random()*3+1.2,tilt:Math.random()*10-5,alpha:1,color:colors[Math.floor(Math.random()*colors.length)]};});var frame=0;(function draw(){if(frame>240){c.style.display='none';return;}frame++;ctx.clearRect(0,0,c.width,c.height);parts.forEach(function(p){ctx.save();ctx.globalAlpha=Math.max(0,p.alpha);ctx.beginPath();ctx.ellipse(p.x,p.y,p.r,p.r*.42,p.tilt,0,Math.PI*2);ctx.fillStyle=p.color;ctx.fill();ctx.restore();p.x+=p.vx;p.y+=p.vy;p.tilt+=.12;p.alpha-=.004;if(p.y>c.height){p.y=-20;p.x=Math.random()*c.width;}});requestAnimationFrame(draw);})();}
+        document.getElementById('nav-apply').addEventListener('click',function(e){e.preventDefault();document.getElementById('apply').scrollIntoView({behavior:'smooth'});});
+    </script>
+</body>
+</html>
