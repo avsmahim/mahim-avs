@@ -242,6 +242,20 @@ if (navbar) {
     else navbar.classList.remove('scrolled');
   });
 
+  /* Mobile Navbar Logic */
+  const hamburgerBtn = document.getElementById('hamburger-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const mobileCloseBtn = document.getElementById('mobile-close-btn');
+  const mobileLinks = document.querySelectorAll('.mobile-nav-links a');
+
+  if (hamburgerBtn && mobileMenu && mobileCloseBtn) {
+    hamburgerBtn.addEventListener('click', () => mobileMenu.classList.add('open'));
+    mobileCloseBtn.addEventListener('click', () => mobileMenu.classList.remove('open'));
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', () => mobileMenu.classList.remove('open'));
+    });
+  }
+
   // Handle smooth scrolling & filtering for navbar links
   const navLinks = navbar.querySelectorAll('a[href^="#"]');
   navLinks.forEach(link => {
