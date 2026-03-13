@@ -99,7 +99,9 @@
 
             item.classList.add('active');
             const target = item.getAttribute('data-target');
-            document.getElementById(`section-${target}`).classList.add('active');
+            // Try both naming conventions: section-{target} is the pattern
+            const sectionEl = document.getElementById(`section-${target}`);
+            if (sectionEl) sectionEl.classList.add('active');
 
             // Load data based on section
             if (target === 'dashboard') loadDashboardStats();
@@ -112,6 +114,7 @@
             if (target === 'orders') loadOrders();
         });
     });
+
 
     // Main Init
     function initAdminPanel() {
@@ -574,4 +577,69 @@
         }).join('');
     }
 
+    /* ==========================
+       USERS MANAGER
+       ========================== */
+    async function loadUsers() {
+        const table = document.getElementById('users-table-body');
+        if (!table || !supabaseClient) return;
+        table.innerHTML = `<tr><td colspan="4" style="text-align:center;opacity:0.5;">Loading users...</td></tr>`;
+        try {
+            const { data, error } = await supabaseClient.from('profiles').select('id, name, email, is_admin, created_at').order('created_at', { ascending: false });
+            if (error) throw error;
+            if (!data || data.length === 0) {
+                table.innerHTML = `<tr><td colspan="4" style="text-align:center;opacity:0.5;">No user profiles found.</td></tr>`;
+                return;
+            }
+            table.innerHTML = data.map(u => `
+                <tr>
+                    <td><strong>${u.name || '—'}</strong><br><span style="font-size:0.7rem;opacity:0.5;">${u.id}</span></td>
+                    <td>${u.email || '—'}</td>
+                    <td>${u.created_at ? new Date(u.created_at).toLocaleDateString() : '—'}</td>
+                    <td>
+                        <span style="padding:2px 8px;border-radius:4px;font-size:0.75rem;background:${u.is_admin ? '#ffd700' : 'rgba(255,255,255,0.08)'};color:${u.is_admin ? '#000' : 'inherit'}">${u.is_admin ? 'ADMIN' : 'User'}</span>
+                        <button class="btn-action" style="margin-left:0.4rem;" onclick="toggleAdmin('${u.id}', ${u.is_admin})">${u.is_admin ? 'Revoke Admin' : 'Make Admin'}</button>
+                    </td>
+                </tr>
+            `).join('');
+        } catch(e) {
+            table.innerHTML = `<tr><td colspan="4" style="color:#ff4d4d;">${e.message}</td></tr>`;
+        }
+    }
+
+    // Toggle admin status
+    window.toggleAdmin = async function(userId, currentStatus) {
+        if (!confirm(`${currentStatus ? 'Revoke' : 'Grant'} admin access?`)) return;
+        const { error } = await supabaseClient.from('profiles').update({ is_admin: !currentStatus }).eq('id', userId);
+        if (!error) loadUsers();
+    };
+
+    /* ==========================
+       ORDERS / SALES
+       ========================== */
+    async function loadOrders() {
+        const table = document.getElementById('orders-table-body');
+        if (!table || !supabaseClient) return;
+        table.innerHTML = `<tr><td colspan="4" style="text-align:center;opacity:0.5;">Loading orders...</td></tr>`;
+        try {
+            const { data, error } = await supabaseClient.from('purchases').select('id, user_id, item_id, created_at').order('created_at', { ascending: false }).limit(100);
+            if (error) throw error;
+            if (!data || data.length === 0) {
+                table.innerHTML = `<tr><td colspan="4" style="text-align:center;opacity:0.5;">No orders found.</td></tr>`;
+                return;
+            }
+            table.innerHTML = data.map(o => `
+                <tr>
+                    <td style="font-size:0.75rem;">${o.id}</td>
+                    <td style="font-size:0.75rem;">${o.user_id || '—'}</td>
+                    <td style="font-size:0.75rem;">${o.item_id || '—'}</td>
+                    <td style="font-size:0.75rem;">${o.created_at ? new Date(o.created_at).toLocaleDateString() : '—'}</td>
+                </tr>
+            `).join('');
+        } catch(e) {
+            table.innerHTML = `<tr><td colspan="4" style="color:#ff4d4d;">${e.message}</td></tr>`;
+        }
+    }
+
 })();
+

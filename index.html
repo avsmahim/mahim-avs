@@ -493,6 +493,111 @@
   <script src="js/supabase-client.js"></script>
   <script src="js/main.js"></script>
   <script src="js/auth.js"></script>
+
+  <!-- DYNAMIC CMS SETTINGS LOADER -->
+  <script>
+    (async function loadCMSSettings() {
+      if (!window.supabaseClient) return;
+      try {
+        const { data, error } = await supabaseClient.from('settings').select('key, value');
+        if (error || !data) return;
+        const s = {};
+        data.forEach(r => { s[r.key] = r.value; });
+
+        // ── NAVBAR ──
+        const logoEl = document.querySelector('.nav-left span');
+        if (logoEl && s.nav_logo_text) logoEl.textContent = s.nav_logo_text;
+        if (logoEl && s.nav_logo_color) logoEl.style.color = s.nav_logo_color;
+        document.querySelectorAll('.mobile-signup-btn, #nav-auth-btn').forEach(btn => {
+          if (s.nav_signup_text) btn.textContent = s.nav_signup_text;
+          if (s.nav_signup_color) { btn.style.backgroundColor = s.nav_signup_color; btn.style.color = '#000'; }
+        });
+
+        // ── HERO ──
+        const h2lines = document.querySelectorAll('.mz2-line1, .mz2-line2');
+        if (s.hero_title && h2lines.length) {
+          const words = s.hero_title.split(' ');
+          const half = Math.ceil(words.length / 2);
+          if (h2lines[0]) h2lines[0].textContent = words.slice(0, half).join(' ');
+          if (h2lines[1]) h2lines[1].textContent = words.slice(half).join(' ');
+        }
+        const descEl = document.querySelector('.mz2-desc span');
+        if (descEl && s.hero_subtitle) descEl.textContent = s.hero_subtitle;
+        const btnEl = document.querySelector('.mz2-btn');
+        if (btnEl && s.hero_btn_link) btnEl.href = s.hero_btn_link;
+
+        // Also update the resources CTA button
+        const resBtn = document.querySelector('a.btn-yellow[href="#"]');
+        if (resBtn && s.hero_btn_text) resBtn.textContent = s.hero_btn_text;
+        if (resBtn && s.hero_btn_link) resBtn.href = s.hero_btn_link;
+
+        // Hero background
+        const heroSection = document.querySelector('.mz2-wrapper');
+        if (heroSection) {
+          if (s.hero_bg_video) {
+            const vid = document.createElement('video');
+            vid.src = s.hero_bg_video; vid.autoplay = true; vid.muted = true; vid.loop = true;
+            vid.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.3;z-index:0;';
+            heroSection.style.position = 'relative';
+            heroSection.prepend(vid);
+          } else if (s.hero_bg_image) {
+            heroSection.style.backgroundImage = `url('${s.hero_bg_image}')`;
+            heroSection.style.backgroundSize = 'cover';
+            heroSection.style.backgroundPosition = 'center';
+          }
+        }
+
+        // ── PROFILE SECTION ──
+        if (s.profile_visible === 'false') {
+          const profSection = document.querySelector('.imdb-profile-layer');
+          if (profSection) profSection.style.display = 'none';
+        }
+        const avatarImg = document.querySelector('.profile-avatar');
+        if (avatarImg && s.profile_image) avatarImg.src = s.profile_image;
+        const bioLines = document.querySelectorAll('.l1-bio-line');
+        const bios = [s.profile_bio1, s.profile_bio2, s.profile_bio3, s.profile_bio4];
+        bioLines.forEach((line, i) => { if (bios[i]) line.textContent = bios[i]; });
+        const profileLinks = document.querySelectorAll('.profile-links a');
+        if (profileLinks[0]) {
+          if (s.profile_link1_text) profileLinks[0].textContent = s.profile_link1_text;
+          if (s.profile_link1_url) profileLinks[0].href = s.profile_link1_url;
+        }
+        if (profileLinks[1]) {
+          if (s.profile_link2_text) profileLinks[1].textContent = s.profile_link2_text;
+          if (s.profile_link2_url) profileLinks[1].href = s.profile_link2_url;
+        }
+
+        // ── FIXED LEFT TEXT ──
+        const fixedLeft = document.querySelector('.fixed-left-text');
+        if (fixedLeft && s.nav_logo_text) fixedLeft.textContent = s.nav_logo_text;
+
+        // ── THEME COLORS ──
+        if (s.color_primary) document.documentElement.style.setProperty('--btn-color', s.color_primary);
+        if (s.color_bg) document.documentElement.style.setProperty('--bg-color', s.color_bg);
+        if (s.color_text) document.documentElement.style.setProperty('--text-white', s.color_text);
+        if (s.color_shadow) document.documentElement.style.setProperty('--btn-shadow-color', s.color_shadow);
+
+        // ── SITE TITLE ──
+        if (s.site_title) document.title = s.site_title;
+        const metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc && s.site_meta_desc) metaDesc.setAttribute('content', s.site_meta_desc);
+        if (s.site_favicon) {
+          let link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+          link.type = 'image/x-icon'; link.rel = 'shortcut icon'; link.href = s.site_favicon;
+          document.getElementsByTagName('head')[0].appendChild(link);
+        }
+
+        // ── MAINTENANCE MODE ──
+        if (s.maintenance_mode === 'true') {
+          document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#030609;color:#ffd700;font-family:Montserrat,sans-serif;text-align:center;flex-direction:column;gap:1rem;"><h1 style="font-size:3rem;letter-spacing:0.2em;">🔧 MAINTENANCE</h1><p style="opacity:0.6;">We\'ll be back soon. Thank you for your patience.</p></div>';
+        }
+
+      } catch(e) {
+        console.warn('CMS settings load failed:', e);
+      }
+    })();
+  </script>
+
   <script>
     window.addEventListener('wheel', function (e) {
       e.preventDefault();
