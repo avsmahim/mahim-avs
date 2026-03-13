@@ -2656,9 +2656,11 @@
                     <textarea class="admin-textarea" id="ad-header-code"
                         placeholder="<script async src='https://pagead2.googlesyndication...'>"></textarea>
                 </div>
-                <div style="margin-top: 1rem;">
-                    <button class="btn-primary" onclick="alert('Ads system mock saved.')">Save Ad Placements</button>
+                <div style="margin-top: 1rem; display: flex; align-items: center; gap: 1rem;">
+                    <button class="btn-primary" onclick="saveAds()">Save Ad Placements</button>
+                    <span id="ads-msg" style="font-size: 0.85rem;"></span>
                 </div>
+
             </div>
               <!-- SECTION 8: SETTINGS (now Supabase-backed) -->
         <div id="section-settings" class="admin-section">
@@ -2851,7 +2853,7 @@
     <script src="js/supabase-client.js"></script>
     <script src="js/blog-editor.js?v=restore"></script>
     <script src="js/admin.js"></script>
-    <script src="js/admin-extra.js"></script>
 </body>
+
 
 </html>
