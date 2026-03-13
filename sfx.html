@@ -22,7 +22,10 @@
 
   <!-- NAVBAR -->
   <nav class="navbar" id="navbar">
-    <div class="nav-left">AVS MAHIM</div>
+    <div class="nav-left" style="display: flex; align-items: center; gap: 1rem;">
+      <span>AVS MAHIM</span>
+      <button class="mobile-signup-btn btn-yellow" id="mobile-signup-btn" style="padding: 0.4rem 0.8rem; font-size: 0.75rem; margin-bottom: 0; box-shadow: none;" onclick="document.getElementById('auth-modal').classList.add('open')">SIGN UP</button>
+    </div>
     <div class="nav-right">
       <a href="index.html">HOME</a>
       <a href="plugins.html">PLUGIN</a>
@@ -31,7 +34,7 @@
       <a href="apps.html">APPS</a>
       <a href="search.html" style="color: var(--btn-color);">SEARCH</a>
       <div class="user-dropdown" id="user-dropdown-container">
-        <button id="nav-auth-btn" class="user-dropdown-btn">ACCOUNT</button>
+        <button id="nav-auth-btn" class="user-dropdown-btn">SIGN UP</button>
         <div class="dropdown-menu" id="user-dropdown-menu">
           <a href="dashboard.html">Dashboard</a>
           <a href="profile.html">Profile</a>
@@ -63,7 +66,6 @@
       <a href="presets.html">PRESET</a>
       <a href="apps.html">APPS</a>
       <a href="search.html" style="color: var(--btn-color);">SEARCH</a>
-      <a href="#" id="mobile-auth-btn">ACCOUNT</a>
     </div>
   </div>
 
@@ -110,119 +112,113 @@
 
   <!-- AUTH MODAL -->
   <div class="auth-modal-overlay" id="auth-modal">
-    <div class="auth-modal-content">
+    <div class="auth-modal-content redesign-modal">
       <button class="auth-close-btn" id="auth-close">&times;</button>
-      <div class="auth-tabs">
-        <button class="auth-tab active" id="tab-signin" data-tab="signin">SIGN IN</button>
-        <button class="auth-tab" id="tab-signup" data-tab="signup">SIGN UP</button>
-        <button class="auth-tab" id="tab-account" data-tab="account" style="display: none;">PROFILE</button>
-      </div>
-
-      <!-- SIGN IN FORM -->
-      <form id="signin-form" class="auth-form active">
-        <input type="email" id="signin-email" placeholder="EMAIL ADDRESS" required>
-        <input type="password" id="signin-password" placeholder="PASSWORD" required>
-        <a href="#" class="forgot-link" id="forgot-password">FORGOT PASSWORD?</a>
-        <button type="submit" class="btn-yellow auth-submit" id="signin-btn">LOGIN</button>
-
-        <div class="social-auth">
-          <button type="button" class="social-btn" id="google-signin">
-            <svg viewBox="0 0 24 24">
-              <path fill="currentColor"
-                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-              <path fill="currentColor"
-                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-              <path fill="currentColor"
-                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" />
-              <path fill="currentColor"
-                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-            </svg>
-            LOGIN WITH GOOGLE
-          </button>
-          <button type="button" class="social-btn" id="facebook-signin">
-            <svg viewBox="0 0 24 24">
-              <path fill="currentColor"
-                d="M12 2.04C6.5 2.04 2 6.53 2 12.06C2 17.06 5.66 21.21 10.44 21.96V14.96H7.9V12.06H10.44V9.85C10.44 7.34 11.93 5.96 14.22 5.96C15.31 5.96 16.45 6.15 16.45 6.15V8.62H15.19C13.95 8.62 13.56 9.39 13.56 10.18V12.06H16.34L15.89 14.96H13.56V21.96A10 10 0 0 0 22 12.06C22 6.53 17.5 2.04 12 2.04Z" />
-            </svg>
-            LOGIN WITH FACEBOOK
-          </button>
+      
+      <div class="auth-split-container">
+        <!-- Left Panel -->
+        <div class="auth-panel-left">
+          <h2 id="left-panel-title">WELCOME<br>BACK!</h2>
         </div>
-        <div class="auth-msg" id="signin-msg"></div>
-      </form>
 
-      <!-- SIGN UP FORM -->
-      <form id="signup-form" class="auth-form">
-        <input type="text" id="signup-name" placeholder="FULL NAME" required>
-        <input type="email" id="signup-email" placeholder="EMAIL ADDRESS" required>
-        <input type="password" id="signup-password" placeholder="PASSWORD" required>
-        <button type="submit" class="btn-yellow auth-submit" id="signup-btn">CREATE ACCOUNT</button>
+        <!-- Right Panel -->
+        <div class="auth-panel-right">
+          <div class="auth-tabs">
+            <button class="auth-tab active" id="tab-signin" data-tab="signin">SIGN IN</button>
+            <button class="auth-tab" id="tab-signup" data-tab="signup">SIGN UP</button>
+            <button class="auth-tab" id="tab-account" data-tab="account" style="display: none;">PROFILE</button>
+          </div>
 
-        <div class="social-auth">
-          <button type="button" class="social-btn" id="google-signup">
-            <svg viewBox="0 0 24 24">
-              <path fill="currentColor"
-                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-              <path fill="currentColor"
-                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-              <path fill="currentColor"
-                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" />
-              <path fill="currentColor"
-                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-            </svg>
-            SIGN UP WITH GOOGLE
-          </button>
-          <button type="button" class="social-btn" id="facebook-signup">
-            <svg viewBox="0 0 24 24">
-              <path fill="currentColor"
-                d="M12 2.04C6.5 2.04 2 6.53 2 12.06C2 17.06 5.66 21.21 10.44 21.96V14.96H7.9V12.06H10.44V9.85C10.44 7.34 11.93 5.96 14.22 5.96C15.31 5.96 16.45 6.15 16.45 6.15V8.62H15.19C13.95 8.62 13.56 9.39 13.56 10.18V12.06H16.34L15.89 14.96H13.56V21.96A10 10 0 0 0 22 12.06C22 6.53 17.5 2.04 12 2.04Z" />
-            </svg>
-            SIGN UP WITH FACEBOOK
-          </button>
-        </div>
-        <div class="auth-msg" id="signup-msg"></div>
-      </form>
-      <!-- SIGN UP STEP 2 FORM -->
-      <form id="signup-step2-form" class="auth-form" style="display: none;">
-        <h3 style="margin-bottom: 1.5rem; text-align: center; font-size: 1.2rem; letter-spacing: 0.1em; color: var(--text-white);">COMPLETE PROFILE</h3>
-        
-        <div class="avatar-upload-area" style="justify-content: center; margin-bottom: 1.5rem;">
-          <img src="https://ui-avatars.com/api/?name=User&background=111&color=fff&size=100" id="step2-avatar-preview" class="avatar-preview">
-          <div>
-            <label for="step2-avatar-upload" class="btn-yellow" style="cursor:pointer; display:inline-block; margin-bottom: 0; font-size: 0.8rem; padding: 0.5rem 1rem;">UPLOAD PHOTO</label>
-            <input type="file" id="step2-avatar-upload" accept="image/*" style="display:none;">
-            <p style="font-size:0.7rem; margin-top:0.3rem; color:rgba(255,255,255,0.5);">* Required</p>
+          <!-- SIGN IN FORM -->
+          <form id="signin-form" class="auth-form active">
+            <input type="email" id="signin-email" placeholder="EMAIL ADDRESS" required>
+            <input type="password" id="signin-password" placeholder="PASSWORD" required>
+            <a href="#" class="forgot-link" id="forgot-password">FORGOT PASSWORD?</a>
+            <button type="submit" class="btn-yellow auth-submit" id="signin-btn">LOGIN</button>
+
+            <div class="social-auth">
+              <button type="button" class="social-btn" id="google-signin">
+                <svg viewBox="0 0 24 24"><path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                LOGIN WITH GOOGLE
+              </button>
+              <button type="button" class="social-btn" id="facebook-signin">
+                <svg viewBox="0 0 24 24">
+                  <path fill="currentColor"
+                    d="M12 2.04C6.5 2.04 2 6.53 2 12.06C2 17.06 5.66 21.21 10.44 21.96V14.96H7.9V12.06H10.44V9.85C10.44 7.34 11.93 5.96 14.22 5.96C15.31 5.96 16.45 6.15 16.45 6.15V8.62H15.19C13.95 8.62 13.56 9.39 13.56 10.18V12.06H16.34L15.89 14.96H13.56V21.96A10 10 0 0 0 22 12.06C22 6.53 17.5 2.04 12 2.04Z" />
+                </svg>
+                LOGIN WITH FACEBOOK
+              </button>
+            </div>
+            <div class="auth-msg" id="signin-msg"></div>
+          </form>
+
+          <!-- SIGN UP FORM -->
+          <form id="signup-form" class="auth-form">
+            <input type="text" id="signup-name" placeholder="FULL NAME" required>
+            <input type="email" id="signup-email" placeholder="EMAIL ADDRESS" required>
+            <input type="password" id="signup-password" placeholder="PASSWORD" required>
+            <button type="submit" class="btn-yellow auth-submit" id="signup-btn">CREATE ACCOUNT</button>
+
+            <div class="social-auth">
+              <button type="button" class="social-btn" id="google-signup">
+                <svg viewBox="0 0 24 24"><path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                SIGN UP WITH GOOGLE
+              </button>
+              <button type="button" class="social-btn" id="facebook-signup">
+                <svg viewBox="0 0 24 24">
+                  <path fill="currentColor"
+                    d="M12 2.04C6.5 2.04 2 6.53 2 12.06C2 17.06 5.66 21.21 10.44 21.96V14.96H7.9V12.06H10.44V9.85C10.44 7.34 11.93 5.96 14.22 5.96C15.31 5.96 16.45 6.15 16.45 6.15V8.62H15.19C13.95 8.62 13.56 9.39 13.56 10.18V12.06H16.34L15.89 14.96H13.56V21.96A10 10 0 0 0 22 12.06C22 6.53 17.5 2.04 12 2.04Z" />
+                </svg>
+                SIGN UP WITH FACEBOOK
+              </button>
+            </div>
+            <div class="auth-msg" id="signup-msg"></div>
+          </form>
+
+          <!-- SIGN UP STEP 2 FORM -->
+          <form id="signup-step2-form" class="auth-form" style="display: none;">
+            <h3 style="margin-bottom: 1.5rem; text-align: center; font-size: 1.2rem; letter-spacing: 0.1em; color: var(--text-white);">COMPLETE PROFILE</h3>
+            
+            <div class="avatar-upload-area" style="justify-content: center; margin-bottom: 1.5rem;">
+              <img src="https://ui-avatars.com/api/?name=User&background=111&color=fff&size=100" id="step2-avatar-preview" class="avatar-preview">
+              <div>
+                <label for="step2-avatar-upload" class="btn-yellow" style="cursor:pointer; display:inline-block; margin-bottom: 0; font-size: 0.8rem; padding: 0.5rem 1rem;">UPLOAD PHOTO</label>
+                <input type="file" id="step2-avatar-upload" accept="image/*" style="display:none;">
+                <p style="font-size:0.7rem; margin-top:0.3rem; color:rgba(255,255,255,0.5);">* Required</p>
+              </div>
+            </div>
+
+            <input type="text" id="step2-name" placeholder="FULL NAME *" required>
+            <input type="email" id="step2-email" placeholder="EMAIL ADDRESS *" readonly style="opacity: 0.6; cursor: not-allowed;">
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <input type="text" id="step2-username" placeholder="USERNAME (Opt)">
+              <input type="tel" id="step2-phone" placeholder="PHONE (Opt)">
+            </div>
+            
+            <input type="date" id="step2-dob" style="color: rgba(255,255,255,0.7);">
+
+            <button type="submit" class="btn-yellow auth-submit" id="step2-btn" disabled style="opacity: 0.5;">COMPLETE SETUP</button>
+            <div class="auth-msg" id="step2-msg"></div>
+          </form>
+
+          <!-- ACCOUNT PROFILE SECTION -->
+          <div id="account-section" class="account-details">
+            <div class="detail-item">
+              <span class="detail-label">Full Name</span>
+              <span class="detail-value" id="profile-name">---</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Email Address</span>
+              <span class="detail-value" id="profile-email">---</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Member Since</span>
+              <span class="detail-value" id="profile-date">---</span>
+            </div>
+            <button type="button" class="btn-yellow auth-submit" id="logout-btn">LOGOUT</button>
           </div>
         </div>
-
-        <input type="text" id="step2-name" placeholder="FULL NAME *" required>
-        <input type="email" id="step2-email" placeholder="EMAIL ADDRESS *" readonly style="opacity: 0.6; cursor: not-allowed;">
-        
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-          <input type="text" id="step2-username" placeholder="USERNAME (Opt)">
-          <input type="tel" id="step2-phone" placeholder="PHONE (Opt)">
-        </div>
-        
-        <input type="date" id="step2-dob" style="color: rgba(255,255,255,0.7);">
-
-        <button type="submit" class="btn-yellow auth-submit" id="step2-btn" disabled style="opacity: 0.5;">COMPLETE SETUP</button>
-        <div class="auth-msg" id="step2-msg"></div>
-      </form>
-
-      <!-- ACCOUNT PROFILE SECTION -->
-      <div id="account-section" class="account-details">
-        <div class="detail-item">
-          <span class="detail-label">Full Name</span>
-          <span class="detail-value" id="profile-name">---</span>
-        </div>
-        <div class="detail-item">
-          <span class="detail-label">Email Address</span>
-          <span class="detail-value" id="profile-email">---</span>
-        </div>
-        <div class="detail-item">
-          <span class="detail-label">Member Since</span>
-          <span class="detail-value" id="profile-date">---</span>
-        </div>
-        <button type="button" class="btn-yellow auth-submit" id="logout-btn">LOGOUT</button>
       </div>
     </div>
   </div>

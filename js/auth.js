@@ -13,10 +13,10 @@
   let currentUser = null;
 
   /* --- Modal helpers --- */
-  function openModal() {
+  function openModal(defaultTab) {
     if (authModal) {
       authModal.classList.add('open');
-      switchTab('signin');
+      switchTab(defaultTab || 'signin');
     }
   }
   function closeModal() {
@@ -32,11 +32,31 @@
     const activeTab = document.querySelector('.auth-tab[data-tab="' + tabId + '"]');
     if (activeTab) activeTab.classList.add('active');
 
+    // Update left panel title
+    const leftTitle = document.getElementById('left-panel-title');
+    if (leftTitle) {
+      if (tabId === 'signup' || tabId === 'signup-step2' || tabId === 'account') {
+        leftTitle.innerHTML = 'WELCOME!';
+      } else {
+        leftTitle.innerHTML = 'WELCOME<br>BACK!';
+      }
+    }
+
     if (tabId === 'account') {
       if (accDetails) accDetails.classList.add('active');
     } else {
       const form = document.getElementById(tabId + '-form');
-      if (form) form.classList.add('active');
+      if (form) {
+        form.classList.add('active');
+        // Simple entry animation trigger
+        form.style.opacity = '0';
+        form.style.transform = 'translateX(10px)';
+        setTimeout(() => {
+          form.style.transition = 'all 0.4s ease';
+          form.style.opacity = '1';
+          form.style.transform = 'translateX(0)';
+        }, 10);
+      }
     }
   }
 
@@ -73,7 +93,7 @@
 
         navAuthBtn.innerHTML = `Hi, ${name.split(' ')[0]} ${avatarHtml}`;
       } else {
-        navAuthBtn.innerText = 'ACCOUNT';
+        navAuthBtn.innerText = 'SIGN UP';
         if (userDropdownMenu) userDropdownMenu.classList.remove('active');
       }
     }
@@ -133,6 +153,15 @@
         // User not logged in: Open sign in modal
         openModal();
       }
+    });
+  }
+
+  /* --- Mobile Signup Button --- */
+  const mobileSignupBtn = document.getElementById('mobile-signup-btn');
+  if (mobileSignupBtn) {
+    mobileSignupBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      openModal('signup');
     });
   }
 
@@ -229,15 +258,15 @@
       // Stop creating account loader
       if (btn) { btn.disabled = false; btn.innerText = 'CREATE ACCOUNT'; }
 
-      // Hide Step 1, Show Step 2
-      signupForm.style.display = 'none';
-      const step2Form = document.getElementById('signup-step2-form');
-      if (step2Form) {
-        step2Form.style.display = 'flex';
-        // Pre-fill
-        document.getElementById('step2-name').value = full_name;
-        document.getElementById('step2-email').value = email;
-      }
+      // Stop creating account loader
+      if (btn) { btn.disabled = false; btn.innerText = 'CREATE ACCOUNT'; }
+
+      // Use switchTab to show Step 2
+      switchTab('signup-step2');
+      
+      // Pre-fill
+      if (document.getElementById('step2-name')) document.getElementById('step2-name').value = full_name;
+      if (document.getElementById('step2-email')) document.getElementById('step2-email').value = email;
     });
   }
 
