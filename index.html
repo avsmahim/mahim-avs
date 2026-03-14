@@ -1,190 +1,726 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AVS Control - Premium Resources</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=3">
-  <style id="dynamic-theme"></style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>AVS Mahim — Creator & Developer</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue:       #1A56FF;
+  --blue-mid:   #2563EB;
+  --blue-light: #60A5FA;
+  --blue-pale:  #DBEAFE;
+  --blue-ghost: #EFF6FF;
+  --navy:       #0F172A;
+  --navy2:      #1E293B;
+  --navy3:      #334155;
+  --white:      #FFFFFF;
+  --off-white:  #F8FAFF;
+  --text:       #0F172A;
+  --text-mid:   #475569;
+  --text-light: #94A3B8;
+  --gold:       #F59E0B;
+  --border:     rgba(26,86,255,0.10);
+  --border-mid: rgba(26,86,255,0.18);
+  --shadow-sm:  0 2px 12px rgba(26,86,255,0.08);
+  --shadow-md:  0 8px 40px rgba(26,86,255,0.14);
+  --shadow-lg:  0 20px 80px rgba(26,86,255,0.18);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  background: var(--off-white);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* CURSOR */
+.cur { width:8px; height:8px; background:var(--blue); border-radius:50%; position:fixed; top:0; left:0; pointer-events:none; z-index:9999; transition:transform 0.15s; }
+.cur-ring { width:32px; height:32px; border:1.5px solid var(--blue); border-radius:50%; position:fixed; top:0; left:0; pointer-events:none; z-index:9998; opacity:0.5; transition:all 0.18s; }
+a:hover~.cur, button:hover~.cur { transform:scale(3); }
+
+/* GEO CANVAS */
+#geo { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; opacity:0.55; }
+
+/* NAV */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:200;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 56px; height:68px;
+  background:rgba(248,250,255,0.88);
+  backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+.nav-logo {
+  font-family:'Cormorant Garamond', serif;
+  font-size:1.5rem; font-weight:600; letter-spacing:2px;
+  color:var(--navy); text-decoration:none;
+}
+.nav-logo span { color:var(--blue); }
+
+.nav-links { display:flex; gap:4px; list-style:none; align-items:center; }
+.nav-links > li { position:relative; }
+.nav-links > li > a {
+  display:flex; align-items:center; gap:4px;
+  text-decoration:none; color:var(--text-mid);
+  font-family:'DM Sans',sans-serif;
+  font-size:0.78rem; letter-spacing:0.5px;
+  padding:8px 14px; transition:color 0.25s;
+  white-space:nowrap; font-weight:500;
+}
+.nav-links > li > a:hover { color:var(--blue); }
+.arrow { font-size:0.55rem; transition:transform 0.25s; }
+.has-dropdown:hover .arrow { transform:rotate(180deg); }
+
+.dropdown {
+  display:none; position:absolute; top:calc(100% + 8px); left:50%;
+  transform:translateX(-50%);
+  background:var(--white); border:1px solid var(--border);
+  min-width:190px; padding:8px 0;
+  box-shadow:var(--shadow-md); border-radius:4px;
+}
+.dropdown::before {
+  content:''; position:absolute; top:-5px; left:50%;
+  transform:translateX(-50%) rotate(45deg);
+  width:9px; height:9px;
+  background:var(--white); border-top:1px solid var(--border);
+  border-left:1px solid var(--border);
+}
+.has-dropdown:hover .dropdown { display:block; }
+.dropdown a {
+  display:flex; align-items:center; gap:10px;
+  padding:10px 20px; color:var(--text-mid);
+  text-decoration:none; font-size:0.76rem; font-weight:500;
+  transition:all 0.2s; white-space:nowrap;
+  border-left:2px solid transparent;
+}
+.dropdown a:hover { color:var(--blue); background:var(--blue-ghost); border-left-color:var(--blue); }
+.dropdown hr { border:none; border-top:1px solid var(--border); margin:6px 0; }
+
+.nav-shop-btn {
+  background:var(--blue); color:var(--white);
+  padding:9px 20px; border:none;
+  font-family:'DM Sans',sans-serif; font-size:0.76rem;
+  font-weight:600; letter-spacing:0.5px;
+  text-decoration:none; display:inline-block;
+  transition:all 0.3s; margin-left:8px;
+  border-radius:3px;
+}
+.nav-shop-btn:hover { background:var(--navy); transform:translateY(-1px); box-shadow:var(--shadow-md); }
+
+.nav-cta {
+  background:transparent; border:1.5px solid var(--blue);
+  color:var(--blue); padding:8px 20px;
+  font-family:'DM Sans',sans-serif; font-size:0.76rem; font-weight:600;
+  cursor:pointer; transition:all 0.3s; margin-left:6px; border-radius:3px;
+}
+.nav-cta:hover { background:var(--blue); color:var(--white); }
+
+/* HAMBURGER */
+.hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:6px; background:none; border:none; }
+.hamburger span { display:block; width:22px; height:1.5px; background:var(--navy); transition:all 0.3s; }
+.hamburger.open span:nth-child(1) { transform:rotate(45deg) translate(4.5px,4.5px); }
+.hamburger.open span:nth-child(2) { opacity:0; }
+.hamburger.open span:nth-child(3) { transform:rotate(-45deg) translate(4.5px,-4.5px); }
+
+/* MOBILE MENU */
+.mob-menu {
+  display:none; position:fixed; top:68px; left:0; right:0;
+  background:var(--white); border-bottom:1px solid var(--border);
+  z-index:199; flex-direction:column;
+  box-shadow:var(--shadow-md);
+  max-height:calc(100vh - 68px); overflow-y:auto;
+}
+.mob-menu.open { display:flex; }
+.mob-menu > a {
+  display:block; padding:14px 28px; color:var(--text-mid);
+  text-decoration:none; font-size:0.8rem; font-weight:500;
+  border-bottom:1px solid var(--border); transition:color 0.2s;
+}
+.mob-menu > a:hover { color:var(--blue); background:var(--blue-ghost); }
+.mob-sec { font-size:0.62rem; letter-spacing:3px; color:var(--text-light); padding:14px 28px 6px; text-transform:uppercase; font-family:'DM Mono',monospace; }
+.mob-sub a { display:block; padding:11px 28px 11px 44px; color:var(--text-mid); text-decoration:none; font-size:0.78rem; border-bottom:1px solid var(--border); transition:color 0.2s; }
+.mob-sub a:hover { color:var(--blue); }
+.mob-btns { display:flex; gap:10px; padding:16px 28px 20px; }
+.mob-btn-s { flex:1; text-align:center; background:var(--blue); color:var(--white); padding:12px; font-size:0.76rem; font-weight:600; text-decoration:none; display:block; border-radius:3px; }
+.mob-btn-j { flex:1; text-align:center; background:transparent; color:var(--blue); border:1.5px solid var(--blue); padding:11px; font-size:0.76rem; font-weight:600; cursor:pointer; border-radius:3px; }
+
+/* HERO */
+.hero {
+  position:relative; z-index:2;
+  min-height:100vh;
+  display:flex; align-items:center;
+  padding:100px clamp(20px,8vw,100px) 80px;
+}
+.hero-inner {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:60px; align-items:center; max-width:1300px; width:100%;
+}
+.hero-left { }
+.hero-eyebrow {
+  display:inline-flex; align-items:center; gap:10px;
+  background:var(--blue-ghost); border:1px solid var(--border-mid);
+  padding:6px 16px; margin-bottom:28px; border-radius:40px;
+}
+.hero-eyebrow span { font-family:'DM Mono',monospace; font-size:0.65rem; letter-spacing:3px; color:var(--blue); text-transform:uppercase; }
+.hero-dot { width:6px; height:6px; background:var(--blue); border-radius:50%; animation:pulse 2s infinite; }
+
+.hero-title {
+  font-family:'Cormorant Garamond', serif;
+  font-size:clamp(3rem,6vw,5.5rem);
+  font-weight:300; line-height:1.1; letter-spacing:-1px;
+  color:var(--navy); margin-bottom:24px;
+  opacity:0; animation:fadeUp 0.9s 0.2s forwards;
+}
+.hero-title strong { font-weight:700; color:var(--blue); display:block; }
+.hero-title em { font-style:italic; color:var(--text-mid); font-size:0.75em; }
+
+.hero-sub {
+  font-size:clamp(0.95rem,2vw,1.1rem); color:var(--text-mid);
+  line-height:1.8; margin-bottom:40px; max-width:440px;
+  opacity:0; animation:fadeUp 0.9s 0.4s forwards;
+}
+
+.hero-btns {
+  display:flex; gap:14px; flex-wrap:wrap;
+  opacity:0; animation:fadeUp 0.9s 0.6s forwards;
+}
+.btn-blue {
+  background:var(--blue); color:var(--white);
+  padding:15px 32px; border:none;
+  font-family:'DM Sans',sans-serif; font-size:0.82rem; font-weight:600;
+  text-decoration:none; display:inline-block;
+  transition:all 0.3s; border-radius:3px; letter-spacing:0.3px;
+}
+.btn-blue:hover { background:var(--navy); transform:translateY(-2px); box-shadow:var(--shadow-md); }
+.btn-ghost-blue {
+  background:transparent; color:var(--blue);
+  padding:14px 32px; border:1.5px solid var(--blue);
+  font-family:'DM Sans',sans-serif; font-size:0.82rem; font-weight:600;
+  text-decoration:none; display:inline-block;
+  transition:all 0.3s; border-radius:3px;
+}
+.btn-ghost-blue:hover { background:var(--blue); color:var(--white); transform:translateY(-2px); }
+
+/* HERO RIGHT — Geo card */
+.hero-right {
+  opacity:0; animation:fadeIn 1s 0.5s forwards;
+  position:relative;
+}
+.hero-card {
+  background:var(--white); border:1px solid var(--border);
+  box-shadow:var(--shadow-lg); padding:48px;
+  position:relative; overflow:hidden;
+}
+.hero-card::before {
+  content:''; position:absolute;
+  top:0; left:0; right:0; height:4px;
+  background:linear-gradient(90deg, var(--blue), var(--blue-light));
+}
+.hero-card-tag {
+  font-family:'DM Mono',monospace; font-size:0.62rem; letter-spacing:3px;
+  color:var(--blue); text-transform:uppercase; margin-bottom:20px;
+}
+.hero-card h2 {
+  font-family:'Cormorant Garamond',serif; font-size:2rem; font-weight:600;
+  color:var(--navy); margin-bottom:16px; line-height:1.2;
+}
+.hero-card p { font-size:0.9rem; color:var(--text-mid); line-height:1.7; margin-bottom:28px; }
+.stat-row-mini { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.stat-mini { text-align:center; padding:16px; background:var(--blue-ghost); border:1px solid var(--border); }
+.stat-mini strong { font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:700; color:var(--blue); display:block; }
+.stat-mini span { font-family:'DM Mono',monospace; font-size:0.55rem; letter-spacing:2px; color:var(--text-light); text-transform:uppercase; }
+.avail-badge {
+  display:inline-flex; align-items:center; gap:8px; margin-top:24px;
+  background:rgba(5,150,105,0.08); border:1px solid rgba(5,150,105,0.2);
+  padding:8px 16px; border-radius:40px;
+}
+.avail-dot { width:7px; height:7px; background:#10B981; border-radius:50%; animation:pulse 1.5s infinite; }
+.avail-badge span { font-family:'DM Mono',monospace; font-size:0.62rem; letter-spacing:2px; color:#10B981; }
+
+/* DIVIDER */
+.divider { position:relative; z-index:2; height:1px; background:var(--border); margin:0 clamp(20px,6vw,60px); }
+
+/* SECTIONS */
+section { position:relative; z-index:2; padding:clamp(70px,10vw,120px) clamp(20px,8vw,100px); }
+.sec-eyebrow {
+  display:inline-flex; align-items:center; gap:10px;
+  margin-bottom:16px;
+}
+.sec-eyebrow span { font-family:'DM Mono',monospace; font-size:0.62rem; letter-spacing:3px; color:var(--blue); text-transform:uppercase; }
+.sec-eyebrow::before { content:''; width:28px; height:1px; background:var(--blue); }
+.sec-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2rem,5vw,3.4rem); font-weight:600;
+  color:var(--navy); margin-bottom:14px; line-height:1.15;
+}
+.sec-sub { font-size:1rem; color:var(--text-mid); line-height:1.7; max-width:540px; margin-bottom:56px; }
+
+/* SERVICES */
+.services-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1px; background:var(--border); border:1px solid var(--border); }
+.svc-card {
+  background:var(--white); padding:40px 36px;
+  transition:all 0.35s; position:relative; overflow:hidden;
+}
+.svc-card::after { content:''; position:absolute; inset:0; background:var(--blue); opacity:0; transition:opacity 0.35s; }
+.svc-card:hover::after { opacity:0.03; }
+.svc-card:hover { transform:translateY(-3px); box-shadow:var(--shadow-md); z-index:1; }
+.svc-num { font-family:'DM Mono',monospace; font-size:0.62rem; letter-spacing:3px; color:var(--blue-light); margin-bottom:20px; display:block; }
+.svc-icon { font-size:2rem; margin-bottom:18px; display:block; }
+.svc-card h3 { font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:600; color:var(--navy); margin-bottom:12px; }
+.svc-card p { color:var(--text-mid); line-height:1.7; font-size:0.9rem; }
+.svc-arrow { display:block; margin-top:20px; color:var(--blue); font-size:1.1rem; transition:transform 0.3s; }
+.svc-card:hover .svc-arrow { transform:translateX(6px); }
+
+/* PRODUCTS */
+.products-wrap { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:24px; }
+.prod-card {
+  background:var(--white); border:1px solid var(--border);
+  overflow:hidden; transition:all 0.35s; box-shadow:var(--shadow-sm);
+}
+.prod-card:hover { border-color:var(--blue); transform:translateY(-5px); box-shadow:var(--shadow-lg); }
+.prod-thumb {
+  height:190px; display:flex; align-items:center; justify-content:center;
+  font-size:3.2rem; position:relative; overflow:hidden;
+  background:var(--blue-ghost);
+}
+.prod-thumb::after { content:''; position:absolute; inset:0; background:linear-gradient(to bottom, transparent 50%, var(--white)); }
+.prod-body { padding:24px; }
+.prod-cat { font-family:'DM Mono',monospace; font-size:0.58rem; letter-spacing:3px; color:var(--blue); text-transform:uppercase; margin-bottom:8px; }
+.prod-body h3 { font-family:'Cormorant Garamond',serif; font-size:1.25rem; font-weight:600; color:var(--navy); margin-bottom:8px; }
+.prod-body p { color:var(--text-mid); font-size:0.88rem; line-height:1.6; margin-bottom:18px; }
+.prod-link { display:inline-flex; align-items:center; gap:6px; color:var(--blue); text-decoration:none; font-size:0.78rem; font-weight:600; transition:gap 0.3s; }
+.prod-link:hover { gap:12px; }
+
+/* HIRE */
+.hire-bg { background:var(--navy); }
+.hire-inner { display:grid; grid-template-columns:1fr 1fr; gap:72px; align-items:start; }
+.hire-left h2 { font-family:'Cormorant Garamond',serif; font-size:clamp(2rem,4.5vw,3.2rem); font-weight:300; color:var(--white); line-height:1.2; margin-bottom:20px; }
+.hire-left h2 strong { font-weight:700; color:var(--blue-light); display:block; }
+.hire-left p { color:rgba(255,255,255,0.55); line-height:1.8; font-size:0.95rem; margin-bottom:32px; }
+.skills-wrap { display:flex; flex-wrap:wrap; gap:9px; margin-bottom:36px; }
+.skill-tag {
+  padding:6px 16px; border:1px solid rgba(255,255,255,0.12);
+  background:rgba(255,255,255,0.05); color:rgba(255,255,255,0.7);
+  font-family:'DM Mono',monospace; font-size:0.6rem; letter-spacing:2px;
+  border-radius:40px; transition:all 0.3s;
+}
+.skill-tag:hover { background:rgba(26,86,255,0.2); border-color:var(--blue-light); color:var(--blue-light); }
+.hire-stats-row { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.08); margin-bottom:36px; }
+.hire-stat { background:var(--navy2); padding:20px 16px; text-align:center; }
+.hire-stat strong { font-family:'Cormorant Garamond',serif; font-size:2rem; font-weight:700; color:var(--blue-light); display:block; }
+.hire-stat span { font-family:'DM Mono',monospace; font-size:0.52rem; letter-spacing:2px; color:rgba(255,255,255,0.35); text-transform:uppercase; }
+
+/* FORM */
+.hire-form { background:var(--white); padding:clamp(28px,5vw,48px); }
+.hire-form h3 { font-family:'Cormorant Garamond',serif; font-size:1.4rem; font-weight:600; color:var(--navy); margin-bottom:24px; }
+.fg { margin-bottom:16px; }
+.fg label { display:block; font-family:'DM Mono',monospace; font-size:0.58rem; letter-spacing:3px; color:var(--text-light); text-transform:uppercase; margin-bottom:7px; }
+.fg input, .fg textarea, .fg select {
+  width:100%; background:var(--off-white); border:1.5px solid var(--border);
+  color:var(--text); padding:12px 16px;
+  font-family:'DM Sans',sans-serif; font-size:0.95rem;
+  transition:border-color 0.3s; outline:none; border-radius:3px;
+}
+.fg input:focus, .fg textarea:focus, .fg select:focus { border-color:var(--blue); background:var(--white); }
+.fg select option { background:var(--white); }
+.fg textarea { resize:vertical; min-height:100px; }
+.form-btn {
+  width:100%; background:var(--blue); border:none; color:var(--white);
+  padding:16px; font-family:'DM Sans',sans-serif; font-size:0.85rem;
+  font-weight:600; cursor:pointer; transition:all 0.3s; margin-top:8px;
+  border-radius:3px; letter-spacing:0.5px;
+}
+.form-btn:hover { background:var(--navy); transform:translateY(-2px); box-shadow:var(--shadow-md); }
+
+/* FOOTER */
+footer {
+  background:var(--navy); border-top:1px solid rgba(255,255,255,0.07);
+  padding:clamp(36px,6vw,64px) clamp(20px,8vw,100px);
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:20px;
+  position:relative; z-index:2;
+}
+.footer-logo { font-family:'Cormorant Garamond',serif; font-size:1.4rem; font-weight:600; color:var(--white); letter-spacing:2px; }
+.footer-logo span { color:var(--blue-light); }
+.footer-nav { display:flex; gap:24px; flex-wrap:wrap; }
+.footer-nav a { color:rgba(255,255,255,0.4); text-decoration:none; font-size:0.78rem; transition:color 0.2s; font-weight:500; }
+.footer-nav a:hover { color:var(--white); }
+.footer-copy { font-family:'DM Mono',monospace; font-size:0.58rem; color:rgba(255,255,255,0.25); letter-spacing:2px; }
+
+/* MODAL */
+.modal-overlay { position:fixed; inset:0; background:rgba(15,23,42,0.7); backdrop-filter:blur(16px); z-index:1000; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.35s; padding:20px; }
+.modal-overlay.active { opacity:1; pointer-events:all; }
+.modal { background:var(--white); border:1px solid var(--border); padding:clamp(28px,6vw,52px); max-width:440px; width:100%; position:relative; box-shadow:var(--shadow-lg); transform:translateY(24px); transition:transform 0.35s; border-radius:4px; }
+.modal-overlay.active .modal { transform:translateY(0); }
+.modal::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--blue),var(--blue-light)); border-radius:4px 4px 0 0; }
+.modal-close { position:absolute; top:16px; right:16px; background:none; border:none; color:var(--text-light); font-size:1.1rem; cursor:pointer; transition:color 0.2s; }
+.modal-close:hover { color:var(--navy); }
+.modal h2 { font-family:'Cormorant Garamond',serif; font-size:1.6rem; font-weight:600; color:var(--navy); margin-bottom:6px; }
+.modal p { color:var(--text-mid); font-size:0.9rem; margin-bottom:24px; }
+
+/* NOTIF */
+.notif { position:fixed; bottom:24px; right:24px; background:var(--white); border:1px solid var(--border); padding:14px 20px; font-family:'DM Mono',monospace; font-size:0.65rem; letter-spacing:2px; color:var(--navy); z-index:1500; transform:translateX(220%); transition:transform 0.4s; box-shadow:var(--shadow-md); max-width:calc(100vw - 48px); border-radius:3px; }
+.notif.show { transform:translateX(0); }
+.notif.success { border-left:3px solid #10B981; color:#10B981; }
+.notif.warn { border-left:3px solid var(--gold); color:var(--gold); }
+
+/* REVEAL */
+.reveal { opacity:0; transform:translateY(24px); transition:all 0.7s cubic-bezier(0.4,0,0.2,1); }
+.reveal.visible { opacity:1; transform:translateY(0); }
+
+/* SCROLL IND */
+.scroll-ind { position:absolute; bottom:32px; left:clamp(20px,8vw,100px); display:flex; align-items:center; gap:12px; opacity:0; animation:fadeIn 1s 1s forwards; z-index:2; }
+.scroll-ind span { font-family:'DM Mono',monospace; font-size:0.58rem; letter-spacing:3px; color:var(--text-light); text-transform:uppercase; }
+.scroll-line { width:48px; height:1px; background:var(--blue); position:relative; overflow:hidden; }
+.scroll-line::after { content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:var(--blue-light); animation:scrollSlide 2s infinite; }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(24px);} to{opacity:1;transform:translateY(0);} }
+@keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.5;transform:scale(1.3);} }
+@keyframes scrollSlide { from{left:-100%;} to{left:100%;} }
+@keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-16px);} }
+
+/* RESPONSIVE */
+@media(max-width:1024px) { .hero-inner{grid-template-columns:1fr;} .hero-right{display:none;} .hire-inner{grid-template-columns:1fr;gap:40px;} .hire-stats-row{grid-template-columns:repeat(4,1fr);} }
+@media(max-width:768px) {
+  nav{padding:0 20px;}
+  .nav-links{display:none;} .nav-cta{display:none;} .nav-shop-btn{display:none;}
+  .hamburger{display:flex;}
+  .hero{padding:90px 20px 60px;}
+  .hero-btns{flex-direction:column;align-items:flex-start;}
+  .hero-btns a{width:100%;max-width:280px;text-align:center;}
+  footer{flex-direction:column;align-items:center;text-align:center;}
+  .footer-nav{justify-content:center;}
+  .hire-stats-row{grid-template-columns:1fr 1fr;}
+  section{padding:60px 20px;}
+}
+@media(max-width:480px) { .hire-stats-row{grid-template-columns:1fr 1fr;} .stat-mini strong{font-size:1.5rem;} }
+</style>
 </head>
 <body>
 
-  <!-- NAVBAR -->
-  <nav class="navbar" id="navbar">
-    <div class="nav-left">
-      <span class="logo-text">AVS MAHIM</span>
+<div class="cur" id="cur"></div>
+<div class="cur-ring" id="cur-ring"></div>
+<canvas id="geo"></canvas>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">AVS<span>.</span>MAHIM</a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li class="has-dropdown">
+      <a href="#">Products <span class="arrow">▾</span></a>
+      <div class="dropdown">
+        <a href="plugins.html">🎛️ Plugins</a>
+        <a href="sfx.html">🔊 SFX Packs</a>
+        <a href="apps.html">💻 Apps</a>
+        <hr>
+        <a href="shop.html">🛒 Full Shop</a>
+      </div>
+    </li>
+    <li><a href="#hire">Hire Me</a></li>
+    <li><a href="shop.html" class="nav-shop-btn">🛒 Shop</a></li>
+  </ul>
+  <button class="nav-cta" onclick="openModal()">Join Now</button>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mob-menu" id="mob-menu">
+  <a href="#services" onclick="closeMenu()">Services</a>
+  <a href="#hire" onclick="closeMenu()">Hire Me</a>
+  <div class="mob-sec">// Products</div>
+  <div class="mob-sub">
+    <a href="plugins.html">🎛️ Plugins</a>
+    <a href="sfx.html">🔊 SFX Packs</a>
+    <a href="apps.html">💻 Apps</a>
+  </div>
+  <div class="mob-btns">
+    <a href="shop.html" class="mob-btn-s">🛒 Shop</a>
+    <button class="mob-btn-j" onclick="closeMenu();openModal()">Join Now</button>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-eyebrow">
+        <div class="hero-dot"></div>
+        <span>Bangladeshi Creator & Developer</span>
+      </div>
+      <h1 class="hero-title">
+        Creative <em>Work,</em>
+        <strong>AVS Mahim</strong>
+      </h1>
+      <p class="hero-sub">Premium plugins, cinematic SFX, motion graphics, and web development — crafted for creators who demand excellence.</p>
+      <div class="hero-btns">
+        <a href="#products" class="btn-blue">Explore Resources</a>
+        <a href="shop.html" class="btn-ghost-blue">🛒 Visit Shop</a>
+        <a href="#hire" class="btn-ghost-blue">Hire Me</a>
+      </div>
     </div>
-    <div class="nav-right">
-      <a href="index.html">HOME</a>
-      <a href="plugins.html">PLUGIN</a>
-      <a href="sfx.html">SFX</a>
-      <a href="apps.html">APPS</a>
-      <button id="nav-auth-btn" class="btn-yellow" onclick="document.getElementById('auth-modal').classList.add('open')">SIGN UP</button>
+    <div class="hero-right">
+      <div class="hero-card">
+        <div class="hero-card-tag">// Profile</div>
+        <h2>AVS Mahim</h2>
+        <p>Motion designer, video editor, web developer & digital product creator based in Bangladesh.</p>
+        <div class="stat-row-mini">
+          <div class="stat-mini"><strong data-count="50">0</strong><span>Projects</span></div>
+          <div class="stat-mini"><strong data-count="30">0</strong><span>Clients</span></div>
+          <div class="stat-mini"><strong data-count="3">0</strong><span>Channels</span></div>
+        </div>
+        <div class="avail-badge">
+          <div class="avail-dot"></div>
+          <span>Available for Freelance</span>
+        </div>
+      </div>
     </div>
+  </div>
+  <div class="scroll-ind">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="sec-eyebrow"><span>What I Offer</span></div>
+  <h2 class="sec-title reveal">Premium <span style="color:var(--blue)">Services</span></h2>
+  <p class="sec-sub reveal">Professional-grade tools, audio, and design services crafted for the modern content creator.</p>
+  <div class="services-grid">
+    <div class="svc-card reveal"><span class="svc-num">01</span><span class="svc-icon">🎛️</span><h3>Premium Plugins</h3><p>Professional plugins for Premiere Pro & After Effects — instantly elevate your edit.</p><span class="svc-arrow">→</span></div>
+    <div class="svc-card reveal"><span class="svc-num">02</span><span class="svc-icon">🔊</span><h3>Cinematic SFX</h3><p>High-quality sound design packs for film, YouTube, and digital content production.</p><span class="svc-arrow">→</span></div>
+    <div class="svc-card reveal"><span class="svc-num">03</span><span class="svc-icon">🎨</span><h3>Pro Presets & LUTs</h3><p>Hollywood-grade color grades and presets that transform footage into cinematic art.</p><span class="svc-arrow">→</span></div>
+    <div class="svc-card reveal"><span class="svc-num">04</span><span class="svc-icon">💻</span><h3>Windows Apps</h3><p>Custom productivity tools and utilities designed specifically for content creators.</p><span class="svc-arrow">→</span></div>
+    <div class="svc-card reveal"><span class="svc-num">05</span><span class="svc-icon">✨</span><h3>Motion Design</h3><p>Animated intros, transitions, and overlays for YouTube channels and brand content.</p><span class="svc-arrow">→</span></div>
+    <div class="svc-card reveal"><span class="svc-num">06</span><span class="svc-icon">🌐</span><h3>Web Development</h3><p>Elegant, animated websites with refined aesthetics — fast, responsive, memorable.</p><span class="svc-arrow">→</span></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PRODUCTS -->
+<section id="products" style="background:var(--blue-ghost);">
+  <div class="sec-eyebrow"><span>Resource Hub</span></div>
+  <h2 class="sec-title reveal">Featured <span style="color:var(--blue)">Products</span></h2>
+  <p class="sec-sub reveal">Hand-crafted digital resources for video editors, designers, and YouTube creators.</p>
+  <div class="products-wrap" id="products-grid"></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- HIRE -->
+<section class="hire-bg" id="hire">
+  <div class="hire-inner">
+    <div class="hire-left reveal">
+      <div class="sec-eyebrow" style="--blue:var(--blue-light)"><span style="color:var(--blue-light)">Open for Work</span></div>
+      <h2>Let's Build <strong>Something Great</strong> Together</h2>
+      <p>Available for freelance projects worldwide — video editing, motion graphics, web development, and more.</p>
+      <div class="skills-wrap" id="skills-list">
+        <span class="skill-tag">Video Editing</span><span class="skill-tag">Motion Graphics</span>
+        <span class="skill-tag">Premiere Pro</span><span class="skill-tag">After Effects</span>
+        <span class="skill-tag">Web Dev</span><span class="skill-tag">YouTube SEO</span>
+        <span class="skill-tag">Animation</span><span class="skill-tag">Plugin Dev</span>
+        <span class="skill-tag">SFX Design</span><span class="skill-tag">Branding</span>
+      </div>
+      <div class="hire-stats-row">
+        <div class="hire-stat"><strong data-count="50">0</strong><span>Projects</span></div>
+        <div class="hire-stat"><strong data-count="30">0</strong><span>Clients</span></div>
+        <div class="hire-stat"><strong data-count="3">0</strong><span>Channels</span></div>
+        <div class="hire-stat"><strong data-count="100">0</strong><span>Dedicated</span></div>
+      </div>
+    </div>
+    <div class="hire-form reveal">
+      <h3>Send a Project Brief</h3>
+      <div class="fg"><label>Your Name</label><input type="text" id="hire-name" placeholder="John Doe"></div>
+      <div class="fg"><label>Email Address</label><input type="email" id="hire-email" placeholder="you@example.com"></div>
+      <div class="fg"><label>Service Needed</label>
+        <select id="hire-service"><option value="">Select a service...</option><option>Video Editing</option><option>Motion Graphics</option><option>Web Development</option><option>YouTube SEO</option><option>Plugin Dev</option><option>Branding & Design</option><option>Other</option></select>
+      </div>
+      <div class="fg"><label>Budget Range</label>
+        <select id="hire-budget"><option value="">Select budget...</option><option>$50–$200</option><option>$200–$500</option><option>$500–$1000</option><option>$1000+</option></select>
+      </div>
+      <div class="fg"><label>Project Details</label><textarea id="hire-message" placeholder="Tell me about your project..."></textarea></div>
+      <button class="form-btn" onclick="submitHire()">Send Project Brief →</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">AVS<span>.</span>MAHIM</div>
+  <nav class="footer-nav">
+    <a href="#services">Services</a>
+    <a href="plugins.html">Plugins</a>
+    <a href="sfx.html">SFX</a>
+    <a href="apps.html">Apps</a>
+    <a href="shop.html">Shop</a>
+    <a href="#hire">Hire Me</a>
+    <a href="admin.html" style="opacity:0.15;font-size:0.6rem;">⚙</a>
   </nav>
+  <div class="footer-copy">© 2026 AVS Mahim · All rights reserved</div>
+</footer>
 
-  <!-- MAIN DYNAMIC CONTENT -->
-  <div id="page-content">
-      <!-- Sections will be injected here in order by JS -->
-  </div>
-
-  <!-- HIDDEN TEMPLATES FOR SECTIONS -->
-  <div id="section-templates" style="display: none;">
-      
-      <section id="Hero" class="mz2-wrapper">
-        <div class="mz2-top">
-          <div class="mz2-text-block">
-            <h2 class="hero-title-main">Get More Plugins</h2>
-            <p class="hero-subtitle-text">Premium resources for creators worldwide.</p>
-            <a href="#" class="mz2-btn" id="hero-btn">Explore Now ↗</a>
-          </div>
-        </div>
-      </section>
-
-      <section id="Profile" class="imdb-profile-layer">
-        <div class="profile-content-inner">
-           <div class="avatar-container">
-               <img src="" alt="Profile" class="profile-avatar" id="prof-img">
-           </div>
-           <div class="profile-right">
-               <h2 id="prof-name">AVS Mahim</h2>
-               <p id="prof-bio">Bangladeshi Creator & Developer.</p>
-           </div>
-        </div>
-      </section>
-
-      <section id="Plugins" class="resources-section">
-        <h2 class="section-title">PREMIUM PLUGINS</h2>
-        <div class="resources-grid" id="plugins-grid"></div>
-      </section>
-
-      <section id="SFX" class="resources-section">
-        <h2 class="section-title">CINEMATIC SFX</h2>
-        <div class="resources-grid" id="sfx-grid"></div>
-      </section>
-
-      <section id="Presets" class="resources-section">
-        <h2 class="section-title">PRO PRESETS</h2>
-        <div class="resources-grid" id="presets-grid"></div>
-      </section>
-
-      <section id="Apps" class="resources-section">
-        <h2 class="section-title">WINDOWS APPS</h2>
-        <div class="resources-grid" id="apps-grid"></div>
-      </section>
-
-      <section id="Footer" class="footer">
-        <div class="footer-content">
-          <h2 id="foot-title">AVS MAHIM</h2>
-          <p id="foot-desc">Professional resources for creators.</p>
-          <div class="copyright">&copy; 2026 AVS Mahim.</div>
-        </div>
-      </section>
-  </div>
-
-  <!-- AUTH MODAL (Essential for Login) -->
-  <div class="auth-modal-overlay" id="auth-modal">
-    <div class="auth-modal-content redesign-modal">
-        <button onclick="this.closest('.auth-modal-overlay').classList.remove('open')">&times;</button>
-        <div id="auth-ui">
-            <!-- Simplified for brevity, usually handled by auth.js -->
-            <h2 style="margin-bottom: 2rem;">JOIN AVS CONTROL</h2>
-            <input type="email" placeholder="Email" id="auth-email" class="input" style="width:100%; margin-bottom:1rem; padding:10px; background:#000; border:1px solid #333; color:#fff;">
-            <button class="btn-yellow" style="width:100%;">Continue</button>
-        </div>
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h2>Join AVS Control</h2>
+    <p>Get early access to premium resources and exclusive creator tools.</p>
+    <div class="fg"><label>Email Address</label><input type="email" id="modal-email" placeholder="your@email.com"></div>
+    <div class="fg"><label>Creator Type</label>
+      <select id="modal-type"><option>Video Editor</option><option>YouTuber</option><option>Motion Designer</option><option>Developer</option><option>Other Creator</option></select>
     </div>
+    <button class="form-btn" onclick="submitModal()">Get Access →</button>
   </div>
+</div>
+<div class="notif" id="notif"></div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/supabase-client.js"></script>
-  <script src="js/auth.js"></script>
+<script>
+// CURSOR
+const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx-4+'px';cur.style.top=my-4+'px';});
+(function loop(){rx+=(mx-rx)*0.13;ry+=(my-ry)*0.13;ring.style.left=rx-16+'px';ring.style.top=ry-16+'px';requestAnimationFrame(loop);})();
+document.querySelectorAll('a,button,.svc-card,.prod-card,.skill-tag').forEach(el=>{el.addEventListener('mouseenter',()=>{cur.style.transform='scale(2.5)';ring.style.transform='scale(1.4)';ring.style.opacity='0.3';});el.addEventListener('mouseleave',()=>{cur.style.transform='scale(1)';ring.style.transform='scale(1)';ring.style.opacity='0.5';});});
 
-  <script>
-    (async function renderPage() {
-      if (!window.supabaseClient) return;
+// GEO BG — animated geometric shapes
+(function(){
+  const cv=document.getElementById('geo');
+  const ctx=cv.getContext('2d');
+  let W,H;
+  function resize(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight;}
+  resize(); window.addEventListener('resize',resize);
 
-      // 1. Load Settings
-      const { data: settings } = await supabaseClient.from('site_settings').select('*');
-      const s = {};
-      (settings || []).forEach(r => s[r.key] = r.value);
+  const shapes=[];
+  const colors=['rgba(26,86,255,0.07)','rgba(96,165,250,0.06)','rgba(219,234,254,0.12)','rgba(30,41,59,0.04)'];
 
-      // Apply Theme
-      document.getElementById('dynamic-theme').innerHTML = `
-        :root {
-          --btn-color: ${s.color_primary || '#ffd700'};
-          --bg-color: ${s.color_bg || '#030609'};
-          --text-white: ${s.color_text || '#ffffff'};
-        }
-        body { background: var(--bg-color); color: var(--text-white); font-family: 'Montserrat', sans-serif; }
-      `;
+  // Generate shapes
+  for(let i=0;i<18;i++){
+    shapes.push({
+      x:Math.random()*1.2-0.1, y:Math.random()*1.2-0.1,
+      size:Math.random()*200+60,
+      sides:Math.floor(Math.random()*3)+3, // 3=triangle,4=square,5=pentagon,6=hex
+      rot:Math.random()*Math.PI*2,
+      rotSpeed:(Math.random()-0.5)*0.003,
+      vx:(Math.random()-0.5)*0.0003,
+      vy:(Math.random()-0.5)*0.0003,
+      color:colors[Math.floor(Math.random()*colors.length)],
+      strokeOnly:Math.random()>0.5
+    });
+  }
 
-      // Apply Global String Replacements
-      if (s.nav_logo_text) document.querySelectorAll('.logo-text, #foot-title').forEach(el => el.textContent = s.nav_logo_text);
-      if (s.site_title) document.title = s.site_title;
+  // Draw regular polygon
+  function poly(ctx,x,y,r,sides,rot){
+    ctx.beginPath();
+    for(let i=0;i<sides;i++){
+      const a=rot+(i/sides)*Math.PI*2;
+      i===0?ctx.moveTo(x+Math.cos(a)*r,y+Math.sin(a)*r):ctx.lineTo(x+Math.cos(a)*r,y+Math.sin(a)*r);
+    }
+    ctx.closePath();
+  }
 
-      // 2. Load Layout & Sections
-      const { data: layout } = await supabaseClient.from('page_layout').select('*').order('position', { ascending: true });
-      const main = document.getElementById('page-content');
-      
-      if (layout) {
-          for (const row of layout) {
-              if (!row.is_visible) continue;
-              const template = document.getElementById(row.section_name);
-              if (!template) continue;
-              
-              const section = template.cloneNode(true);
-              main.appendChild(section);
-
-              // Inject Section-Specific Data
-              if (row.section_name === 'Hero') {
-                  if (s.hero_title) section.querySelector('.hero-title-main').textContent = s.hero_title;
-                  if (s.hero_subtitle) section.querySelector('.hero-subtitle-text').textContent = s.hero_subtitle;
-                  if (s.hero_btn_text) section.querySelector('#hero-btn').textContent = s.hero_btn_text;
-                  if (s.hero_btn_link) section.querySelector('#hero-btn').href = s.hero_btn_link;
-                  if (s.hero_bg) {
-                      if (s.hero_bg.includes('mp4')) {
-                          section.style.background = 'none';
-                          section.innerHTML = `<video src="${s.hero_bg}" autoplay muted loop style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:-1; opacity:0.3;"></video>` + section.innerHTML;
-                      } else {
-                          section.style.background = `url('${s.hero_bg}') center/cover`;
-                      }
-                  }
-              }
-
-              if (row.section_name === 'Footer') {
-                  if (s.footer_desc) section.querySelector('#foot-desc').textContent = s.footer_desc;
-              }
-
-              // Load Cards for dynamic sections
-              const gridId = row.section_name.toLowerCase() + '-grid';
-              const grid = section.querySelector('#' + gridId);
-              if (grid) {
-                  const table = row.section_name.toLowerCase();
-                  const { data: items } = await supabaseClient.from(table).select('*').limit(4);
-                  grid.innerHTML = (items || []).map(i => `
-                    <div class="resource-card" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; overflow: hidden; margin: 10px;">
-                        <img src="${i.image_url || 'https://via.placeholder.com/300x200'}" style="width:100%; height:200px; object-fit:cover;">
-                        <div style="padding: 1.5rem;">
-                            <h3>${i.title}</h3>
-                            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1rem;">
-                                <span style="color:var(--btn-color); font-weight:800;">${i.is_premium ? '$'+i.price : 'FREE'}</span>
-                                <button class="btn-yellow" style="padding:5px 15px; font-size:0.8rem;">GET</button>
-                            </div>
-                        </div>
-                    </div>
-                  `).join('');
-                  grid.style.display = 'grid';
-                  grid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(280px, 1fr))';
-              }
-          }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    shapes.forEach(s=>{
+      s.x+=s.vx; s.y+=s.vy; s.rot+=s.rotSpeed;
+      if(s.x<-0.2)s.x=1.1; if(s.x>1.1)s.x=-0.1;
+      if(s.y<-0.2)s.y=1.1; if(s.y>1.1)s.y=-0.1;
+      const px=s.x*W, py=s.y*H;
+      poly(ctx,px,py,s.size,s.sides,s.rot);
+      if(s.strokeOnly){
+        ctx.strokeStyle=s.color; ctx.lineWidth=1.5; ctx.stroke();
+      } else {
+        ctx.fillStyle=s.color; ctx.fill();
       }
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
 
-      // Check Maintenance
-      if (s.maintenance_mode === 'true') {
-          document.body.innerHTML = "<div style='height:100vh; display:flex; align-items:center; justify-content:center; background:#000; color:var(--btn-color);'><h1>UNDER MAINTENANCE</h1></div>";
-      }
-    })();
-  </script>
+// MOBILE MENU
+function toggleMenu(){document.getElementById('mob-menu').classList.toggle('open');document.getElementById('hamburger').classList.toggle('open');}
+function closeMenu(){document.getElementById('mob-menu').classList.remove('open');document.getElementById('hamburger').classList.remove('open');}
+
+// SCROLL REVEAL
+const obs=new IntersectionObserver(entries=>{entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*80);});},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// COUNTER
+function animCount(el){const t=parseInt(el.dataset.count);let c=0;const iv=setInterval(()=>{c+=t/50;if(c>=t){el.textContent=t+(t===100?'%':'+');clearInterval(iv);}else el.textContent=Math.floor(c);},22);}
+const cObs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){animCount(x.target);cObs.unobserve(x.target);}});},{threshold:0.5});
+document.querySelectorAll('[data-count]').forEach(el=>cObs.observe(el));
+
+// PRODUCTS
+const defP=[
+  {id:1,type:'Plugin',name:'Cinema Pack Pro',desc:'Professional cinematic plugin bundle for Premiere Pro & After Effects.',icon:'🎛️',link:'plugins.html'},
+  {id:2,type:'SFX',name:'Impact SFX Vol.1',desc:'Powerful impact sounds, whooshes, and transitions for any project.',icon:'🔊',link:'sfx.html'},
+  {id:3,type:'App',name:'Creator Suite',desc:'All-in-one Windows productivity app for YouTube creators.',icon:'💻',link:'apps.html'},
+  {id:4,type:'Preset',name:'Color Cinematic LUTs',desc:'Hollywood-grade color grading LUTs for stunning visuals.',icon:'🎨',link:'plugins.html'},
+  {id:5,type:'SFX',name:'Sci-Fi FX Pack',desc:'Futuristic UI sounds, laser effects, and space ambiences.',icon:'🚀',link:'sfx.html'},
+  {id:6,type:'Plugin',name:'Transition Master',desc:'200+ smooth transitions for video editing workflows.',icon:'⚡',link:'plugins.html'}
+];
+const prods=JSON.parse(localStorage.getItem('avs_products')||JSON.stringify(defP));
+document.getElementById('products-grid').innerHTML=prods.map(p=>`
+  <div class="prod-card reveal">
+    <div class="prod-thumb"><span style="position:relative;z-index:1;">${p.icon}</span></div>
+    <div class="prod-body">
+      <div class="prod-cat">${p.type}</div>
+      <h3>${p.name}</h3>
+      <p>${p.desc}</p>
+      <a href="${p.link}" class="prod-link">View Details →</a>
+    </div>
+  </div>`).join('');
+document.querySelectorAll('.prod-card.reveal').forEach(el=>obs.observe(el));
+
+// HERO SETTINGS from admin
+const hs=JSON.parse(localStorage.getItem('avs_hero')||'{}');
+if(hs.sub)document.querySelector('.hero-sub').textContent=hs.sub;
+if(hs.skills){const l=document.getElementById('skills-list');if(l)l.innerHTML=hs.skills.split(',').map(s=>`<span class="skill-tag">${s.trim()}</span>`).join('');}
+
+// MODAL
+function openModal(){document.getElementById('modal').classList.add('active');}
+function closeModal(){document.getElementById('modal').classList.remove('active');}
+document.getElementById('modal').addEventListener('click',e=>{if(e.target===document.getElementById('modal'))closeModal();});
+
+function showNotif(msg,type=''){
+  const n=document.getElementById('notif');
+  n.className='notif '+type;
+  n.textContent=msg;n.classList.add('show');
+  setTimeout(()=>n.classList.remove('show'),3500);
+}
+function submitModal(){
+  const email=document.getElementById('modal-email').value;
+  if(!email){showNotif('⚠ Enter your email!','warn');return;}
+  const m=JSON.parse(localStorage.getItem('avs_members')||'[]');
+  m.push({email,type:document.getElementById('modal-type').value,date:new Date().toISOString()});
+  localStorage.setItem('avs_members',JSON.stringify(m));
+  showNotif('✓ Welcome to AVS Control!','success');closeModal();
+}
+function submitHire(){
+  const n=document.getElementById('hire-name').value,
+        e=document.getElementById('hire-email').value,
+        s=document.getElementById('hire-service').value,
+        m=document.getElementById('hire-message').value;
+  if(!n||!e||!s||!m){showNotif('⚠ Please fill all fields!','warn');return;}
+  const b=JSON.parse(localStorage.getItem('avs_briefs')||'[]');
+  b.push({name:n,email:e,service:s,budget:document.getElementById('hire-budget').value,message:m,date:new Date().toISOString(),status:'new'});
+  localStorage.setItem('avs_briefs',JSON.stringify(b));
+  showNotif('✓ Brief sent! I\'ll respond within 24 hours.','success');
+  document.getElementById('hire-name').value='';
+  document.getElementById('hire-email').value='';
+  document.getElementById('hire-message').value='';
+}
+</script>
 </body>
 </html>
